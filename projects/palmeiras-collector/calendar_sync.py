@@ -1,12 +1,12 @@
 #!/usr/bin/env python3
 """
-Palmeiras Calendar Sync - Anti-Duplication Version
+Palmeiras Calendar Sync - Robust Anti-Duplication Version
 
 Fetches upcoming matches from football-data.org and creates Google Calendar events.
-Uses a cache file to track created events and avoid duplicates.
+Uses match ID from API as unique identifier and stores Google Calendar Event IDs.
 
 Usage:
-    python calendar_sync.py [--dry-run] [--limit N] [--force]
+    python calendar_sync.py [--dry-run] [--limit N] [--force-update]
 
 Environment:
     FOOTBALL_API_KEY - API key for football-data.org
@@ -18,7 +18,7 @@ import sys
 import json
 import subprocess
 import argparse
-import hashlib
+import re
 from datetime import datetime, timedelta
 from pathlib import Path
 from zoneinfo import ZoneInfo
@@ -96,7 +96,7 @@ def load_cache() -> dict:
                 return json.load(f)
         except:
             pass
-    return {'events': {}, 'last_sync': None}
+    return {'events': {}, 'match_map': {}, 'last_sync': None}
 
 
 def save_cache(cache: dict) -> None:
@@ -106,15 +106,9 @@ def save_cache(cache: dict) -> None:
         json.dump(cache, f, indent=2)
 
 
-def generate_event_id(match: dict) -> str:
-    """Generate a unique ID for a match based on date and teams."""
-    utc_date = match.get('utcDate', '')
-    home = match.get('homeTeam', {}).get('id', '')
-    away = match.get('awayTeam', {}).get('id', '')
-    
-    # Create unique key: date_homeId_awayId
-    key = f"{utc_date[:10]}_{home}_{away}"
-    return hashlib.md5(key.encode()).hexdigest()[:12]
+def get_match_id(match: dict) -> str:
+    """Get unique match ID from API response."""
+    return str(match.get('id', ''))
 
 
 def get_team_name(team: dict) -> str:
@@ -195,6 +189,7 @@ def create_event_description(match: dict, competition: str, match_time: str) -> 
     city = 'São Paulo, SP' if is_home_game(match, team_id) else 'TBD'
     broadcast = get_broadcast_info(competition)
     round_num = match.get('matchday', 'TBD')
+    match_id = get_match_id(match)
     
     return f"""⚽ PARTIDA DO PALMEIRAS
 
@@ -207,7 +202,9 @@ def create_event_description(match: dict, competition: str, match_time: str) -> 
 • Streaming: {broadcast['streaming']}
 
 🔄 Competição: {competition}
-📊 Rodada: {round_num}ªrodada"""
+📊 Rodada: {round_num}ªrodada
+
+🆔 Match ID: {match_id}"""
 
 
 def get_event_color(match: dict, competition: str) -> str:
@@ -241,11 +238,13 @@ def fetch_upcoming_matches(limit: int = 10) -> list:
     return upcoming[:limit]
 
 
-def get_calendar_event_id(opponent: str, date: str) -> str:
-    """Search for existing event ID by title pattern using gog."""
-    # Try to find event by searching calendar
-    from_date = date[:10]
-    to_date = (datetime.fromisoformat(date[:10]) + timedelta(days=1)).strftime('%Y-%m-%d')
+def find_calendar_event_by_match(opponent: str, match_date: str) -> str:
+    """Search for existing event by title pattern using gog calendar events.
+    
+    Returns the Google Calendar Event ID if found, None otherwise.
+    """
+    from_date = match_date[:10]
+    to_date = (datetime.fromisoformat(match_date[:10]) + timedelta(days=1)).strftime('%Y-%m-%d')
     
     cmd = [
         'gog', 'calendar', 'events', CALENDAR_ID,
@@ -254,69 +253,92 @@ def get_calendar_event_id(opponent: str, date: str) -> str:
         '--json'
     ]
     
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     
     if result.returncode != 0:
+        print(f"    ⚠️  Error searching calendar: {result.stderr.strip()}")
         return None
     
     try:
-        events = json.loads(result.stdout)
-        # Look for matching event
+        events = json.loads(result.stdout) if result.stdout.strip() else []
+        # Look for matching event with "Palmeiras vs {opponent}"
         for event in events:
             summary = event.get('summary', '')
-            if 'Palmeiras' in summary and opponent in summary:
-                return event.get('id')
-    except:
-        pass
+            # Match pattern like "Palmeiras vs Corinthians - Brasileirão"
+            if 'Palmeiras vs' in summary and opponent in summary:
+                event_id = event.get('id')
+                print(f"    ✅ Found existing event: {event_id}")
+                return event_id
+    except json.JSONDecodeError as e:
+        print(f"    ⚠️  Error parsing calendar events: {e}")
+    except Exception as e:
+        print(f"    ⚠️  Error checking calendar: {e}")
     
     return None
 
 
-def update_calendar_event(event_id: str, match: dict, dry_run: bool = False) -> bool:
-    """Update an existing calendar event."""
+def find_calendar_event_by_id(google_event_id: str) -> bool:
+    """Check if a specific Google Calendar event ID still exists."""
+    cmd = [
+        'gog', 'calendar', 'event', CALENDAR_ID,
+        '--id', google_event_id,
+        '--json'
+    ]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    return result.returncode == 0
+
+
+def delete_calendar_event(event_id: str, dry_run: bool = False) -> bool:
+    """Delete a calendar event."""
+    print(f"    🗑️  Deleting old event: {event_id}")
+    
+    if dry_run:
+        print(f"    [DRY RUN - Not deleting]")
+        return True
+    
+    cmd = [
+        'gog', 'calendar', 'delete', CALENDAR_ID,
+        '--id', event_id,
+        '--yes'
+    ]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
+    
+    if result.returncode == 0:
+        print(f"    ✅ Event deleted")
+        return True
+    else:
+        print(f"    ❌ Error deleting: {result.stderr.strip()}")
+        return False
+
+
+def create_calendar_event(match: dict, dry_run: bool = False) -> str:
+    """Create a calendar event for a match.
+    
+    Returns the Google Calendar Event ID if successful, None otherwise.
+    """
     team_id = TEAM_ID
+    
     opponent = get_opponent(match, team_id)
     competition = get_competition_name(match)
     match_time = match.get('utcDate', '')
+    match_id = get_match_id(match)
     
     start_iso, end_iso, time_formatted = format_datetime(match_time)
     title = create_event_title(opponent, competition)
     description = create_event_description(match, competition, time_formatted)
     color = get_event_color(match, competition)
     
-    print(f"  Updating event: {title}")
+    print(f"  Creating event: {title}")
+    print(f"    Match ID: {match_id}")
+    print(f"    Start: {start_iso}")
+    print(f"    End: {end_iso}")
+    print(f"    Color: {color}")
     
     if dry_run:
-        print("    [DRY RUN - Not updating]")
-        return True
-    
-    # Note: gog doesn't have direct update, we delete and recreate
-    # For now, we'll just log that update is needed
-    print(f"    ℹ️  Event exists - will be updated on next sync")
-    return True
-
-
-def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
-    """Create a calendar event for a match."""
-    team_id = TEAM_ID
-    
-    opponent = get_opponent(match, team_id)
-    competition = get_competition_name(match)
-    match_time = match.get('utcDate', '')
-    
-    start_iso, end_iso, time_formatted = format_datetime(match_time)
-    title = create_event_title(opponent, competition)
-    description = create_event_description(match, competition, time_formatted)
-    color = get_event_color(match, competition)
-    
-    print(f"Creating event: {title}")
-    print(f"  Start: {start_iso}")
-    print(f"  End: {end_iso}")
-    print(f"  Color: {color}")
-    
-    if dry_run:
-        print("  [DRY RUN - Not creating event]")
-        return True
+        print(f"    [DRY RUN - Not creating event]")
+        return "dry-run-event-id"
     
     cmd = [
         'gog', 'calendar', 'create', CALENDAR_ID,
@@ -328,14 +350,155 @@ def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
         '--reminder', 'popup:120m',
     ]
     
-    result = subprocess.run(cmd, capture_output=True, text=True)
+    result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
     
     if result.returncode == 0:
-        print(f"  ✅ Event created successfully")
-        return True
+        # Try to extract event ID from output
+        # gog calendar create returns the event ID in stdout or a link
+        output = result.stdout.strip()
+        
+        # Try to parse as JSON first
+        try:
+            data = json.loads(output)
+            event_id = data.get('id') or data.get('eventId')
+            if event_id:
+                print(f"    ✅ Event created: {event_id}")
+                return event_id
+        except:
+            pass
+        
+        # Try to extract ID from URL pattern in output
+        # Pattern: https://calendar.google.com/calendar/event?eid=XXXXX
+        match = re.search(r'eid=([a-zA-Z0-9_-]+)', output)
+        if match:
+            event_id = match.group(1)
+            print(f"    ✅ Event created: {event_id}")
+            return event_id
+        
+        # Last resort: return a placeholder and let the caller search for it
+        print(f"    ✅ Event created (ID extraction pending)")
+        return "created_pending_id"
     else:
-        print(f"  ❌ Error: {result.stderr}")
+        print(f"    ❌ Error: {result.stderr.strip()}")
+        return None
+
+
+def update_calendar_event(google_event_id: str, match: dict, dry_run: bool = False) -> bool:
+    """Update an existing calendar event by deleting and recreating."""
+    team_id = TEAM_ID
+    
+    opponent = get_opponent(match, team_id)
+    competition = get_competition_name(match)
+    match_id = get_match_id(match)
+    
+    print(f"  🔄 Updating event: {google_event_id}")
+    print(f"    Match ID: {match_id}")
+    
+    # Delete existing event
+    if not delete_calendar_event(google_event_id, dry_run):
         return False
+    
+    # Create new event (this will return the new ID)
+    new_event_id = create_calendar_event(match, dry_run)
+    
+    if new_event_id and new_event_id != "dry-run-event-id":
+        return True
+    
+    return new_event_id is not None
+
+
+def sync_match_to_calendar(match: dict, cache: dict, force_update: bool = False, dry_run: bool = False) -> tuple:
+    """Sync a single match to calendar with anti-duplication logic.
+    
+    Returns: (status, event_id) where status is 'created', 'updated', 'skipped', or 'error'
+    """
+    match_id = get_match_id(match)
+    opponent = get_opponent(match, TEAM_ID)
+    competition = get_competition_name(match)
+    title = create_event_title(opponent, competition)
+    match_date = match.get('utcDate', '')
+    
+    print(f"\n📋 Processing: {title}")
+    print(f"    Match ID (API): {match_id}")
+    
+    # Step 1: Check if we have this match_id in our cache with a Google Event ID
+    cached_event = cache.get('events', {}).get(match_id)
+    
+    if cached_event and cached_event.get('google_event_id'):
+        stored_google_id = cached_event['google_event_id']
+        print(f"    Cached Google Event ID: {stored_google_id}")
+        
+        # Verify it still exists in Google Calendar
+        if find_calendar_event_by_id(stored_google_id):
+            if force_update:
+                print(f"    🔄 Force update enabled - updating event")
+                event_id = update_calendar_event(stored_google_id, match, dry_run)
+                if event_id:
+                    # Update cache with new ID
+                    cache['events'][match_id]['google_event_id'] = event_id if event_id != "dry-run-event-id" else stored_google_id
+                    return ('updated', event_id)
+                return ('error', None)
+            else:
+                print(f"    ⏭️  Event exists in calendar - skipping (use --force-update to update)")
+                return ('skipped', stored_google_id)
+        else:
+            print(f"    ⚠️  Cached event not found in calendar - will create new")
+            # Remove stale cache entry
+            del cache['events'][match_id]
+    
+    # Step 2: Search Google Calendar for existing event by title
+    print(f"    🔍 Searching calendar for existing event...")
+    existing_google_id = find_calendar_event_by_match(opponent, match_date)
+    
+    if existing_google_id:
+        print(f"    Found existing event: {existing_google_id}")
+        
+        if force_update:
+            event_id = update_calendar_event(existing_google_id, match, dry_run)
+            if event_id:
+                cache['events'][match_id] = {
+                    'title': title,
+                    'google_event_id': event_id if event_id != "dry-run-event-id" else existing_google_id,
+                    'competition': competition,
+                    'date': match_date[:10],
+                    'created_at': datetime.now().isoformat()
+                }
+                return ('updated', event_id)
+            return ('error', None)
+        else:
+            # Store the found event ID in cache
+            cache['events'][match_id] = {
+                'title': title,
+                'google_event_id': existing_google_id,
+                'competition': competition,
+                'date': match_date[:10],
+                'created_at': datetime.now().isoformat()
+            }
+            print(f"    ⏭️  Event exists - using existing ID (use --force-update to update)")
+            return ('skipped', existing_google_id)
+    
+    # Step 3: Create new event
+    print(f"    ➕ Creating new event...")
+    event_id = create_calendar_event(match, dry_run)
+    
+    if event_id:
+        # Store in cache with match_id as key
+        actual_event_id = event_id if event_id != "dry-run-event-id" else None
+        cache['events'][match_id] = {
+            'title': title,
+            'google_event_id': actual_event_id,
+            'competition': competition,
+            'date': match_date[:10],
+            'created_at': datetime.now().isoformat()
+        }
+        
+        # Also map the google_event_id for reverse lookup
+        if actual_event_id:
+            cache['match_map'][actual_event_id] = match_id
+        
+        return ('created', event_id)
+    
+    return ('error', None)
 
 
 def main():
@@ -343,16 +506,24 @@ def main():
     parser.add_argument('--dry-run', action='store_true', help='Show what would be created without creating events')
     parser.add_argument('--limit', type=int, default=5, help='Number of matches to sync')
     parser.add_argument('--calendar-id', type=str, default=CALENDAR_ID, help='Calendar ID to use')
-    parser.add_argument('--force', action='store_true', help='Force recreate all events (ignore cache)')
+    parser.add_argument('--force-update', action='store_true', help='Force update existing events instead of skipping')
     parser.add_argument('--check', action='store_true', help='Check existing events only (no create)')
+    parser.add_argument('--clear-cache', action='store_true', help='Clear cache before syncing')
     
     args = parser.parse_args()
     
-    print("⚽ Palmeiras Calendar Sync (Anti-Duplication)")
-    print("=" * 45)
+    print("⚽ Palmeiras Calendar Sync (Robust Anti-Duplication)")
+    print("=" * 50)
+    print(f"Using match ID from football-data.org as unique identifier")
+    print(f"Calendar: {args.calendar_id}")
     
     # Load cache
     cache = load_cache()
+    
+    if args.clear_cache:
+        print(f"\n🧹 Clearing cache...")
+        cache = {'events': {}, 'match_map': {}, 'last_sync': None}
+    
     print(f"\n📂 Cache loaded: {len(cache.get('events', {}))} events tracked")
     
     # Fetch upcoming matches
@@ -365,82 +536,74 @@ def main():
     
     print(f"Found {len(matches)} upcoming matches\n")
     
-    # Check mode - just show what's in calendar
+    # Check mode - just show what's in calendar vs cache
     if args.check:
-        print("🔍 Checking existing events in calendar...")
+        print("🔍 Checking matches vs calendar...\n")
         for match in matches:
-            event_id = generate_event_id(match)
+            match_id = get_match_id(match)
             opponent = get_opponent(match, TEAM_ID)
             date = match.get('utcDate', '')[:10]
             
-            cached = cache['events'].get(event_id)
-            exists = '✅' if cached else '⏭️'
-            
-            print(f"  {exists} {date} - Palmeiras vs {opponent}")
+            cached = cache['events'].get(match_id)
             if cached:
-                print(f"      Cached: {cached.get('title')}")
+                google_id = cached.get('google_event_id')
+                exists = find_calendar_event_by_id(google_id) if google_id else False
+                status = '✅' if exists else '⚠️ stale'
+                print(f"  {status} {date} - Palmeiras vs {opponent}")
+                print(f"      Match ID: {match_id}")
+                print(f"      Google Event ID: {google_id}")
+            else:
+                print(f"  ⏭️  {date} - Palmeiras vs {opponent}")
+                print(f"      Match ID: {match_id} (not in calendar)")
         return
     
-    # Create events
+    # Sync matches
     created = 0
+    updated = 0
     skipped = 0
-    already_exists = 0
+    errors = 0
     
     for match in matches:
-        event_id = generate_event_id(match)
-        opponent = get_opponent(match, TEAM_ID)
-        competition = get_competition_name(match)
-        title = create_event_title(opponent, competition)
-        date = match.get('utcDate', '')[:10]
+        status, event_id = sync_match_to_calendar(
+            match, cache, 
+            force_update=args.force_update, 
+            dry_run=args.dry_run
+        )
         
-        # Check if already in cache
-        if not args.force and event_id in cache['events']:
-            print(f"⏭️  Skipping (cached): {title}")
-            skipped += 1
-            already_exists += 1
-            continue
-        
-        # Also check calendar for existing events (fallback)
-        existing_event_id = get_calendar_event_id(opponent, match.get('utcDate', ''))
-        
-        if existing_event_id and not args.force:
-            print(f"⏭️  Skipping (exists in calendar): {title}")
-            # Add to cache
-            cache['events'][event_id] = {
-                'title': title,
-                'date': date,
-                'calendar_event_id': existing_event_id,
-                'created_at': datetime.now().isoformat()
-            }
-            skipped += 1
-            already_exists += 1
-            continue
-        
-        # Create new event
-        if create_calendar_event(match, args.dry_run):
+        if status == 'created':
             created += 1
-            # Add to cache
-            cache['events'][event_id] = {
-                'title': title,
-                'date': date,
-                'competition': competition,
-                'created_at': datetime.now().isoformat()
-            }
+        elif status == 'updated':
+            updated += 1
+        elif status == 'skipped':
+            skipped += 1
+        elif status == 'error':
+            errors += 1
     
     # Clean old events from cache (older than 30 days)
     cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
-    old_events = [eid for eid, ev in cache['events'].items() if ev.get('date', '') < cutoff]
-    for eid in old_events:
-        del cache['events'][eid]
+    old_events = [
+        mid for mid, ev in cache.get('events', {}).items() 
+        if ev.get('date', '') < cutoff
+    ]
+    for mid in old_events:
+        del cache['events'][mid]
+    if old_events:
+        print(f"\n🧹 Cleaned {len(old_events)} old events from cache")
     
     # Save cache
     save_cache(cache)
     
-    print(f"\n✅ Summary:")
-    print(f"   Created: {created}")
-    print(f"   Skipped (exists): {skipped}")
-    print(f"   Total:   {len(matches)}")
+    print(f"\n" + "=" * 50)
+    print(f"✅ Summary:")
+    print(f"   Created:  {created}")
+    print(f"   Updated:  {updated}")
+    print(f"   Skipped:  {skipped}")
+    print(f"   Errors:   {errors}")
+    print(f"   Total:    {len(matches)}")
     print(f"\n📂 Cache saved: {len(cache['events'])} events tracked")
+    
+    if args.dry_run:
+        print(f"\n⚠️  DRY RUN - No actual changes made")
 
 
 if __name__ == '__main__':
