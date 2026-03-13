@@ -1,20 +1,39 @@
-# Process
+# Research Policy
 
-Fluxo de trabalho entre agentes.
+## Rule: Always Research Before Implementing
 
-## Pipeline
+**Before any implementation, research best practices.**
 
-1. **Athena (Design)** → Especificações, protótipos, decisões de UX
-2. **Hefesto (Code)** → Implementação, código, testes
-3. **Apollo (QA)** → Validação, testes, regressão
-4. **Hermes (Coordinator)** → Coordena handoffs
+This applies to:
+- New projects
+- New technologies
+- Architecture decisions
+- Code patterns
+- Tools and frameworks
 
-## Handoffs
+## Process
 
-Cada transição deve incluir:
-- Contexto (o quê + por quê)
-- Decisões tomadas
-- Pendências
-- Links relevantes
+1. **Research** → Use web search (Brave API available)
+2. **Document** → Save findings in `knowledge/decisions/`
+3. **Discuss** → Share with team before implementation
+4. **Implement** → Only after approval
 
-Ver templates em `decisions/` e `projects/`.
+## Research Agent
+
+**Artemis** should be the dedicated research agent.
+
+When active, Artemis will:
+- Research topics before projects start
+- Find best practices and patterns
+- Document findings in knowledge base
+- Provide recommendations to the team
+
+## Current Status
+
+- Web search: Working (Brave API)
+- Artemis: Not yet activated
+- Manual research: Can be done by any agent
+
+---
+
+*Last updated: 2026-03-12*
