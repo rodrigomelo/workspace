@@ -4,690 +4,731 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palmeiras - Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
             --palmeiras-green: #007824;
-            --palmeiras-dark-green: #005c1a;
-            --palmeiras-white: #ffffff;
-            --palmeiras-cream: #f5f5dc;
-            --bg-dark: #1a1a1a;
-            --bg-card: #2d2d2d;
-            --text-light: #ffffff;
-            --text-muted: #a0a0a0;
+            --palmeiras-green-light: #00a030;
+            --palmeiras-green-dark: #005c1a;
+            --palmeiras-gold: #CEB888;
+            --bg-dark: #0a0a0a;
+            --bg-card: #141414;
+            --bg-card-hover: #1a1a1a;
+            --bg-elevated: #1f1f1f;
+            --text-primary: #ffffff;
+            --text-secondary: #a0a0a0;
+            --text-muted: #666666;
+            --border-subtle: rgba(255, 255, 255, 0.08);
+            --border-accent: rgba(0, 120, 36, 0.3);
+            --shadow-card: 0 4px 24px rgba(0, 0, 0, 0.4);
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Outfit', -apple-system, BlinkMacSystemFont, sans-serif;
             background: var(--bg-dark);
-            color: var(--text-light);
+            color: var(--text-primary);
             min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: 
+                radial-gradient(ellipse at 20% 0%, rgba(0, 120, 36, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse at 80% 100%, rgba(206, 184, 136, 0.08) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: -1;
         }
 
         .header {
-            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-dark-green));
-            padding: 2rem;
+            background: linear-gradient(180deg, rgba(0, 120, 36, 0.15) 0%, transparent 100%);
+            padding: 3rem 2rem 2rem;
             text-align: center;
-            box-shadow: 0 4px 20px rgba(0, 120, 36, 0.4);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .header-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            background: var(--palmeiras-green);
+            color: white;
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 1rem;
         }
 
         .header h1 {
             font-size: 2.5rem;
-            color: var(--palmeiras-white);
-            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+            font-weight: 800;
+            background: linear-gradient(135deg, #fff 0%, var(--palmeiras-gold) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
         }
 
         .header .subtitle {
-            color: var(--palmeiras-cream);
-            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-size: 1rem;
             margin-top: 0.5rem;
         }
 
         .container {
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             padding: 2rem;
         }
 
-        /* Tabs */
-        .tabs {
+        .nav-tabs {
             display: flex;
             gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
+            margin-bottom: 2rem;
+            background: var(--bg-card);
+            padding: 0.4rem;
+            border-radius: 12px;
+            border: 1px solid var(--border-subtle);
+            overflow-x: auto;
         }
 
-        .tab-btn {
-            padding: 0.8rem 1.5rem;
-            background: var(--bg-card);
-            border: 2px solid transparent;
+        .nav-tab {
+            flex: 1;
+            min-width: fit-content;
+            padding: 0.9rem 1.5rem;
+            background: transparent;
+            border: none;
             border-radius: 8px;
-            color: var(--text-light);
+            color: var(--text-secondary);
             cursor: pointer;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-        }
-
-        .tab-btn:hover {
-            background: rgba(0, 120, 36, 0.2);
-        }
-
-        .tab-btn.active {
-            background: var(--palmeiras-green);
-            border-color: var(--palmeiras-green);
-        }
-
-        .competition-tabs {
+            font-size: 0.95rem;
+            font-weight: 500;
+            font-family: inherit;
+            transition: all 0.25s ease;
             display: flex;
+            align-items: center;
+            justify-content: center;
             gap: 0.5rem;
-            margin-bottom: 1rem;
         }
 
-        .comp-btn {
-            padding: 0.5rem 1rem;
-            background: var(--bg-card);
-            border: 2px solid transparent;
-            border-radius: 6px;
-            color: var(--text-muted);
-            cursor: pointer;
-            font-size: 0.9rem;
-            transition: all 0.3s ease;
-        }
+        .nav-tab:hover { color: var(--text-primary); background: rgba(255, 255, 255, 0.05); }
 
-        .comp-btn:hover {
-            border-color: var(--palmeiras-green);
-            color: var(--text-light);
-        }
-
-        .comp-btn.active {
+        .nav-tab.active {
             background: var(--palmeiras-green);
             color: white;
+            box-shadow: 0 2px 12px rgba(0, 120, 36, 0.4);
         }
 
-        /* Tab Content */
-        .tab-content {
-            display: none;
-        }
+        .tab-content { display: none; animation: fadeIn 0.3s ease; }
+        .tab-content.active { display: block; }
 
-        .tab-content.active {
-            display: block;
-        }
-
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 1.5rem;
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card {
             background: var(--bg-card);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            padding: 1.75rem;
+            border: 1px solid var(--border-subtle);
+            box-shadow: var(--shadow-card);
+            margin-bottom: 1.5rem;
+        }
+
+        .card-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.5rem;
         }
 
         .card-title {
-            color: var(--palmeiras-green);
-            font-size: 1.3rem;
-            margin-bottom: 1rem;
+            font-size: 1.15rem;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+
+        .card-title .icon { color: var(--palmeiras-green); }
+
+        /* Featured Match */
+        .match-featured {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(0, 120, 36, 0.08) 100%);
+            border: 1px solid var(--border-accent);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .match-featured::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--palmeiras-green), var(--palmeiras-gold));
+        }
+
+        .match-competition-tag {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--palmeiras-green);
+            color: white;
+            padding: 0.35rem 0.85rem;
+            border-radius: 6px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+
+        .match-date {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
             display: flex;
             align-items: center;
             gap: 0.5rem;
         }
 
-        .card-title::before {
-            content: '';
-            width: 4px;
-            height: 24px;
-            background: var(--palmeiras-green);
-            border-radius: 2px;
-        }
-
-        /* Next Matches List */
-        .matches-list {
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .match-item {
-            padding: 1rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid var(--palmeiras-green);
-        }
-
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 0.8rem;
-        }
-
-        .match-date-time {
-            font-size: 0.9rem;
-            color: var(--text-muted);
-        }
-
-        .match-competition {
-            font-size: 0.75rem;
-            background: var(--palmeiras-green);
-            color: white;
-            padding: 0.2rem 0.6rem;
-            border-radius: 10px;
-        }
+        .match-date strong { color: var(--text-primary); font-weight: 600; }
 
         .match-teams {
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            justify-content: center;
+            gap: 2rem;
+            padding: 1.5rem 0;
         }
 
-        .team {
-            text-align: center;
-            flex: 1;
-        }
+        .match-team { text-align: center; flex: 1; }
 
-        .team-name {
-            font-size: 1rem;
-            font-weight: bold;
-        }
-
-        .team.palmeiras .team-name {
-            color: var(--palmeiras-green);
-        }
-
-        .vs {
-            font-size: 1rem;
-            color: var(--text-muted);
-            font-weight: bold;
-            padding: 0 0.5rem;
-        }
-
-        /* Recent Results */
-        .results-list {
+        .match-team-logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 0.75rem;
+            background: var(--bg-elevated);
+            border-radius: 50%;
             display: flex;
-            flex-direction: column;
-            gap: 0.8rem;
-        }
-
-        .result-item {
-            display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
-            border-left: 3px solid var(--palmeiras-green);
+            justify-content: center;
+            font-size: 2rem;
+            border: 2px solid var(--border-subtle);
         }
 
-        .result-date {
+        .match-team-logo.palmeiras {
+            border-color: var(--palmeiras-green);
+            background: rgba(0, 120, 36, 0.1);
+        }
+
+        .match-team-name { font-size: 1.1rem; font-weight: 600; }
+        .match-team-name.palmeiras { color: var(--palmeiras-green); }
+        .match-vs { font-size: 1.5rem; font-weight: 300; color: var(--text-muted); }
+
+        /* Where to Watch */
+        .watch-info {
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .watch-title {
             font-size: 0.8rem;
-            color: var(--text-muted);
-            width: 60px;
+            font-weight: 600;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            margin-bottom: 0.75rem;
         }
 
-        .result-teams {
-            flex: 1;
-            text-align: center;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-
-        .result-score {
-            font-size: 1.1rem;
-            font-weight: bold;
-            min-width: 60px;
-            text-align: right;
-        }
-
-        .win { color: #4ade80; }
-        .draw { color: #fbbf24; }
-        .loss { color: #f87171; }
-
-        /* Standings */
-        .standings-info {
-            text-align: center;
-        }
-
-        .position {
-            font-size: 3rem;
-            font-weight: bold;
-            color: var(--palmeiras-green);
-        }
-
-        .position-label {
-            color: var(--text-muted);
-            font-size: 0.9rem;
-        }
-
-        .competition-name {
-            font-size: 1.1rem;
-            color: var(--palmeiras-cream);
+        .watch-channels {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
             margin-bottom: 1rem;
         }
 
-        .stats {
+        .watch-channel {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.4rem;
+            background: var(--bg-elevated);
+            padding: 0.4rem 0.75rem;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .watch-channel.tv { color: #f472b6; }
+        .watch-channel.stream { color: #60a5fa; }
+        .watch-channel.radio { color: #fbbf24; }
+
+        .watch-label {
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+            margin-bottom: 0.5rem;
+        }
+
+        /* Match List */
+        .match-list { display: flex; flex-direction: column; gap: 1rem; }
+
+        .match-item {
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.2s ease;
+        }
+
+        .match-item:hover {
+            border-color: var(--border-accent);
+            transform: translateX(4px);
+        }
+
+        .match-item-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.75rem;
+        }
+
+        .match-item-comp {
+            font-size: 0.7rem;
+            font-weight: 600;
+            padding: 0.25rem 0.6rem;
+            border-radius: 4px;
+            background: var(--palmeiras-green);
+            color: white;
+        }
+
+        .match-item-date { font-size: 0.8rem; color: var(--text-muted); }
+
+        .match-item-teams {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .match-item-team { font-size: 0.95rem; font-weight: 500; }
+        .match-item-team.palmeiras { color: var(--palmeiras-green); }
+        .match-item-vs { color: var(--text-muted); font-size: 0.85rem; padding: 0 0.5rem; }
+
+        /* Results */
+        .result-list { display: flex; flex-direction: column; gap: 0.75rem; }
+
+        .result-item {
+            display: flex;
+            align-items: center;
+            background: var(--bg-elevated);
+            border-radius: 10px;
+            padding: 1rem 1.25rem;
+            border: 1px solid var(--border-subtle);
+        }
+
+        .result-date { font-size: 0.75rem; color: var(--text-muted); width: 65px; flex-shrink: 0; }
+
+        .result-teams {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 1rem;
+            font-size: 0.95rem;
+        }
+
+        .result-team { flex: 1; text-align: center; }
+        .result-team.palmeiras { color: var(--palmeiras-green); font-weight: 600; }
+
+        .result-score { font-size: 1.1rem; font-weight: 700; min-width: 70px; text-align: center; }
+        .result-score.win { color: #4ade80; }
+        .result-score.draw { color: #fbbf24; }
+        .result-score.loss { color: #f87171; }
+
+        /* Standings */
+        .standings-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+
+        .competition-tabs { display: flex; gap: 0.4rem; }
+
+        .comp-tab {
+            padding: 0.5rem 1rem;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-family: inherit;
+            transition: all 0.2s ease;
+        }
+
+        .comp-tab:hover { border-color: var(--palmeiras-green); color: var(--text-primary); }
+
+        .comp-tab.active {
+            background: var(--palmeiras-green);
+            border-color: var(--palmeiras-green);
+            color: white;
+        }
+
+        .standings-display { text-align: center; padding: 2rem 0; }
+
+        .standings-position {
+            font-size: 4.5rem;
+            font-weight: 800;
+            line-height: 1;
+            background: linear-gradient(135deg, var(--palmeiras-green) 0%, var(--palmeiras-green-light) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .standings-position-label { color: var(--text-secondary); font-size: 0.95rem; margin-top: 0.5rem; }
+
+        .standings-stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 1rem;
-            margin-top: 1.5rem;
+            margin-top: 2rem;
         }
 
-        .stat {
+        .standings-stat {
+            background: var(--bg-elevated);
+            padding: 1.25rem;
+            border-radius: 10px;
+            border: 1px solid var(--border-subtle);
             text-align: center;
-            padding: 0.8rem;
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 8px;
         }
 
-        .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--palmeiras-green);
+        .standings-stat-value { font-size: 2rem; font-weight: 700; color: var(--palmeiras-green); }
+        .standings-stat-label { font-size: 0.75rem; color: var(--text-muted); text-transform: uppercase; margin-top: 0.25rem; }
+
+        /* Stadium */
+        .stadium-card {
+            background: linear-gradient(135deg, var(--bg-card) 0%, rgba(206, 184, 136, 0.05) 100%);
         }
 
-        .stat-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
+        .stadium-hero { display: flex; gap: 2rem; align-items: flex-start; }
+
+        .stadium-icon {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-green-dark));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            flex-shrink: 0;
+            box-shadow: 0 8px 24px rgba(0, 120, 36, 0.3);
         }
 
-        .no-data {
+        .stadium-info h3 { font-size: 1.75rem; font-weight: 700; margin-bottom: 0.5rem; }
+
+        .stadium-address {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .stadium-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem; }
+
+        .stadium-stat {
+            background: var(--bg-elevated);
+            padding: 1rem;
+            border-radius: 10px;
             text-align: center;
-            color: var(--text-muted);
-            padding: 2rem;
+            border: 1px solid var(--border-subtle);
         }
 
-        /* Loading */
-        .loading {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 2rem;
-        }
+        .stadium-stat-value { font-size: 1.5rem; font-weight: 700; color: var(--palmeiras-gold); }
+        .stadium-stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
+
+        /* News */
+        .news-placeholder { text-align: center; padding: 4rem 2rem; }
+        .news-placeholder-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
+        .news-placeholder-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
+        .news-placeholder-text { color: var(--text-secondary); }
+
+        .loading, .no-data { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
 
         .loading::after {
             content: '';
             display: inline-block;
-            width: 20px;
-            height: 20px;
+            width: 24px;
+            height: 24px;
             border: 2px solid var(--palmeiras-green);
             border-top-color: transparent;
             border-radius: 50%;
-            animation: spin 1s linear infinite;
+            animation: spin 0.8s linear infinite;
             margin-left: 10px;
             vertical-align: middle;
         }
 
-        @keyframes spin {
-            to { transform: rotate(360deg); }
-        }
+        @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Footer */
         .footer {
             text-align: center;
             padding: 2rem;
             color: var(--text-muted);
-            font-size: 0.9rem;
+            font-size: 0.85rem;
+            border-top: 1px solid var(--border-subtle);
+            margin-top: 2rem;
         }
 
         @media (max-width: 768px) {
-            .header h1 {
-                font-size: 1.8rem;
-            }
-            
-            .container {
-                padding: 1rem;
-            }
-            
-            .grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .tabs {
-                justify-content: center;
-            }
-            
-            .tab-btn {
-                padding: 0.6rem 1rem;
-                font-size: 0.9rem;
-            }
-
-            .hero-card {
-                padding: 1.5rem;
-            }
-
-            .hero-teams {
-                flex-direction: column;
-                gap: 1rem;
-            }
-
-            .hero-vs {
-                font-size: 1.5rem;
-            }
-
-            .info-bar {
-                flex-direction: column;
-            }
-        }
-
-        /* Hero Card */
-        .hero-card {
-            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-dark-green));
-            border-radius: 16px;
-            padding: 2rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 8px 32px rgba(0, 120, 36, 0.4);
-            border: 2px solid var(--palmeiras-green);
-        }
-
-        .hero-header {
-            text-align: center;
-            margin-bottom: 1.5rem;
-        }
-
-        .hero-competition {
-            display: inline-block;
-            background: rgba(255, 255, 255, 0.2);
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            color: white;
-        }
-
-        .hero-teams {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 2rem;
-        }
-
-        .hero-team {
-            text-align: center;
-            flex: 1;
-        }
-
-        .hero-team-name {
-            font-size: 1.3rem;
-            font-weight: bold;
-            color: white;
-            margin-top: 0.5rem;
-        }
-
-        .hero-team.palmeiras .hero-team-name {
-            color: var(--palmeiras-cream);
-        }
-
-        .hero-vs {
-            font-size: 2rem;
-            font-weight: bold;
-            color: var(--palmeiras-cream);
-        }
-
-        .hero-datetime {
-            text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255, 255, 255, 0.2);
-        }
-
-        .hero-date {
-            font-size: 1.2rem;
-            color: white;
-            font-weight: bold;
-        }
-
-        .hero-time {
-            font-size: 1.5rem;
-            color: var(--palmeiras-cream);
-            margin-top: 0.3rem;
-        }
-
-        /* Info Bar */
-        .info-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .info-card {
-            flex: 1;
-            background: var(--bg-card);
-            border-radius: 12px;
-            padding: 1rem 1.5rem;
-            display: flex;
-            align-items: center;
-            gap: 1rem;
-            border-left: 4px solid var(--palmeiras-green);
-        }
-
-        .info-icon {
-            font-size: 1.5rem;
-        }
-
-        .info-label {
-            font-size: 0.8rem;
-            color: var(--text-muted);
-            text-transform: uppercase;
-        }
-
-        .info-value {
-            font-size: 1rem;
-            color: var(--text-light);
-            font-weight: 500;
+            .header { padding: 2rem 1rem; }
+            .header h1 { font-size: 1.8rem; }
+            .container { padding: 1rem; }
+            .nav-tabs { padding: 0.3rem; }
+            .nav-tab { padding: 0.7rem 1rem; font-size: 0.85rem; }
+            .card { padding: 1.25rem; }
+            .match-teams { gap: 1rem; }
+            .match-team-logo { width: 60px; height: 60px; font-size: 1.5rem; }
+            .stadium-hero { flex-direction: column; align-items: center; text-align: center; }
+            .stadium-stats { grid-template-columns: 1fr; }
+            .standings-stats { grid-template-columns: 1fr; }
         }
     </style>
 </head>
 <body>
     <header class="header">
-        <h1>🏆 Palmeiras</h1>
-        <p class="subtitle">Dashboard de Jogos e Classificação</p>
+        <div class="header-badge"><span>🏆</span> Sociedade Esportiva Palmeiras</div>
+        <h1>Verdão</h1>
+        <p class="subtitle">Dashboard de Jogos e Informações</p>
     </header>
 
     <main class="container">
-        <!-- Hero: Next Match -->
-        <div class="hero-card" id="hero-match">
-            <div class="loading">Carregando próximo jogo...</div>
-        </div>
-        
-        <!-- Info Bar: Where to Watch + Stadium -->
-        <div class="info-bar">
-            <div class="info-card">
-                <span class="info-icon">📺</span>
-                <div class="info-content">
-                    <div class="info-label">Onde Assistir</div>
-                    <div class="info-value" id="where-watch">Globo, Premiere, Amazon Prime</div>
-                </div>
-            </div>
-            <div class="info-card">
-                <span class="info-icon">📍</span>
-                <div class="info-content">
-                    <div class="info-label">Estádio</div>
-                    <div class="info-value" id="stadium-info">Allianz Parque</div>
-                </div>
-            </div>
-        </div>
+        <nav class="nav-tabs">
+            <button class="nav-tab active" data-tab="jogos"><span class="icon">📅</span> Próximos Jogos</button>
+            <button class="nav-tab" data-tab="resultados"><span class="icon">⚽</span> Resultados</button>
+            <button class="nav-tab" data-tab="classificacao"><span class="icon">📊</span> Classificação</button>
+            <button class="nav-tab" data-tab="estadio"><span class="icon">🏟️</span> Estádio</button>
+            <button class="nav-tab" data-tab="noticias"><span class="icon">📰</span> Notícias</button>
+        </nav>
 
-        <!-- Navigation Tabs -->
-        <div class="tabs">
-            <button class="tab-btn active" data-tab="proximos">Próximos Jogos</button>
-            <button class="tab-btn" data-tab="resultados">Resultados</button>
-            <button class="tab-btn" data-tab="classificacao">Classificação</button>
-        </div>
-
-        <!-- Próximos Jogos Tab -->
-        <div id="proximos" class="tab-content active">
-            <div class="grid">
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h2 class="card-title">Próximos 5 Jogos</h2>
-                    <div id="next-matches">
-                        <div class="loading">Carregando...</div>
+        <!-- Jogos -->
+        <section id="jogos" class="tab-content active">
+            <div class="card match-featured">
+                <div class="card-header">
+                    <span class="match-competition-tag">🏆 Brasileirão</span>
+                    <span class="match-date"><span>📅</span> <strong>Sábado, 15/03</strong> às 18:30</span>
+                </div>
+                <div class="match-teams">
+                    <div class="match-team">
+                        <div class="match-team-logo palmeiras">🌴</div>
+                        <div class="match-team-name palmeiras">Palmeiras</div>
+                    </div>
+                    <span class="match-vs">X</span>
+                    <div class="match-team">
+                        <div class="match-team-logo">⚫</div>
+                        <div class="match-team-name">São Paulo</div>
+                    </div>
+                </div>
+                <div class="watch-info">
+                    <div class="watch-title">📺 Onde Assistir</div>
+                    <div class="watch-label">Televisão</div>
+                    <div class="watch-channels">
+                        <span class="watch-channel tv">📺 Globo</span>
+                        <span class="watch-channel tv">📺 SporTV</span>
+                        <span class="watch-channel tv">📺 Premiere</span>
+                    </div>
+                    <div class="watch-label">Streaming</div>
+                    <div class="watch-channels">
+                        <span class="watch-channel stream">🌐 Globoplay</span>
+                        <span class="watch-channel stream">🌐 Prime Video</span>
+                    </div>
+                    <div class="watch-label">Rádio</div>
+                    <div class="watch-channels">
+                        <span class="watch-channel radio">📻 Rádio Palmeiras</span>
+                        <span class="watch-channel radio">📻 Rádio Globo</span>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <!-- Resultados Tab -->
-        <div id="resultados" class="tab-content">
-            <div class="grid">
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h2 class="card-title">Últimos Resultados</h2>
-                    <div id="recent-results">
-                        <div class="loading">Carregando...</div>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="icon">📋</span> Próximos 4 Jogos</h2>
+                </div>
+                <div id="next-matches"><div class="loading">Carregando...</div></div>
+            </div>
+        </section>
+
+        <!-- Resultados -->
+        <section id="resultados" class="tab-content">
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="icon">⚽</span> Últimos 5 Resultados</h2>
+                </div>
+                <div id="recent-results"><div class="loading">Carregando...</div></div>
+            </div>
+        </section>
+
+        <!-- Classificação -->
+        <section id="classificacao" class="tab-content">
+            <div class="card">
+                <div class="standings-header">
+                    <h2 class="card-title"><span class="icon">📊</span> Classificação</h2>
+                    <div class="competition-tabs">
+                        <button class="comp-tab active" data-comp="BSA">Brasileirão</button>
+                        <button class="comp-tab" data-comp="CLI">Libertadores</button>
+                    </div>
+                </div>
+                <div id="standings"><div class="loading">Carregando...</div></div>
+            </div>
+        </section>
+
+        <!-- Estádio -->
+        <section id="estadio" class="tab-content">
+            <div class="card stadium-card">
+                <div class="stadium-hero">
+                    <div class="stadium-icon">🏟️</div>
+                    <div class="stadium-info">
+                        <h3>Allianz Parque</h3>
+                        <p class="stadium-address"><span>📍</span> Rua Palestra Itália, 200 - São Paulo, SP</p>
+                        <div class="stadium-stats">
+                            <div class="stadium-stat">
+                                <div class="stadium-stat-value">43.713</div>
+                                <div class="stadium-stat-label">Capacidade</div>
+                            </div>
+                            <div class="stadium-stat">
+                                <div class="stadium-stat-value">2014</div>
+                                <div class="stadium-stat-label">Inauguração</div>
+                            </div>
+                            <div class="stadium-stat">
+                                <div class="stadium-stat-value">R$ 630M</div>
+                                <div class="stadium-stat-label">Custo Total</div>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-
-        <!-- Classificação Tab -->
-        <div id="classificacao" class="tab-content">
-            <div class="competition-tabs">
-                <button class="comp-btn active" data-comp="BSA">Brasileirão</button>
-                <button class="comp-btn" data-comp="CLI">Libertadores</button>
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title"><span class="icon">ℹ️</span> Sobre o Allianz Parque</h2>
+                </div>
+                <p style="color: var(--text-secondary); line-height: 1.8;">
+                    O Allianz Parque é a arena multiuso do Palmeiras, localizada no bairro da Perdizes, em São Paulo. 
+                    Inaugurado em 2014, é considerado um dos estádios mais modernos do Brasil, com cobertura total, 
+                    capacidade para mais de 43 mil torcedores e tecnologia de ponta. O nome é resultado de 
+                    acordo de naming rights com a Allianz, seguradora alemã.
+                </p>
             </div>
-            <div class="grid">
-                <div class="card" style="grid-column: 1 / -1;">
-                    <h2 class="card-title">Classificação</h2>
-                    <div id="standings">
-                        <div class="loading">Carregando...</div>
-                    </div>
+        </section>
+
+        <!-- Notícias -->
+        <section id="noticias" class="tab-content">
+            <div class="card">
+                <div class="news-placeholder">
+                    <div class="news-placeholder-icon">📰</div>
+                    <h3 class="news-placeholder-title">Em Breve</h3>
+                    <p class="news-placeholder-text">Seção de notícias em desenvolvimento. Em breve você poderá acompanhar as últimas notícias do Palmeiras aqui!</p>
                 </div>
             </div>
-        </div>
+        </section>
     </main>
 
     <footer class="footer">
-        <p>Dados fornecidos por Football-Data.org</p>
+        <p>Dados fornecidos por Football-Data.org • Palmeiras Dashboard v3</p>
     </footer>
 
     <script>
-        // Local API base (server proxies requests to football-data.org)
         const API_BASE = '/api';
         const TEAM_ID = 1769;
-        
-        // Brazilian timezone (UTC-3)
         const BR_TZ = 'America/Sao_Paulo';
 
-        // Format date to Brazilian Portuguese
         function formatDate(dateStr) {
             const date = new Date(dateStr);
-            return date.toLocaleDateString('pt-BR', { 
-                day: '2-digit', 
-                month: '2-digit',
-                year: 'numeric',
-                timeZone: BR_TZ
-            });
+            return date.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', year: 'numeric', timeZone: BR_TZ });
         }
 
-        // Format time to Brazilian Portuguese
         function formatTime(dateStr) {
             const date = new Date(dateStr);
-            return date.toLocaleTimeString('pt-BR', { 
-                hour: '2-digit', 
-                minute: '2-digit',
-                timeZone: BR_TZ
-            });
+            return date.toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: BR_TZ });
         }
 
-        // Format competition name
         function formatCompetition(comp) {
-            const names = {
-                'BSA': 'Brasileirão',
-                'COPA_DO_BRASIL': 'Copa do Brasil',
-                'LIBERTADORES': 'Libertadores',
-                'RECOPA': 'Recopa',
-                'PAULISTA': 'Campeonato Paulista',
-                'BRA': 'Brasileirão'
-            };
+            const names = { 'BSA': 'Brasileirão', 'SERIE_A': 'Brasileirão', 'COPA_DO_BRASIL': 'Copa do Brasil', 'LIBERTADORES': 'Libertadores', 'LIB': 'Libertadores', 'RECOPA': 'Recopa', 'PAULISTA': 'Camp. Paulista', 'BRA': 'Brasileirão' };
             return names[comp] || comp;
         }
 
-        // Get competition code
         function getCompetitionCode(comp) {
             if (comp === 'SERIE_A' || comp?.code === 'BSA' || comp?.code === 'BRA') return 'BSA';
-            if (comp?.code === 'LIBERTADORES') return 'LIB';
+            if (comp?.code === 'LIBERTADORES' || comp?.code === 'LIB') return 'CLI';
             return comp?.code || comp || 'BSA';
         }
 
         // Tab switching
-        document.querySelectorAll('.tab-btn').forEach(btn => {
+        document.querySelectorAll('.nav-tab').forEach(btn => {
             btn.addEventListener('click', () => {
-                // Update active tab button
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.nav-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
-                
-                // Show corresponding content
                 const tabId = btn.dataset.tab;
-                document.querySelectorAll('.tab-content').forEach(content => {
-                    content.classList.remove('active');
-                });
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
             });
         });
 
         // Competition switching
         let currentCompetition = 'BSA';
-        document.querySelectorAll('.comp-btn').forEach(btn => {
+        document.querySelectorAll('.comp-tab').forEach(btn => {
             btn.addEventListener('click', () => {
-                document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('active'));
+                document.querySelectorAll('.comp-tab').forEach(b => b.classList.remove('active'));
                 btn.classList.add('active');
                 currentCompetition = btn.dataset.comp;
                 loadStandings(currentCompetition);
             });
         });
 
-        // Load next 5 matches
+        // Load next matches
         async function loadNextMatches() {
             const container = document.getElementById('next-matches');
-            
             try {
-                const response = await fetch(
-                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`
-                );
-                
+                const response = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`);
                 if (!response.ok) throw new Error('API error');
-                
                 const data = await response.json();
                 const matches = data.matches || [];
                 
-                if (matches.length === 0) {
-                    container.innerHTML = '<div class="no-data">Nenhum jogo agendado no momento</div>';
+                if (matches.length <= 1) {
+                    container.innerHTML = '<div class="no-data">Nenhum outro jogo agendado no momento</div>';
                     return;
                 }
 
-                const matchesHTML = matches.map(match => {
+                const remainingMatches = matches.slice(1, 5);
+                const matchesHTML = remainingMatches.map(match => {
                     const homeTeam = match.homeTeam;
                     const awayTeam = match.awayTeam;
                     const isHome = homeTeam.id === TEAM_ID;
                     const compCode = getCompetitionCode(match.competition);
-
                     return `
                         <div class="match-item">
-                            <div class="match-header">
-                                <span class="match-date-time">
-                                    ${formatDate(match.utcDate)} às ${formatTime(match.utcDate)}
-                                </span>
-                                <span class="match-competition">${formatCompetition(compCode)}</span>
+                            <div class="match-item-header">
+                                <span class="match-item-comp">${formatCompetition(compCode)}</span>
+                                <span class="match-item-date">${formatDate(match.utcDate)} • ${formatTime(match.utcDate)}</span>
                             </div>
-                            <div class="match-teams">
-                                <div class="team ${isHome ? 'palmeiras' : ''}">
-                                    <div class="team-name">${homeTeam.name}</div>
-                                </div>
-                                <span class="vs">X</span>
-                                <div class="team ${!isHome ? 'palmeiras' : ''}">
-                                    <div class="team-name">${awayTeam.name}</div>
-                                </div>
+                            <div class="match-item-teams">
+                                <span class="match-item-team ${isHome ? 'palmeiras' : ''}">${homeTeam.name}</span>
+                                <span class="match-item-vs">X</span>
+                                <span class="match-item-team ${!isHome ? 'palmeiras' : ''}">${awayTeam.name}</span>
                             </div>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
-
-                container.innerHTML = `<div class="matches-list">${matchesHTML}</div>`;
+                container.innerHTML = `<div class="match-list">${matchesHTML}</div>`;
             } catch (error) {
                 container.innerHTML = '<div class="no-data">Erro ao carregar próximos jogos</div>';
                 console.error(error);
@@ -697,14 +738,9 @@
         // Load recent results
         async function loadRecentResults() {
             const container = document.getElementById('recent-results');
-            
             try {
-                const response = await fetch(
-                    `${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`
-                );
-                
+                const response = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`);
                 if (!response.ok) throw new Error('API error');
-                
                 const data = await response.json();
                 const matches = data.matches || [];
                 
@@ -718,26 +754,24 @@
                     const awayTeam = match.awayTeam;
                     const scoreHome = match.score.fullTime.home ?? 0;
                     const scoreAway = match.score.fullTime.away ?? 0;
-                    
                     const isPalmeirasHome = homeTeam.id === TEAM_ID;
                     const palmeirasScore = isPalmeirasHome ? scoreHome : scoreAway;
                     const opponentScore = isPalmeirasHome ? scoreAway : scoreHome;
                     const opponentName = isPalmeirasHome ? awayTeam.name : homeTeam.name;
-                    
                     let resultClass = 'draw';
                     if (palmeirasScore > opponentScore) resultClass = 'win';
                     else if (palmeirasScore < opponentScore) resultClass = 'loss';
-
                     return `
                         <div class="result-item">
                             <span class="result-date">${formatDate(match.utcDate)}</span>
-                            <span class="result-teams">${opponentName}</span>
+                            <span class="result-teams">
+                                <span class="result-team ${isPalmeirasHome ? 'palmeiras' : ''}">Palmeiras</span>
+                                <span class="result-team">${opponentName}</span>
+                            </span>
                             <span class="result-score ${resultClass}">${scoreHome} - ${scoreAway}</span>
-                        </div>
-                    `;
+                        </div>`;
                 }).join('');
-
-                container.innerHTML = `<div class="results-list">${resultsHTML}</div>`;
+                container.innerHTML = `<div class="result-list">${resultsHTML}</div>`;
             } catch (error) {
                 container.innerHTML = '<div class="no-data">Erro ao carregar resultados</div>';
                 console.error(error);
@@ -748,14 +782,9 @@
         async function loadStandings(competition = 'BSA') {
             const container = document.getElementById('standings');
             container.innerHTML = '<div class="loading">Carregando...</div>';
-            
             try {
-                const response = await fetch(
-                    `${API_BASE}/competitions/${competition}/standings`
-                );
-                
+                const response = await fetch(`${API_BASE}/competitions/${competition}/standings`);
                 if (!response.ok) {
-                    // Check if it's a 404 - competition might not have standings
                     if (response.status === 404) {
                         const compName = competition === 'CLI' ? 'Libertadores' : 'Brasileirão';
                         container.innerHTML = `<div class="no-data">Classificação não disponível para ${compName}<br><small>(Apenas competições de liga têm tabela)</small></div>`;
@@ -766,18 +795,12 @@
                 
                 const data = await response.json();
                 const standings = data.standings || [];
-                
                 if (standings.length === 0) {
                     container.innerHTML = '<div class="no-data">Nenhum dado de classificação disponível</div>';
                     return;
                 }
 
-                // Find Palmeirense position in TOTAL table
-                let position = null;
-                let played = 0;
-                let points = 0;
-                let wins = 0;
-
+                let position = null, played = 0, points = 0, wins = 0;
                 for (const standing of standings) {
                     if (standing.type === 'TOTAL') {
                         for (let i = 0; i < standing.table.length; i++) {
@@ -800,31 +823,19 @@
                 }
 
                 const compName = competition === 'CLI' ? 'Libertadores' : 'Brasileirão';
-
                 container.innerHTML = `
-                    <div class="standings-info">
-                        <div class="competition-name">${compName}</div>
-                        <div class="position">${position}º</div>
-                        <div class="position-label">Lugar no Campeonato</div>
-                        <div class="stats">
-                            <div class="stat">
-                                <div class="stat-value">${played}</div>
-                                <div class="stat-label">Jogos</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${points}</div>
-                                <div class="stat-label">Pontos</div>
-                            </div>
-                            <div class="stat">
-                                <div class="stat-value">${wins}</div>
-                                <div class="stat-label">Vitórias</div>
-                            </div>
+                    <div class="standings-display">
+                        <div class="standings-position">${position}º</div>
+                        <div class="standings-position-label">Lugar no ${compName}</div>
+                        <div class="standings-stats">
+                            <div class="standings-stat"><div class="standings-stat-value">${played}</div><div class="standings-stat-label">Jogos</div></div>
+                            <div class="standings-stat"><div class="standings-stat-value">${points}</div><div class="standings-stat-label">Pontos</div></div>
+                            <div class="standings-stat"><div class="standings-stat-value">${wins}</div><div class="standings-stat-label">Vitórias</div></div>
                         </div>
-                    </div>
-                `;
+                    </div>`;
             } catch (error) {
                 if (currentCompetition === 'CLI') {
-                    container.innerHTML = '<div class="no-data">📊 Libertadores: dados não disponíveis no plano gratuito. Atualize para acessar!</div>';
+                    container.innerHTML = '<div class="no-data">📊 Libertadores: dados não disponíveis no plano gratuito.</div>';
                 } else {
                     container.innerHTML = '<div class="no-data">Erro ao carregar classificação</div>';
                 }
@@ -834,74 +845,10 @@
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            loadHeroMatch();
             loadNextMatches();
             loadRecentResults();
             loadStandings(currentCompetition);
         });
-
-        // Load hero (next match)
-        async function loadHeroMatch() {
-            const container = document.getElementById('hero-match');
-            
-            try {
-                const response = await fetch(
-                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`
-                );
-                
-                if (!response.ok) throw new Error('API error');
-                
-                const data = await response.json();
-                const match = data.matches?.[0];
-                
-                if (!match) {
-                    container.innerHTML = '<div class="no-data" style="color: white;">Nenhum jogo agendado</div>';
-                    return;
-                }
-
-                const homeTeam = match.homeTeam;
-                const awayTeam = match.awayTeam;
-                const isHome = homeTeam.id === TEAM_ID;
-                const compCode = getCompetitionCode(match.competition);
-
-                // Determine where to watch based on competition
-                let whereToWatch = 'Globo, Premiere';
-                if (compCode === 'LIB') {
-                    whereToWatch = 'Globo, Paramount+';
-                } else if (compCode === 'COPA') {
-                    whereToWatch = 'Globo, Band, CazéTV';
-                }
-
-                // Determine venue
-                const venue = isHome ? 'Allianz Parque' : (match.venue || 'Ausente');
-
-                // Update info bar
-                document.getElementById('where-watch').textContent = whereToWatch;
-                document.getElementById('stadium-info').textContent = venue;
-
-                container.innerHTML = `
-                    <div class="hero-header">
-                        <span class="hero-competition">${formatCompetition(compCode)}</span>
-                    </div>
-                    <div class="hero-teams">
-                        <div class="hero-team ${isHome ? 'palmeiras' : ''}">
-                            <div class="team-name">${homeTeam.name}</div>
-                        </div>
-                        <div class="hero-vs">X</div>
-                        <div class="hero-team ${!isHome ? 'palmeiras' : ''}">
-                            <div class="team-name">${awayTeam.name}</div>
-                        </div>
-                    </div>
-                    <div class="hero-datetime">
-                        <div class="hero-date">${formatDate(match.utcDate)}</div>
-                        <div class="hero-time">${formatTime(match.utcDate)}</div>
-                    </div>
-                `;
-            } catch (error) {
-                container.innerHTML = '<div class="no-data" style="color: white;">Erro ao carregar próximo jogo</div>';
-                console.error(error);
-            }
-        }
     </script>
 </body>
 </html>

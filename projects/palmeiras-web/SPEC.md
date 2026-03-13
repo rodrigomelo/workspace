@@ -1,4 +1,11 @@
-# SPEC.md - Palmeiras Dashboard v2
+# SPEC.md - Palmeiras Dashboard v3
+
+## Novas Funcionalidades v3
+
+- ✅ Where to Watch (Onde Assistir) - TV, Streaming, Rádio
+- ✅ Seção Estádio - Allianz Parque com informações completas
+- ✅ Seção Notícias - Placeholder "Em breve"
+- ✅ Design limpo e moderno com tema escuro
 
 ## Paleta de Cores
 
@@ -7,63 +14,58 @@
 | Primary (Verdão) | Verde Palmeiras | `#007824` |
 | Secondary | Branco | `#FFFFFF` |
 | Accent | Dourado | `#CEB888` |
-| Background Dark | Cinza Escuro | `#1A1A1A` |
-| Background Card | Cinza Médio | `#2D2D2D` |
-| Text Primary | Branco | `#FFFFFF` |
-| Text Secondary | Cinza Claro | `#B0B0B0` |
-| Error | Vermelho | `#E53935` |
-| Success | Verde Claro | `#4CAF50` |
-
-**Contraste:** Garantir razão mínima 4.5:1 para texto sobre fundo escuro.
+| Background Dark | Preto | `#0a0a0a` |
+| Background Card | Cinza Escuro | `#141414` |
+| Background Elevated | Cinza | `#1f1f1f` |
+| Text Primary | Branco | `#ffffff` |
+| Text Secondary | Cinza Claro | `#a0a0a0` |
 
 ## Tipografia
 
-- **Headings:** `Inter` ou `Poppins` (700 weight)
-- **Body:** `Inter` (400/500 weight)
+- **Fonte:** Outfit (Google Fonts)
+- **Headings:** 700-800 weight
+- **Body:** 400-500 weight
 - **Tamanhos:**
-  - H1: 32px
-  - H2: 24px
-  - H3: 18px
-  - Body: 16px
-  - Small: 14px
+  - H1: 2.5rem
+  - H2: 1.75rem
+  - Body: 1rem
+  - Small: 0.85rem
 
-## Layout dos Cards
+## Layout
+
+### Cards
+- Bordas arredondadas 16px
+- Sombra suave
+- Hover com borda verde sutil
+
+### Abas de Navegação
+- 5 abas: Jogos, Resultados, Classificação, Estádio, Notícias
+- Estilo pills com background verde ativo
 
 ### Próximo Jogo (Destaque)
-- Card grande e prominence
-- Escudo do time grande (80x80px)
-- Data e horário em destaque
-- Estádio/local
-- Borda sutil com cor `#007824`
+- Card especial com borda verde/gold
+- Escudo do time (80x80px)
+- Data e horário
+- **Onde Assistir:** TV, Streaming, Rádio
 
-### Resultados Recentes
-- Formato de lista vertical
-- Cada item: data, time casa (escudo 32px), placar, time visitante (escudo 32px)
-- Fundo alternado para leitura fácil
+### Where to Watch (Hardcoded)
+- **TV:** Globo, SporTV, Premiere
+- **Streaming:** Globoplay, Prime Video
+- **Rádio:** Rádio Palmeiras, Rádio Globo
 
-### Classificação
-- Tabela com colunas: Pos, Time, Pts, J, V, E, D, GP, GC, SG
-- Linha do Palmeirense destacada com fundo `#007824` com 10% opacidade
+### Estádio
+- **Nome:** Allianz Parque
+- **Endereço:** Rua Palestra Itália, 200 - São Paulo, SP
+- **Capacidade:** 43.713
+- **Inauguração:** 2014
+- **Custo:** R$ 630M
 
-## Estado de Carregamento
-
-- **Spinner:** Círculo giratório verde (`#007824`) com 40px
-- **Esqueleto:** Cards com efeito "skeleton"
-
-## Estado de Erro
-
-- Ícone de alerta em vermelho
-- Mensagem: "Ops! Algo deu errado."
-- Botão "Tentar novamente"
+### Notícias
+- Placeholder "Em Breve"
 
 ## Breakpoints Mobile
 
 | Dispositivo | Largura |
 |-------------|---------|
 | Mobile | < 768px |
-| Desktop | > 1024px |
-
-**Ajustes mobile:**
-- Cards em stack vertical
-- Padding reduzido
-- Tabelas com scroll horizontal
+| Desktop | > 768px |
