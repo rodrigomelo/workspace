@@ -1,0 +1,694 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Setup OpenClaw - Olympian Family</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --bg-primary: #0d1117;
+            --bg-secondary: #161b22;
+            --bg-tertiary: #21262d;
+            --text-primary: #e6edf3;
+            --text-secondary: #8b949e;
+            --accent: #58a6ff;
+            --accent-gold: #f0b429;
+            --success: #3fb950;
+            --purple: #a371f7;
+            --pink: #db61a2;
+            --orange: #f0883e;
+            --green: #7ee787;
+            --border: #30363d;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+        
+        header {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 2rem;
+            background: linear-gradient(135deg, var(--bg-secondary), var(--bg-tertiary));
+            border-radius: 16px;
+            border: 1px solid var(--border);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            background: linear-gradient(90deg, var(--accent-gold), var(--orange));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 0.5rem;
+        }
+        
+        .subtitle {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+        }
+        
+        .stats-bar {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+        
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            text-transform: uppercase;
+        }
+        
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 0.75rem 1.5rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            transition: all 0.2s;
+            font-weight: 500;
+        }
+        
+        .tab:hover {
+            background: var(--bg-tertiary);
+            color: var(--text-primary);
+        }
+        
+        .tab.active {
+            background: var(--accent);
+            color: var(--bg-primary);
+            border-color: var(--accent);
+        }
+        
+        .search-box {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .search-box:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        .search-box::placeholder {
+            color: var(--text-secondary);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .section-title {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .category-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+        
+        .skill-card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: all 0.2s;
+        }
+        
+        .skill-card:hover {
+            border-color: var(--accent);
+            transform: translateY(-2px);
+        }
+        
+        .skill-card.hidden {
+            display: none;
+        }
+        
+        .skill-header {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            margin-bottom: 0.75rem;
+        }
+        
+        .skill-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.2rem;
+            background: var(--bg-tertiary);
+        }
+        
+        .skill-name {
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+        
+        .skill-desc {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+            line-height: 1.5;
+        }
+        
+        .tag {
+            display: inline-block;
+            padding: 0.2rem 0.5rem;
+            background: var(--bg-tertiary);
+            border-radius: 4px;
+            font-size: 0.75rem;
+            color: var(--text-secondary);
+            margin-right: 0.25rem;
+            margin-top: 0.5rem;
+        }
+        
+        .tag.category { background: rgba(88, 166, 255, 0.2); color: var(--accent); }
+        .tag.status { background: rgba(63, 185, 80, 0.2); color: var(--success); }
+        
+        .tools-section {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        .tools-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 1rem;
+        }
+        
+        .tool-item {
+            background: var(--bg-tertiary);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .tool-name {
+            font-weight: 600;
+            color: var(--accent);
+            margin-bottom: 0.25rem;
+        }
+        
+        .tool-detail {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        
+        .agents-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--bg-secondary);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+        
+        .agents-table th, .agents-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .agents-table th {
+            background: var(--bg-tertiary);
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+        
+        .agents-table tr:hover {
+            background: var(--bg-tertiary);
+        }
+        
+        .model-badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            background: rgba(88, 166, 255, 0.2);
+            color: var(--accent);
+            border-radius: 4px;
+            font-family: monospace;
+            font-size: 0.85rem;
+        }
+        
+        .flow-list {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .flow-item {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+        
+        .flow-arrow {
+            color: var(--accent-gold);
+            margin: 0 0.5rem;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .highlight {
+            color: var(--accent-gold);
+            font-weight: 600;
+        }
+        
+        @media (max-width: 768px) {
+            .container { padding: 1rem; }
+            h1 { font-size: 1.8rem; }
+            .category-grid { grid-template-columns: 1fr; }
+            .stats-bar { gap: 1rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚡ Setup OpenClaw</h1>
+            <p class="subtitle">Olympian Family - Visão Geral Completa</p>
+            <div class="stats-bar">
+                <div class="stat-item">
+                    <div class="stat-value">53</div>
+                    <div class="stat-label">Skills</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">9</div>
+                    <div class="stat-label">Agentes</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Canais</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-value">2</div>
+                    <div class="stat-label">Áudio</div>
+                </div>
+            </div>
+        </header>
+        
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('skills')">🛠️ Skills</button>
+            <button class="tab" onclick="showTab('tools')">🔧 Ferramentas</button>
+            <button class="tab" onclick="showTab('agents')">👥 Agentes</button>
+            <button class="tab" onclick="showTab('audio')">🔊 Áudio</button>
+            <button class="tab" onclick="showTab('flows')">🔄 Fluxos</button>
+        </div>
+        
+        <input type="text" class="search-box" id="searchBox" placeholder="🔍 Buscar skills..." oninput="filterSkills()">
+        
+        <div id="skills" class="tab-content active">
+            <h2 class="section-title">💡 Todas as Skills Disponíveis</h2>
+            <div class="category-grid" id="skillsGrid"></div>
+        </div>
+        
+        <div id="tools" class="tab-content">
+            <h2 class="section-title">⚙️ Configurações do Sistema</h2>
+            
+            <div class="tools-section">
+                <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🤖 OpenClaw</h3>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">Versão</div>
+                        <div class="tool-detail">2026.3.7</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Modelo Padrão</div>
+                        <div class="tool-detail">minimax/MiniMax-M2.5</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Host</div>
+                        <div class="tool-detail">Mac mini de Rodrigo</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">OS</div>
+                        <div class="tool-detail">macOS Darwin 25.3.0 (arm64)</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Node</div>
+                        <div class="tool-detail">v25.8.0</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Shell</div>
+                        <div class="tool-detail">zsh</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-section">
+                <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">💬 Canais</h3>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">Telegram</div>
+                        <div class="tool-detail">Ativo - 9 bots configurados</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Discord</div>
+                        <div class="tool-detail">Ativo</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-section">
+                <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🌐 Hospedagem</h3>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">here.now</div>
+                        <div class="tool-detail">Email: melorodrigo@gmail.com</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="agents" class="tab-content">
+            <h2 class="section-title">👥 Agentes - Olympian Family</h2>
+            <table class="agents-table">
+                <thead>
+                    <tr>
+                        <th>Agente</th>
+                        <th>Papel</th>
+                        <th>Workspace</th>
+                        <th>Modelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🏃‍♂️ <strong>Hermes</strong></td>
+                        <td>Coordenador Geral</td>
+                        <td>~/.openclaw/workspace</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🔨 <strong>Hefesto</strong></td>
+                        <td>Engenheiro de Software</td>
+                        <td>~/.openclaw/workspace-hefesto</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🦉 <strong>Athena</strong></td>
+                        <td>Designer de UX</td>
+                        <td>~/.openclaw/workspace-athena</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>☀️ <strong>Apollo</strong></td>
+                        <td>QA Engineer</td>
+                        <td>~/.openclaw/workspace-apollo</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🏹 <strong>Artemis</strong></td>
+                        <td>Pesquisadora</td>
+                        <td>~/.openclaw/workspace-artemis</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🌊 <strong>Poseidon</strong></td>
+                        <td>Engenheiro de Dados</td>
+                        <td>~/.openclaw/workspace-poseidon</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🍷 <strong>Dionysus</strong></td>
+                        <td>Criativo</td>
+                        <td>~/.openclaw/workspace-dionysus</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>💀 <strong>Hades</strong></td>
+                        <td>Engenheiro de Segurança</td>
+                        <td>~/.openclaw/workspace-hades</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td>🌾 <strong>Demeter</strong></td>
+                        <td>Automação</td>
+                        <td>~/.openclaw/workspace-demeter</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div id="audio" class="tab-content">
+            <h2 class="section-title">🔊 Configurações de Áudio</h2>
+            
+            <div class="tools-section">
+                <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🗣️ Text-to-Speech (TTS)</h3>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">Edge TTS (Principal)</div>
+                        <div class="tool-detail">Voice: pt-BR-AntonioNeural</div>
+                        <div class="tool-detail">Idioma: pt-BR</div>
+                        <div class="tool-detail">Gratuito - sem API key</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">say (Fallback)</div>
+                        <div class="tool-detail">Português: Luciana</div>
+                        <div class="tool-detail">Inglês: Samantha</div>
+                        <div class="tool-detail">macOS built-in</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">ElevenLabs (sag)</div>
+                        <div class="tool-detail">Estilo mac-style say UX</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">Sherpa ONNX</div>
+                        <div class="tool-detail">Offline TTS</div>
+                        <div class="tool-detail">Sem cloud</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="tools-section">
+                <h3 style="color: var(--accent-gold); margin-bottom: 1rem;">🎤 Speech-to-Text (STT)</h3>
+                <div class="tools-grid">
+                    <div class="tool-item">
+                        <div class="tool-name">Whisper CLI</div>
+                        <div class="tool-detail">Modelo: turbo</div>
+                        <div class="tool-detail">Local - gratuito</div>
+                    </div>
+                    <div class="tool-item">
+                        <div class="tool-name">OpenAI Whisper API</div>
+                        <div class="tool-detail">Transcrição via API</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div id="flows" class="tab-content">
+            <h2 class="section-title">🔄 Fluxos de Colaboração</h2>
+            <div class="flow-list">
+                <div class="flow-item">
+                    <strong>1. Athena designs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto builds</strong> <span class="flow-arrow">→</span> 
+                    <strong>Apollo tests</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hermes delivers</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>2. Artemis hunts bugs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Apollo reviews</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto fixes</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>3. Poseidon provides data</strong> <span class="flow-arrow">→</span> 
+                    <strong>Athena designs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto builds</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>4. Dionysus generates ideas</strong> <span class="flow-arrow">→</span> 
+                    <strong>Athena refines</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto implements</strong>
+                </div>
+                <div class="flow-item">
+                    <strong>5. Demeter automates</strong> <span class="flow-arrow">→</span> 
+                    <strong>Everything runs smoothly</strong>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Setup OpenClaw | Olympian Family | <span class="highlight">53 Skills</span> | <span class="highlight">9 Agentes</span></p>
+            <p>Gerado em Março 2026</p>
+        </footer>
+    </div>
+    
+    <script>
+        const skills = [
+            {name: "1password", icon: "🔐", desc: "Gerenciar senhas e secrets via 1Password CLI", category: "security"},
+            {name: "apple-notes", icon: "📝", desc: "Criar, editar, buscar notas no Apple Notes", category: "productivity"},
+            {name: "apple-reminders", icon: "⏰", desc: "Gerenciar lembretes via remindctl CLI", category: "productivity"},
+            {name: "bear-notes", icon: "🐻", desc: "Criar e gerenciar notas no Bear", category: "productivity"},
+            {name: "blogwatcher", icon: "📰", desc: "Monitorar blogs e RSS/Atom feeds", category: "monitoring"},
+            {name: "blucli", icon: "🔵", desc: "Controle de dispositivos BluOS (soundbars)", category: "media"},
+            {name: "bluebubbles", icon: "💬", desc: "Enviar iMessages via BlueBubbles", category: "messaging"},
+            {name: "camsnap", icon: "📷", desc: "Capturar frames de câmeras RTSP/ONVIF", category: "camera"},
+            {name: "canvas", icon: "🎨", desc: "Controlar node canvases (present/hide/eval)", category: "ui"},
+            {name: "clawhub", icon: "🕷️", desc: "Buscar e instalar skills do clawhub.com", category: "tools"},
+            {name: "coding-agent", icon: "🤖", desc: "Delegar tarefas para Codex, Claude Code ou Pi", category: "coding"},
+            {name: "discord", icon: "💜", desc: "Operações no Discord (send, react, etc)", category: "messaging"},
+            {name: "eightctl", icon: "🛏️", desc: "Controlar Eight Sleep pods", category: "iot"},
+            {name: "gemini", icon: "🧠", desc: "Gemini CLI para Q&A e geração", category: "ai"},
+            {name: "gh-issues", icon: "🐙", desc: "Gerenciar issues do GitHub e criar PRs", category: "devops"},
+            {name: "gifgrep", icon: "🎬", desc: "Buscar e baixar GIFs", category: "media"},
+            {name: "github", icon: "📂", desc: "Operações via gh CLI (issues, PRs, CI)", category: "devops"},
+            {name: "gog", icon: "📧", desc: "Google Workspace: Gmail, Calendar, Drive", category: "productivity"},
+            {name: "goplaces", icon: "📍", desc: "Buscar lugares via Google Places API", category: "api"},
+            {name: "healthcheck", icon: "🛡️", desc: "Auditoria de segurança e hardening", category: "security"},
+            {name: "here-now", icon: "🌐", desc: "Publicar arquivos na web instantaneamente", category: "hosting"},
+            {name: "himalaya", icon: "📨", desc: "Gerenciar emails via IMAP/SMTP", category: "productivity"},
+            {name: "imsg", icon: "💬", desc: "iMessage/SMS via Messages.app", category: "messaging"},
+            {name: "mcporter", icon: "🔌", desc: "Chamar MCP servers/tools diretamente", category: "tools"},
+            {name: "model-usage", icon: "📊", desc: "Ver uso de modelos (Codex, Claude)", category: "monitoring"},
+            {name: "nano-banana-pro", icon: "🍌", desc: "Gerar imagens via Gemini 3 Pro", category: "ai"},
+            {name: "nano-pdf", icon: "📄", desc: "Editar PDFs com instruções em linguagem natural", category: "productivity"},
+            {name: "notion", icon: "📋", desc: "API do Notion (pages, databases)", category: "productivity"},
+            {name: "obsidian", icon: "💎", desc: "Trabalhar com vaults Obsidian (Markdown)", category: "productivity"},
+            {name: "openai-image-gen", icon: "🖼️", desc: "Gerar imagens via OpenAI Images API", category: "ai"},
+            {name: "openai-whisper", icon: "🎤", desc: "Transcrição local via Whisper CLI", category: "audio"},
+            {name: "openai-whisper-api", icon: "🎙️", desc: "Transcrição via OpenAI API", category: "audio"},
+            {name: "openhue", icon: "💡", desc: "Controlar Philips Hue", category: "iot"},
+            {name: "oracle", icon: "🔮", "desc": "Boas práticas do oracle CLI", category: "tools"},
+            {name: "ordercli", icon: "🍔", desc: "Ver pedidos do Foodora", category: "shopping"},
+            {name: "peekaboo", icon: "👻", desc: "Capturar e automatizar UI do macOS", category: "automation"},
+            {name: "sag", icon: "🔊", desc: "ElevenLabs TTS com estilo mac say", category: "audio"},
+            {name: "session-logs", icon: "📜", desc: "Buscar em logs de sessão", category: "monitoring"},
+            {name: "sherpa-onnx-tts", icon: "🔈", desc: "TTS offline via sherpa-onnx", category: "audio"},
+            {name: "skill-creator", icon: "🛠️", desc: "Criar e atualizar AgentSkills", category: "tools"},
+            {name: "slack", icon: "💼", desc: "Controlar Slack (reactions, pins)", category: "messaging"},
+            {name: "songsee", icon: "🎵", desc: "Gerar spectrogramas de audio", category: "audio"},
+            {name: "sonoscli", icon: "🔊", desc: "Controlar caixas Sonos", category: "media"},
+            {name: "spotify-player", icon: "🎧", desc: "Spotify via terminal (spogo)", category: "media"},
+            {name: "summarize", icon: "📖", desc: "Resumir URLs, podcasts, arquivos", category: "ai"},
+            {name: "things-mac", icon: "✅", desc: "Gerenciar Things 3 via CLI", category: "productivity"},
+            {name: "tmux", icon: "🖥️", desc: "Controlar sessões tmux", category: "tools"},
+            {name: "trello", icon: "📊", desc: "Gerenciar boards Trello", category: "productivity"},
+            {name: "video-frames", icon: "🎞️", desc: "Extrair frames de vídeos via ffmpeg", category: "media"},
+            {name: "voice-call", icon: "📞", desc: "Iniciar chamadas de voz", category: "communication"},
+            {name: "wacli", icon: "💬", desc: "WhatsApp via wacli CLI", category: "messaging"},
+            {name: "weather", icon: "🌤️", desc: "Previsão do tempo (wttr.in/Open-Meteo)", category: "api"},
+            {name: "xurl", icon: "🐦", desc: "API do X (Twitter)", category: "social"}
+        ];
+        
+        const categories = {
+            "productivity": {label: "Produtividade", color: "#3fb950"},
+            "messaging": {label: "Mensagens", color: "#a371f7"},
+            "media": {label: "Mídia", color: "#f0883e"},
+            "audio": {label: "Áudio", color: "#db61a2"},
+            "ai": {label: "IA", color: "#58a6ff"},
+            "coding": {label: "Código", color: "#f0b429"},
+            "devops": {label: "DevOps", color: "#7ee787"},
+            "security": {label: "Segurança", color: "#f85149"},
+            "iot": {label: "IoT", color: "#79c0ff"},
+            "automation": {label: "Automação", color: "#d2a8ff"},
+            "tools": {label: "Ferramentas", color: "#8b949e"},
+            "monitoring": {label: "Monitoramento", color: "#56d4dd"},
+            "api": {label: "API", color: "#e3b341"},
+            "hosting": {label: "Hospedagem", color: "#3fb950"},
+            "shopping": {label: "Compras", color: "#f778ba"},
+            "communication": {label: "Comunicação", color: "#6cb6ff"},
+            "social": {label: "Social", color: "#1f6feb"},
+            "camera": {label: "Câmera", color: "#8a8a8a"},
+            "ui": {label: "UI", color: "#bd93f9"}
+        };
+        
+        function showTab(tabId) {
+            document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+            document.querySelector(`[onclick="showTab('${tabId}')"]`).classList.add('active');
+            document.getElementById(tabId).classList.add('active');
+        }
+        
+        function renderSkills() {
+            const grid = document.getElementById('skillsGrid');
+            grid.innerHTML = skills.map(skill => {
+                const cat = categories[skill.category] || {label: skill.category, color: '#8b949e'};
+                return `
+                    <div class="skill-card" data-name="${skill.name.toLowerCase()}" data-category="${skill.category}">
+                        <div class="skill-header">
+                            <div class="skill-icon">${skill.icon}</div>
+                            <div class="skill-name">${skill.name}</div>
+                        </div>
+                        <div class="skill-desc">${skill.desc}</div>
+                        <div>
+                            <span class="tag category" style="background: ${cat.color}20; color: ${cat.color}">${cat.label}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+        
+        function filterSkills() {
+            const query = document.getElementById('searchBox').value.toLowerCase();
+            document.querySelectorAll('.skill-card').forEach(card => {
+                const name = card.dataset.name;
+                const matches = name.includes(query);
+                card.classList.toggle('hidden', !matches);
+            });
+        }
+        
+        renderSkills();
+    </script>
+</body>
+</html>

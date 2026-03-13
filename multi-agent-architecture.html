@@ -1,0 +1,736 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Arquitetura Multi-Agents - Olympian Family</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            min-height: 100vh;
+            color: #e8e8e8;
+            padding: 2rem;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        h1 {
+            text-align: center;
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            background: linear-gradient(90deg, #ffd700, #ff8c00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+        
+        .meta-info {
+            text-align: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .meta-label {
+            font-size: 0.75rem;
+            color: #888;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 0.25rem;
+        }
+        
+        .meta-value {
+            font-size: 1.1rem;
+            color: #00d4ff;
+            font-weight: 600;
+        }
+        
+        .section {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        .section h2 {
+            color: #ffd700;
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .agents-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1rem;
+        }
+        
+        .agent-card {
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border-left: 4px solid;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        
+        .agent-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+        }
+        
+        .agent-card.hermes { border-color: #00d4ff; }
+        .agent-card.hefesto { border-color: #ff6b35; }
+        .agent-card.athena { border-color: #9b59b6; }
+        .agent-card.apollo { border-color: #f1c40f; }
+        .agent-card.artemis { border-color: #2ecc71; }
+        .agent-card.poseidon { border-color: #3498db; }
+        .agent-card.dionysus { border-color: #e74c3c; }
+        .agent-card.hades { border-color: #95a5a6; }
+        .agent-card.demeter { border-color: #27ae60; }
+        
+        .agent-card h3 {
+            font-size: 1.3rem;
+            margin-bottom: 0.25rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .agent-card .god {
+            font-size: 0.85rem;
+            color: #888;
+            margin-bottom: 0.5rem;
+        }
+        
+        .agent-card .workspace {
+            font-family: monospace;
+            font-size: 0.75rem;
+            color: #aaa;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            display: inline-block;
+            margin-bottom: 0.5rem;
+        }
+        
+        .agent-card .role {
+            font-size: 0.8rem;
+            color: #ffd700;
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+        }
+        
+        .agent-card .purpose {
+            font-size: 0.9rem;
+            color: #ccc;
+            line-height: 1.4;
+            margin-bottom: 0.75rem;
+        }
+        
+        .agent-card .model {
+            font-size: 0.75rem;
+            color: #888;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 0.5rem;
+            margin-top: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .agent-card .model span {
+            color: #00d4ff;
+            font-family: monospace;
+            font-weight: 600;
+        }
+        
+        .model-badge {
+            display: inline-block;
+            background: rgba(0, 212, 255, 0.2);
+            color: #00d4ff;
+            padding: 0.2rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-family: monospace;
+        }
+        
+        .family-tree {
+            text-align: center;
+            padding: 1rem;
+        }
+        
+        .tree-level {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .tree-node {
+            background: rgba(0, 0, 0, 0.4);
+            padding: 0.75rem 1.25rem;
+            border-radius: 8px;
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            font-weight: 500;
+        }
+        
+        .tree-node.zeus {
+            background: rgba(255, 215, 0, 0.2);
+            border-color: #ffd700;
+            color: #ffd700;
+        }
+        
+        .tree-connector {
+            color: #666;
+            font-size: 0.8rem;
+            margin: 0.25rem 0;
+        }
+        
+        .flows {
+            display: grid;
+            gap: 1rem;
+        }
+        
+        .flow {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            font-size: 0.95rem;
+        }
+        
+        .flow-arrow {
+            color: #ffd700;
+            margin: 0 0.5rem;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        
+        th {
+            color: #ffd700;
+            font-weight: 600;
+        }
+        
+        .telegram-id {
+            font-family: monospace;
+            color: #00d4ff;
+        }
+        
+        .tech-stack {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+        
+        .tech-item {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+        }
+        
+        .tech-item .icon {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .tech-item .name {
+            font-weight: 600;
+            color: #ffd700;
+            margin-bottom: 0.25rem;
+        }
+        
+        .tech-item .desc {
+            font-size: 0.85rem;
+            color: #aaa;
+        }
+        
+        .footer {
+            text-align: center;
+            margin-top: 2rem;
+            color: #666;
+            font-size: 0.85rem;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+            
+            h1 {
+                font-size: 1.8rem;
+            }
+            
+            .agents-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .meta-info {
+                flex-direction: column;
+                gap: 1rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>⚡ Arquitetura Multi-Agents</h1>
+        <p class="subtitle">Olympian Family - Sistema de Agentes OpenClaw</p>
+        
+        <div class="meta-info">
+            <div class="meta-item">
+                <div class="meta-label">Modelo Padrão</div>
+                <div class="meta-value">MiniMax-M2.5</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Plataforma</div>
+                <div class="meta-value">OpenClaw</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Total de Agentes</div>
+                <div class="meta-value">9</div>
+            </div>
+            <div class="meta-item">
+                <div class="meta-label">Canais</div>
+                <div class="meta-value">Telegram, Discord</div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🛠️ Stack Técnica</h2>
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="icon">🤖</div>
+                    <div class="name">OpenClaw</div>
+                    <div class="desc">Framework Multi-Agent</div>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🧠</div>
+                    <div class="name">MiniMax M2.5</div>
+                    <div class="desc">LLM Principal</div>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">💬</div>
+                    <div class="name">Telegram</div>
+                    <div class="desc">Canal Principal</div>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🌐</div>
+                    <div class="name">here.now</div>
+                    <div class="desc">Hospedagem Web</div>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🔊</div>
+                    <div class="name">Edge TTS</div>
+                    <div class="desc">Text-to-Speech</div>
+                </div>
+                <div class="tech-item">
+                    <div class="icon">🎤</div>
+                    <div class="name">Whisper</div>
+                    <div class="desc">Speech-to-Text</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>👥 Agentes</h2>
+            <div class="agents-grid">
+                <div class="agent-card hermes">
+                    <h3>🏃‍♂️ Hermes</h3>
+                    <div class="god">Deus: Mensageiro</div>
+                    <div class="role">🎯 Coordenador Geral</div>
+                    <div class="workspace">~/.openclaw/workspace</div>
+                    <div class="purpose">Assistente principal, orquestração entre agentes, bridge entre ideias e execução</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card hefesto">
+                    <h3>🔨 Hefesto</h3>
+                    <div class="god">Deus: Forge</div>
+                    <div class="role">⚙️ Engenheiro de Software</div>
+                    <div class="workspace">~/.openclaw/workspace-hefesto</div>
+                    <div class="purpose">Código, arquitetura, desenvolvimento técnico, refatoração</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card athena">
+                    <h3>🦉 Athena</h3>
+                    <div class="god">Deus: Sabedoria</div>
+                    <div class="role">🎨 Designer de UX</div>
+                    <div class="workspace">~/.openclaw/workspace-athena</div>
+                    <div class="purpose">UX Design, pesquisa de usuário, arquitetura de informação, prototipagem</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card apollo">
+                    <h3>☀️ Apollo</h3>
+                    <div class="god">Deus: Sol</div>
+                    <div class="role">🧪 QA Engineer</div>
+                    <div class="workspace">~/.openclaw/workspace-apollo</div>
+                    <div class="purpose">Code review, testes, QA, qualidade de código, debugging</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card artemis">
+                    <h3>🏹 Artemis</h3>
+                    <div class="god">Deus: Caça</div>
+                    <div class="role">🔍 Pesquisadora</div>
+                    <div class="workspace">~/.openclaw/workspace-artemis</div>
+                    <div class="purpose">Pesquisa, caça de bugs, exploração de código, investigação técnica</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card poseidon">
+                    <h3>🌊 Poseidon</h3>
+                    <div class="god">Deus: Mar</div>
+                    <div class="role">💾 Engenheiro de Dados</div>
+                    <div class="workspace">~/.openclaw/workspace-poseidon</div>
+                    <div class="purpose">Pipelines de dados, armazenamento, infraestrutura, ETL</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card dionysus">
+                    <h3>🍷 Dionysus</h3>
+                    <div class="god">Deus: Vinho</div>
+                    <div class="role">💡 Criativo</div>
+                    <div class="workspace">~/.openclaw/workspace-dionysus</div>
+                    <div class="purpose">Brainstorming criativo, geração de ideias, conteúdo, storytelling</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card hades">
+                    <h3>💀 Hades</h3>
+                    <div class="god">Deus: Mundo Inferior</div>
+                    <div class="role">🔐 Engenheiro de Segurança</div>
+                    <div class="workspace">~/.openclaw/workspace-hades</div>
+                    <div class="purpose">Arquivos, segurança, backups, infraestrutura crítica, compliance</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+                
+                <div class="agent-card demeter">
+                    <h3>🌾 Demeter</h3>
+                    <div class="god">Deus: Colheita</div>
+                    <div class="role">⚡ Automação</div>
+                    <div class="workspace">~/.openclaw/workspace-demeter</div>
+                    <div class="purpose">Automação, agendamento, produtividade, workflows, cron jobs</div>
+                    <div class="model">🧠 Modelo: <span>minimax/MiniMax-M2.5</span></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>🌳 Árvore Genealógica</h2>
+            <div class="family-tree">
+                <div class="tree-level">
+                    <div class="tree-node zeus">⚡ ZEUS (Rei)</div>
+                </div>
+                <div class="tree-connector">│</div>
+                <div class="tree-level">
+                    <div class="tree-node">🏃‍♂️ HERMES</div>
+                    <div class="tree-node">🔨 HEFESTO</div>
+                    <div class="tree-node">🌊 POSEIDON</div>
+                </div>
+                <div class="tree-connector">│ &nbsp;│ &nbsp;│</div>
+                <div class="tree-level">
+                    <div class="tree-node">🦉 ATHENA</div>
+                </div>
+                <div class="tree-connector">│</div>
+                <div class="tree-level">
+                    <div class="tree-node">☀️ APOLLO</div>
+                    <div class="tree-node">🏹 ARTEMIS</div>
+                    <div class="tree-node">💀 HADES</div>
+                </div>
+                <div class="tree-connector">│ &nbsp;│</div>
+                <div class="tree-level">
+                    <div class="tree-node">🍷 DIONYSUS</div>
+                    <div class="tree-node">🌾 DEMETER</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="section">
+            <h2>📱 Routing por Telegram</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Account ID</th>
+                        <th>Agente</th>
+                        <th>Papel</th>
+                        <th>Modelo</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td class="telegram-id">default / 316530505</td>
+                        <td>Hermes</td>
+                        <td>Coordenador</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">hefesto</td>
+                        <td>Hefesto</td>
+                        <td>Engenheiro</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">athena</td>
+                        <td>Athena</td>
+                        <td>Designer</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">apollo</td>
+                        <td>Apollo</td>
+                        <td>QA</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">artemis</td>
+                        <td>Artemis</td>
+                        <td>Pesquisadora</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">poseidon</td>
+                        <td>Poseidon</td>
+                        <td>Dados</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">dionysus</td>
+                        <td>Dionysus</td>
+                        <td>Criativo</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">hades</td>
+                        <td>Hades</td>
+                        <td>Segurança</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                    <tr>
+                        <td class="telegram-id">demeter</td>
+                        <td>Demeter</td>
+                        <td>Automação</td>
+                        <td><span class="model-badge">MiniMax-M2.5</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="section">
+            <h2>🔄 Fluxos de Colaboração</h2>
+            <div class="flows">
+                <div class="flow">
+                    <strong>1. Athena designs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto builds</strong> <span class="flow-arrow">→</span> 
+                    <strong>Apollo tests</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hermes delivers</strong>
+                </div>
+                <div class="flow">
+                    <strong>2. Artemis hunts bugs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Apollo reviews</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto fixes</strong>
+                </div>
+                <div class="flow">
+                    <strong>3. Poseidon provides data</strong> <span class="flow-arrow">→</span> 
+                    <strong>Athena designs</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto builds</strong>
+                </div>
+                <div class="flow">
+                    <strong>4. Dionysus generates ideas</strong> <span class="flow-arrow">→</span> 
+                    <strong>Athena refines</strong> <span class="flow-arrow">→</span> 
+                    <strong>Hefesto implements</strong>
+                </div>
+                <div class="flow">
+                    <strong>5. Demeter automates</strong> <span class="flow-arrow">→</span> 
+                    <strong>Everything runs smoothly</strong>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🖥️ Infraestrutura</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Dispositivo</th>
+                        <th>IP</th>
+                        <th>Usuário</th>
+                        <th>Acesso</th>
+                        <th>Descrição</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🫐 Raspberry Pi</td>
+                        <td class="telegram-id">192.168.15.17</td>
+                        <td>melor</td>
+                        <td><span class="model-badge">SSH</span></td>
+                        <td>Servidor local - executa comandos via SSH</td>
+                    </tr>
+                    <tr>
+                        <td>🖥️ Mac mini (Host)</td>
+                        <td class="telegram-id">192.168.15.159</td>
+                        <td>rodrigomelo</td>
+                        <td><span class="model-badge">Local</span></td>
+                        <td>Host do OpenClaw Gateway</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h3 style="margin-top: 1.5rem; color: #ffd700;">🐚 Agentes no Raspberry Pi</h3>
+            <p style="color: #aaa; margin-bottom: 1rem;">O Raspberry Pi executa agentes OpenClaw via SSH. Para executar comandos:</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>ssh -i ~/.ssh/id_ed25519 -o StrictHostKeyChecking=no melor@192.168.15.17 "comando"</code></pre>
+            
+            <h4 style="margin-top: 1rem; color: #00d4ff;">Exemplos de Comandos</h4>
+            <ul style="color: #ccc; margin-left: 1.5rem; line-height: 1.8;">
+                <li><code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 4px;">ssh -i ~/.ssh/id_ed25519 melor@192.168.15.17 "hostname"</code> - Verificar conexão</li>
+                <li><code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 4px;">ssh -i ~/.ssh/id_ed25519 melor@192.168.15.17 "uptime"</code> - Tempo de atividade</li>
+                <li><code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 4px;">ssh -i ~/.ssh/id_ed25519 melor@192.168.15.17 "docker ps"</code> - Containers ativos</li>
+                <li><code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 4px;">ssh -i ~/.ssh/id_ed25519 melor@192.168.15.17 "htop"</code> - Monitoramento</li>
+            </ul>
+
+            <h4 style="margin-top: 1rem; color: #00d4ff;">🔑 Configuração SSH</h4>
+            <p style="color: #aaa; margin-bottom: 0.5rem;">Adicionar ao ~/.ssh/config para简化:</p>
+            <pre style="background: rgba(0,0,0,0.3); padding: 1rem; border-radius: 8px; overflow-x: auto;"><code>Host pi
+    HostName 192.168.15.17
+    User melor
+    IdentityFile ~/.ssh/id_ed25519
+    StrictHostKeyChecking no</code></pre>
+            <p style="color: #aaa; margin-top: 0.5rem;">Depois use: <code style="background: rgba(0,0,0,0.3); padding: 0.2rem 0.4rem; border-radius: 4px;">ssh pi "comando"</code></p>
+
+            <h4 style="margin-top: 1.5rem; color: #00d4ff;">🔧 OpenClaw no Raspberry Pi</h4>
+            <p style="color: #aaa; margin-bottom: 0.5rem;">O Raspberry Pi executa OpenClaw com as seguintes configurações:</p>
+            <table style="margin-top: 0.5rem;">
+                <thead>
+                    <tr>
+                        <th>Propriedade</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🔹 Agente</td>
+                        <td><strong>Hephaestus (Hefesto)</strong> - Deus da Forja</td>
+                    </tr>
+                    <tr>
+                        <td>🧠 Modelo</td>
+                        <td>minimax/MiniMax-M2.5</td>
+                    </tr>
+                    <tr>
+                        <td>📡 Canais</td>
+                        <td>Telegram, Discord</td>
+                    </tr>
+                    <tr>
+                        <td>🔌 Gateway Port</td>
+                        <td>18789</td>
+                    </tr>
+                    <tr>
+                        <td>🌐 Bind Mode</td>
+                        <td>loopback (acesso via Tailscale)</td>
+                    </tr>
+                    <tr>
+                        <td>🔒 Exec Security</td>
+                        <td>full</td>
+                    </tr>
+                    <tr>
+                        <td>🔊 TTS</td>
+                        <td>Edge TTS (pt-BR-AntonioNeural)</td>
+                    </tr>
+                    <tr>
+                        <td>🎤 STT</td>
+                        <td>Whisper CLI local</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-top: 1.5rem; color: #00d4ff;">🤖 Nanobot no Raspberry Pi</h4>
+            <p style="color: #aaa; margin-bottom: 0.5rem;">O Nanobot também está instalado no Pi como fallback/alternativa:</p>
+            <table style="margin-top: 0.5rem;">
+                <thead>
+                    <tr>
+                        <th>Propriedade</th>
+                        <th>Valor</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>🧠 Modelo</td>
+                        <td>openrouter/stepfun/step-3.5-flash:free</td>
+                    </tr>
+                    <tr>
+                        <td>📡 Canais</td>
+                        <td>Telegram</td>
+                    </tr>
+                    <tr>
+                        <td>🔌 Gateway Port</td>
+                        <td>18790</td>
+                    </tr>
+                    <tr>
+                        <td>⏱️ Exec Timeout</td>
+                        <td>60 segundos</td>
+                    </tr>
+                    <tr>
+                        <td>🔧 Provider</td>
+                        <td>OpenRouter</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <h4 style="margin-top: 1.5rem; color: #27ae60;">✅ Status</h4>
+            <ul style="color: #ccc; margin-left: 1.5rem; line-height: 1.8;">
+                <li><span style="color: #27ae60;">●</span> OpenClaw Gateway: <strong>Ativo</strong> na Pi (porta 18789)</li>
+                <li><span style="color: #27ae60;">●</span> Nanobot: <strong>Ativo</strong> na Pi (porta 18790)</li>
+                <li><span style="color: #27ae60;">●</span> Tailscale: <strong>Configurado</strong> para acesso remoto</li>
+                <li><span style="color: #27ae60;">●</span> SSH: <strong>Acessível</strong> via chave pública</li>
+            </ul>
+        </div>
+        
+        <div class="footer">
+            <p>Arquitetura Multi-Agents OpenClaw | Olympian Family</p>
+            <p>Modelo padrão: minimax/MiniMax-M2.5 | Atualizado em 11 de Março 2026</p>
+        </div>
+    </div>
+</body>
+</html>

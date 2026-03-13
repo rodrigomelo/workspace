@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "skills": {
+    "openai-whisper": {
+      "version": "1.0.0",
+      "installedAt": 1772592607456
+    },
+    "sag": {
+      "version": "1.0.0",
+      "installedAt": 1772592612625
+    },
+    "peekaboo": {
+      "version": "1.0.0",
+      "installedAt": 1772624394993
+    },
+    "summarize": {
+      "version": "1.0.0",
+      "installedAt": 1772624399547
+    },
+    "xurl": {
+      "version": "1.0.0",
+      "installedAt": 1772624403668
+    },
+    "blogwatcher": {
+      "version": "1.0.0",
+      "installedAt": 1772624407487
+    }
+  }
+}
