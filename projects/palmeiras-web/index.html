@@ -54,11 +54,74 @@
             padding: 2rem;
         }
 
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+            flex-wrap: wrap;
+        }
+
+        .tab-btn {
+            padding: 0.8rem 1.5rem;
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            border-radius: 8px;
+            color: var(--text-light);
+            cursor: pointer;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .tab-btn:hover {
+            background: rgba(0, 120, 36, 0.2);
+        }
+
+        .tab-btn.active {
+            background: var(--palmeiras-green);
+            border-color: var(--palmeiras-green);
+        }
+
+        .competition-tabs {
+            display: flex;
+            gap: 0.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .comp-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-card);
+            border: 2px solid transparent;
+            border-radius: 6px;
+            color: var(--text-muted);
+            cursor: pointer;
+            font-size: 0.9rem;
+            transition: all 0.3s ease;
+        }
+
+        .comp-btn:hover {
+            border-color: var(--palmeiras-green);
+            color: var(--text-light);
+        }
+
+        .comp-btn.active {
+            background: var(--palmeiras-green);
+            color: white;
+        }
+
+        /* Tab Content */
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
         .grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
             gap: 1.5rem;
-            margin-top: 2rem;
         }
 
         .card {
@@ -86,32 +149,54 @@
             border-radius: 2px;
         }
 
-        /* Next Match */
-        .next-match {
-            text-align: center;
+        /* Next Matches List */
+        .matches-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
         }
 
-        .match-date {
-            font-size: 1.1rem;
+        .match-item {
+            padding: 1rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--palmeiras-green);
+        }
+
+        .match-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 0.8rem;
+        }
+
+        .match-date-time {
+            font-size: 0.9rem;
             color: var(--text-muted);
-            margin-bottom: 1rem;
+        }
+
+        .match-competition {
+            font-size: 0.75rem;
+            background: var(--palmeiras-green);
+            color: white;
+            padding: 0.2rem 0.6rem;
+            border-radius: 10px;
         }
 
         .match-teams {
             display: flex;
-            justify-content: space-around;
+            justify-content: space-between;
             align-items: center;
-            margin: 1.5rem 0;
         }
 
         .team {
             text-align: center;
+            flex: 1;
         }
 
         .team-name {
-            font-size: 1.2rem;
+            font-size: 1rem;
             font-weight: bold;
-            margin-top: 0.5rem;
         }
 
         .team.palmeiras .team-name {
@@ -119,25 +204,10 @@
         }
 
         .vs {
-            font-size: 1.5rem;
+            font-size: 1rem;
             color: var(--text-muted);
             font-weight: bold;
-        }
-
-        .competition {
-            display: inline-block;
-            background: var(--palmeiras-green);
-            color: white;
-            padding: 0.3rem 1rem;
-            border-radius: 20px;
-            font-size: 0.9rem;
-            margin-top: 1rem;
-        }
-
-        .no-match {
-            text-align: center;
-            color: var(--text-muted);
-            padding: 2rem;
+            padding: 0 0.5rem;
         }
 
         /* Recent Results */
@@ -167,6 +237,7 @@
             flex: 1;
             text-align: center;
             font-weight: bold;
+            font-size: 0.9rem;
         }
 
         .result-score {
@@ -196,6 +267,12 @@
             font-size: 0.9rem;
         }
 
+        .competition-name {
+            font-size: 1.1rem;
+            color: var(--palmeiras-cream);
+            margin-bottom: 1rem;
+        }
+
         .stats {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -221,7 +298,7 @@
             color: var(--text-muted);
         }
 
-        .no-standings {
+        .no-data {
             text-align: center;
             color: var(--text-muted);
             padding: 2rem;
@@ -271,6 +348,15 @@
             .grid {
                 grid-template-columns: 1fr;
             }
+            
+            .tabs {
+                justify-content: center;
+            }
+            
+            .tab-btn {
+                padding: 0.6rem 1rem;
+                font-size: 0.9rem;
+            }
         }
     </style>
 </head>
@@ -281,28 +367,49 @@
     </header>
 
     <main class="container">
-        <div class="grid">
-            <!-- Próximo Jogo -->
-            <div class="card">
-                <h2 class="card-title">Próximo Jogo</h2>
-                <div id="next-match">
-                    <div class="loading">Carregando...</div>
+        <!-- Navigation Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="proximos">Próximos Jogos</button>
+            <button class="tab-btn" data-tab="resultados">Resultados</button>
+            <button class="tab-btn" data-tab="classificacao">Classificação</button>
+        </div>
+
+        <!-- Próximos Jogos Tab -->
+        <div id="proximos" class="tab-content active">
+            <div class="grid">
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2 class="card-title">Próximos 5 Jogos</h2>
+                    <div id="next-matches">
+                        <div class="loading">Carregando...</div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Últimos Resultados -->
-            <div class="card">
-                <h2 class="card-title">Últimos Resultados</h2>
-                <div id="recent-results">
-                    <div class="loading">Carregando...</div>
+        <!-- Resultados Tab -->
+        <div id="resultados" class="tab-content">
+            <div class="grid">
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2 class="card-title">Últimos Resultados</h2>
+                    <div id="recent-results">
+                        <div class="loading">Carregando...</div>
+                    </div>
                 </div>
             </div>
+        </div>
 
-            <!-- Classificação -->
-            <div class="card">
-                <h2 class="card-title">Classificação - Serie A</h2>
-                <div id="standings">
-                    <div class="loading">Carregando...</div>
+        <!-- Classificação Tab -->
+        <div id="classificacao" class="tab-content">
+            <div class="competition-tabs">
+                <button class="comp-btn active" data-comp="BSA">Brasileirão</button>
+                <button class="comp-btn" data-comp="CLI">Libertadores</button>
+            </div>
+            <div class="grid">
+                <div class="card" style="grid-column: 1 / -1;">
+                    <h2 class="card-title">Classificação</h2>
+                    <div id="standings">
+                        <div class="loading">Carregando...</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -313,13 +420,12 @@
     </footer>
 
     <script>
-        const API_KEY = 'eca8b30bb5c34fcfa80ec28ceedf84a0';
+        // Local API base (server proxies requests to football-data.org)
+        const API_BASE = '/api';
         const TEAM_ID = 1769;
-        const API_BASE = 'https://api.football-data.org/v4';
-
-        const headers = {
-            'X-Auth-Token': API_KEY
-        };
+        
+        // Brazilian timezone (UTC-3)
+        const BR_TZ = 'America/Sao_Paulo';
 
         // Format date to Brazilian Portuguese
         function formatDate(dateStr) {
@@ -327,7 +433,8 @@
             return date.toLocaleDateString('pt-BR', { 
                 day: '2-digit', 
                 month: '2-digit',
-                year: 'numeric'
+                year: 'numeric',
+                timeZone: BR_TZ
             });
         }
 
@@ -336,7 +443,8 @@
             const date = new Date(dateStr);
             return date.toLocaleTimeString('pt-BR', { 
                 hour: '2-digit', 
-                minute: '2-digit'
+                minute: '2-digit',
+                timeZone: BR_TZ
             });
         }
 
@@ -347,19 +455,53 @@
                 'COPA_DO_BRASIL': 'Copa do Brasil',
                 'LIBERTADORES': 'Libertadores',
                 'RECOPA': 'Recopa',
-                'PAULISTA': 'Campeonato Paulista'
+                'PAULISTA': 'Campeonato Paulista',
+                'BRA': 'Brasileirão'
             };
             return names[comp] || comp;
         }
 
-        // Load next match
-        async function loadNextMatch() {
-            const container = document.getElementById('next-match');
+        // Get competition code
+        function getCompetitionCode(comp) {
+            if (comp === 'SERIE_A' || comp?.code === 'BSA' || comp?.code === 'BRA') return 'BSA';
+            if (comp?.code === 'LIBERTADORES') return 'LIB';
+            return comp?.code || comp || 'BSA';
+        }
+
+        // Tab switching
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Update active tab button
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                // Show corresponding content
+                const tabId = btn.dataset.tab;
+                document.querySelectorAll('.tab-content').forEach(content => {
+                    content.classList.remove('active');
+                });
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Competition switching
+        let currentCompetition = 'BSA';
+        document.querySelectorAll('.comp-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCompetition = btn.dataset.comp;
+                loadStandings(currentCompetition);
+            });
+        });
+
+        // Load next 5 matches
+        async function loadNextMatches() {
+            const container = document.getElementById('next-matches');
             
             try {
                 const response = await fetch(
-                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED`,
-                    { headers }
+                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`
                 );
                 
                 if (!response.ok) throw new Error('API error');
@@ -368,34 +510,40 @@
                 const matches = data.matches || [];
                 
                 if (matches.length === 0) {
-                    container.innerHTML = '<div class="no-match">Nenhum jogo agendado no momento</div>';
+                    container.innerHTML = '<div class="no-data">Nenhum jogo agendado no momento</div>';
                     return;
                 }
 
-                const nextMatch = matches[0];
-                const homeTeam = nextMatch.homeTeam;
-                const awayTeam = nextMatch.awayTeam;
-                const isHome = homeTeam.id === TEAM_ID;
+                const matchesHTML = matches.map(match => {
+                    const homeTeam = match.homeTeam;
+                    const awayTeam = match.awayTeam;
+                    const isHome = homeTeam.id === TEAM_ID;
+                    const compCode = getCompetitionCode(match.competition);
 
-                container.innerHTML = `
-                    <div class="next-match">
-                        <div class="match-date">
-                            ${formatDate(nextMatch.utcDate)} às ${formatTime(nextMatch.utcDate)}
-                        </div>
-                        <div class="match-teams">
-                            <div class="team ${isHome ? 'palmeiras' : ''}">
-                                <div class="team-name">${homeTeam.name}</div>
+                    return `
+                        <div class="match-item">
+                            <div class="match-header">
+                                <span class="match-date-time">
+                                    ${formatDate(match.utcDate)} às ${formatTime(match.utcDate)}
+                                </span>
+                                <span class="match-competition">${formatCompetition(compCode)}</span>
                             </div>
-                            <div class="vs">X</div>
-                            <div class="team ${!isHome ? 'palmeiras' : ''}">
-                                <div class="team-name">${awayTeam.name}</div>
+                            <div class="match-teams">
+                                <div class="team ${isHome ? 'palmeiras' : ''}">
+                                    <div class="team-name">${homeTeam.name}</div>
+                                </div>
+                                <span class="vs">X</span>
+                                <div class="team ${!isHome ? 'palmeiras' : ''}">
+                                    <div class="team-name">${awayTeam.name}</div>
+                                </div>
                             </div>
                         </div>
-                        <span class="competition">${formatCompetition(nextMatch.competition?.code)}</span>
-                    </div>
-                `;
+                    `;
+                }).join('');
+
+                container.innerHTML = `<div class="matches-list">${matchesHTML}</div>`;
             } catch (error) {
-                container.innerHTML = '<div class="no-match">Erro ao carregar próximo jogo</div>';
+                container.innerHTML = '<div class="no-data">Erro ao carregar próximos jogos</div>';
                 console.error(error);
             }
         }
@@ -406,8 +554,7 @@
             
             try {
                 const response = await fetch(
-                    `${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`,
-                    { headers }
+                    `${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`
                 );
                 
                 if (!response.ok) throw new Error('API error');
@@ -416,7 +563,7 @@
                 const matches = data.matches || [];
                 
                 if (matches.length === 0) {
-                    container.innerHTML = '<div class="no-match">Nenhum resultado encontrado</div>';
+                    container.innerHTML = '<div class="no-data">Nenhum resultado encontrado</div>';
                     return;
                 }
 
@@ -446,28 +593,36 @@
 
                 container.innerHTML = `<div class="results-list">${resultsHTML}</div>`;
             } catch (error) {
-                container.innerHTML = '<div class="no-match">Erro ao carregar resultados</div>';
+                container.innerHTML = '<div class="no-data">Erro ao carregar resultados</div>';
                 console.error(error);
             }
         }
 
         // Load standings
-        async function loadStandings() {
+        async function loadStandings(competition = 'BSA') {
             const container = document.getElementById('standings');
+            container.innerHTML = '<div class="loading">Carregando...</div>';
             
             try {
                 const response = await fetch(
-                    `${API_BASE}/competitions/BSA/standings`,
-                    { headers }
+                    `${API_BASE}/competitions/${competition}/standings`
                 );
                 
-                if (!response.ok) throw new Error('API error');
+                if (!response.ok) {
+                    // Check if it's a 404 - competition might not have standings
+                    if (response.status === 404) {
+                        const compName = competition === 'CLI' ? 'Libertadores' : 'Brasileirão';
+                        container.innerHTML = `<div class="no-data">Classificação não disponível para ${compName}<br><small>(Apenas competições de liga têm tabela)</small></div>`;
+                        return;
+                    }
+                    throw new Error('API error');
+                }
                 
                 const data = await response.json();
                 const standings = data.standings || [];
                 
                 if (standings.length === 0) {
-                    container.innerHTML = '<div class="no-standings">Nenhum dado de classificação disponível</div>';
+                    container.innerHTML = '<div class="no-data">Nenhum dado de classificação disponível</div>';
                     return;
                 }
 
@@ -494,12 +649,15 @@
                 }
 
                 if (position === null) {
-                    container.innerHTML = '<div class="no-standings">Palmeiras não encontrado na tabela</div>';
+                    container.innerHTML = '<div class="no-data">Palmeiras não encontrado na tabela</div>';
                     return;
                 }
 
+                const compName = competition === 'CLI' ? 'Libertadores' : 'Brasileirão';
+
                 container.innerHTML = `
                     <div class="standings-info">
+                        <div class="competition-name">${compName}</div>
                         <div class="position">${position}º</div>
                         <div class="position-label">Lugar no Campeonato</div>
                         <div class="stats">
@@ -519,16 +677,16 @@
                     </div>
                 `;
             } catch (error) {
-                container.innerHTML = '<div class="no-standings">Erro ao carregar classificação</div>';
+                container.innerHTML = '<div class="no-data">Erro ao carregar classificação</div>';
                 console.error(error);
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
-            loadNextMatch();
+            loadNextMatches();
             loadRecentResults();
-            loadStandings();
+            loadStandings(currentCompetition);
         });
     </script>
 </body>
