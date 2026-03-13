@@ -48,9 +48,28 @@ Este é o workspace central onde todos os agentes (Hermes, Hefesto, Athena, Apol
 - **Hefesto** — Código, arquitetura, infra
 - **Athena** — Design, UX, research
 - **Apollo** — QA, testes, revisão
+- **Artemis** — Pesquisa, análise, investigação
+- **Poseidon** — Sistemas, rede, infraestrutura
+- **Dionysus** — Criativo, conteúdo, entretenimento
+- **Hades** — Segurança, privacidade, compliance
+- **Demeter** — Dados, analytics, growth
 
 Todos usam este workspace. `requireMention: true` — mencionar para ativar.
 
+## Git
+
+Repositório: `https://github.com/rodrigomelo/workspace`
+
+```bash
+cd ~/.openclaw/workspace
+git pull --rebase origin main   # sempre antes de começar
+git add -A
+git commit -m "<type>(<scope>): <description>"
+git push origin main
+```
+
+**Nunca commitar tokens, senhas ou API keys.**
+
 ---
 
-*Última atualização: 2025-03-12*
+*Última atualização: 2026-03-12*
