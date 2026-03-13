@@ -1,18 +1,17 @@
-// ANSI color codes (matching spec)
-export const colors = {
-  reset: '\x1b[0m',
-  red: '\x1b[31m',      // High priority
-  yellow: '\x1b[33m',   // Medium priority
-  green: '\x1b[32m',    // Low priority
-  cyan: '\x1b[36m',     // Headers
-  bright: '\x1b[1m',    // IDs
-};
+import chalk from 'chalk';
 
-export function priorityColor(priority: 'low' | 'medium' | 'high'): string {
+export function formatTask(task: { id: number; text: string; priority: 'low' | 'medium' | 'high'; status: 'pending' | 'completed' }): string {
+  const emoji = priorityEmoji(task.priority);
+  const statusIcon = task.status === 'completed' ? '✅' : '⬜';
+  const color = priorityChalk(task.priority);
+  return `${color}${emoji} ${chalk.bold(`[${task.id}]`)}${chalk.reset} ${task.text} ${statusIcon}`;
+}
+
+export function priorityChalk(priority: 'low' | 'medium' | 'high') {
   switch (priority) {
-    case 'high': return colors.red;
-    case 'medium': return colors.yellow;
-    case 'low': return colors.green;
+    case 'high': return chalk.red;
+    case 'medium': return chalk.yellow;
+    case 'low': return chalk.green;
   }
 }
 
@@ -24,21 +23,14 @@ export function priorityEmoji(priority: 'low' | 'medium' | 'high'): string {
   }
 }
 
-export function formatTask(task: { id: number; text: string; priority: string; status: string }): string {
-  const color = priorityColor(task.priority as any);
-  const emoji = priorityEmoji(task.priority as any);
-  const statusIcon = task.status === 'completed' ? '✅' : '⬜';
-  return `${color}${emoji} ${colors.bright}[${task.id}]${colors.reset} ${task.text} ${statusIcon}`;
-}
-
 export function header(text: string): string {
-  return `${colors.cyan}📋 ${text}${colors.reset}`;
+  return chalk.cyan(`📋 ${text}`);
 }
 
 export function success(text: string): string {
-  return `✅ ${text}${colors.reset}`;
+  return chalk.green(`✅ ${text}`);
 }
 
 export function error(text: string): string {
-  return `❌ ${text}${colors.reset}`;
+  return chalk.red(`❌ ${text}`);
 }

@@ -2,7 +2,7 @@ import { readFile, writeFile, mkdir } from 'fs/promises';
 import { existsSync } from 'fs';
 import { join } from 'path';
 import { homedir } from 'os';
-import { Task } from './types.js';
+import { Task } from '../types.js';
 
 const CONFIG_DIR = join(homedir(), '.config', 'clawlab');
 const STORAGE_FILE = join(CONFIG_DIR, 'tasks.json');
@@ -18,9 +18,9 @@ export async function loadTasks(): Promise<Task[]> {
     await ensureStorageDir();
     const data = await readFile(STORAGE_FILE, 'utf-8');
     return JSON.parse(data) as Task[];
-  } catch (err) {
-    // If file doesn't exist or is invalid, return empty array
-    if (err.code === 'ENOENT') return [];
+  } catch (err: unknown) {
+    // If file doesn't exist, return empty array
+    if (err instanceof Error && (err as any).code === 'ENOENT') return [];
     if (err instanceof SyntaxError) return [];
     throw err;
   }
