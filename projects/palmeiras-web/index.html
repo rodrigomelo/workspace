@@ -460,6 +460,41 @@
         .stadium-stat-label { font-size: 0.75rem; color: var(--text-muted); margin-top: 0.25rem; }
 
         /* News */
+        .news-list { display: flex; flex-direction: column; gap: 1rem; }
+
+        .news-item {
+            display: block;
+            background: var(--bg-elevated);
+            border-radius: 12px;
+            padding: 1.25rem;
+            border: 1px solid var(--border-subtle);
+            transition: all 0.2s ease;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .news-item:hover {
+            border-color: var(--palmeiras-green);
+            transform: translateX(4px);
+            background: var(--bg-card-hover);
+        }
+
+        .news-item-title {
+            font-size: 1rem;
+            font-weight: 500;
+            line-height: 1.4;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+        }
+
+        .news-item-source {
+            font-size: 0.75rem;
+            color: var(--palmeiras-green);
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+
         .news-placeholder { text-align: center; padding: 4rem 2rem; }
         .news-placeholder-icon { font-size: 4rem; margin-bottom: 1rem; opacity: 0.5; }
         .news-placeholder-title { font-size: 1.5rem; font-weight: 600; margin-bottom: 0.5rem; }
@@ -634,17 +669,17 @@
         <!-- Notícias -->
         <section id="noticias" class="tab-content">
             <div class="card">
-                <div class="news-placeholder">
-                    <div class="news-placeholder-icon">📰</div>
-                    <h3 class="news-placeholder-title">Em Breve</h3>
-                    <p class="news-placeholder-text">Seção de notícias em desenvolvimento. Em breve você poderá acompanhar as últimas notícias do Palmeiras aqui!</p>
+                <div class="card-header">
+                    <h2 class="card-title"><span class="icon">📰</span> Últimas Notícias</h2>
                 </div>
+                <div id="news-list"><div class="loading">Carregando...</div></div>
             </div>
         </section>
     </main>
 
     <footer class="footer">
-        <p>Dados fornecidos por Football-Data.org • Palmeiras Dashboard v3</p>
+        <p>Dados: football-data.org • ge.globo • Lance! | Palmeiras Dashboard v3</p>
+        <p style="font-size: 0.75rem; opacity: 0.6;">Veja SOURCES.md para fontes completas</p>
     </footer>
 
     <script>
@@ -681,6 +716,11 @@
                 const tabId = btn.dataset.tab;
                 document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
                 document.getElementById(tabId).classList.add('active');
+                
+                // Load news when tab is clicked
+                if (tabId === 'noticias') {
+                    loadNews();
+                }
             });
         });
 
@@ -839,6 +879,32 @@
                 } else {
                     container.innerHTML = '<div class="no-data">Erro ao carregar classificação</div>';
                 }
+                console.error(error);
+            }
+        }
+
+        // Load news from ge.globo
+        async function loadNews() {
+            const container = document.getElementById('news-list');
+            try {
+                const response = await fetch(`${API_BASE}/palmeiras/news`);
+                const data = await response.json();
+                
+                if (!data.success || !data.news || data.news.length === 0) {
+                    container.innerHTML = '<div class="no-data">Nenhuma notícia encontrada no momento</div>';
+                    return;
+                }
+
+                const newsHTML = data.news.map(item => `
+                    <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="news-item">
+                        <div class="news-item-title">${item.title}</div>
+                        <div class="news-item-source">📰 ge.globo.com</div>
+                    </a>
+                `).join('');
+                
+                container.innerHTML = `<div class="news-list">${newsHTML}</div>`;
+            } catch (error) {
+                container.innerHTML = '<div class="no-data">Erro ao carregar notícias</div>';
                 console.error(error);
             }
         }
