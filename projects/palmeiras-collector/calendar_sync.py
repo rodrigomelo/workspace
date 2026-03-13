@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
 """
-Palmeiras Calendar Sync
+Palmeiras Calendar Sync - Anti-Duplication Version
 
 Fetches upcoming matches from football-data.org and creates Google Calendar events.
+Uses a cache file to track created events and avoid duplicates.
 
 Usage:
-    python calendar_sync.py [--dry-run] [--limit N]
+    python calendar_sync.py [--dry-run] [--limit N] [--force]
 
 Environment:
     FOOTBALL_API_KEY - API key for football-data.org
@@ -17,7 +18,9 @@ import sys
 import json
 import subprocess
 import argparse
+import hashlib
 from datetime import datetime, timedelta
+from pathlib import Path
 from zoneinfo import ZoneInfo
 
 import requests
@@ -31,10 +34,13 @@ API_KEY = os.getenv('FOOTBALL_API_KEY', 'eca8b30bb5c34fcfa80ec28ceedf84a0')
 TEAM_ID = os.getenv('TEAM_ID', '1769')
 CALENDAR_ID = os.getenv('CALENDAR_ID', 'melorodrigo@gmail.com')
 
+# Cache file for tracking created events
+CACHE_FILE = Path(__file__).parent / '.calendar_cache.json'
+
 # Brazil timezone
 BRAZIL_TZ = ZoneInfo('America/Sao_Paulo')
 
-# Stadium mapping (can be expanded)
+# Stadium mapping
 STADIUMS = {
     'SE Palmeiras': 'Allianz Parque',
     'Mirassol FC': 'Estádio José Maria de Campos Maia',
@@ -55,7 +61,6 @@ STADIUMS = {
     'SC Internacional': 'Estádio Beira-Rio',
     'Fluminense FC': 'Estádio do Maracanã',
     'CR Vasco da Gama': 'Estádio São Januário',
-    'Clube do Remo': 'Estádio Evandro Almeida',
 }
 
 # Competitions with broadcaster info
@@ -81,6 +86,35 @@ BROADCASTERS = {
         'streaming': 'Globoplay, Paulistão Play'
     }
 }
+
+
+def load_cache() -> dict:
+    """Load the event cache from file."""
+    if CACHE_FILE.exists():
+        try:
+            with open(CACHE_FILE, 'r') as f:
+                return json.load(f)
+        except:
+            pass
+    return {'events': {}, 'last_sync': None}
+
+
+def save_cache(cache: dict) -> None:
+    """Save the event cache to file."""
+    cache['last_sync'] = datetime.now().isoformat()
+    with open(CACHE_FILE, 'w') as f:
+        json.dump(cache, f, indent=2)
+
+
+def generate_event_id(match: dict) -> str:
+    """Generate a unique ID for a match based on date and teams."""
+    utc_date = match.get('utcDate', '')
+    home = match.get('homeTeam', {}).get('id', '')
+    away = match.get('awayTeam', {}).get('id', '')
+    
+    # Create unique key: date_homeId_awayId
+    key = f"{utc_date[:10]}_{home}_{away}"
+    return hashlib.md5(key.encode()).hexdigest()[:12]
 
 
 def get_team_name(team: dict) -> str:
@@ -116,7 +150,6 @@ def get_competition_name(match: dict) -> str:
     comp = match.get('competition', {})
     name = comp.get('name', 'Campeonato')
     
-    # Simplify competition names
     if 'Brasileiro' in name and 'Série A' in name:
         return 'Brasileirão'
     elif 'Copa do Brasil' in name:
@@ -132,7 +165,6 @@ def get_competition_name(match: dict) -> str:
 
 def get_broadcast_info(competition: str) -> dict:
     """Get broadcaster info for competition."""
-    # Try exact match first
     for comp_key, info in BROADCASTERS.items():
         if comp_key in competition:
             return info
@@ -140,19 +172,11 @@ def get_broadcast_info(competition: str) -> dict:
 
 
 def format_datetime(utc_str: str) -> tuple:
-    """Convert UTC string to Brazil timezone datetime.
-    
-    Returns:
-        tuple: (start_iso, end_iso) in ISO format
-    """
+    """Convert UTC string to Brazil timezone datetime."""
     utc_dt = datetime.fromisoformat(utc_str.replace('Z', '+00:00'))
     brazil_dt = utc_dt.astimezone(BRAZIL_TZ)
-    
-    # Match duration: 90 minutes + 15 min halftime = ~2 hours total
     end_dt = brazil_dt + timedelta(hours=2)
     
-    # Format for gog CLI - needs timezone offset
-    # e.g., 2026-03-15T21:30:00-03:00
     start_iso = brazil_dt.strftime('%Y-%m-%dT%H:%M:%S%z')
     end_iso = end_dt.strftime('%Y-%m-%dT%H:%M:%S%z')
     
@@ -168,14 +192,11 @@ def create_event_description(match: dict, competition: str, match_time: str) -> 
     """Create event description in the required format."""
     team_id = TEAM_ID
     venue = get_stadium('SE Palmeiras') if is_home_game(match, team_id) else 'TBD'
-    
-    # Get city (usually São Paulo for most matches in Brasileirão)
     city = 'São Paulo, SP' if is_home_game(match, team_id) else 'TBD'
-    
     broadcast = get_broadcast_info(competition)
     round_num = match.get('matchday', 'TBD')
     
-    description = f"""⚽ PARTIDA DO PALMEIRAS
+    return f"""⚽ PARTIDA DO PALMEIRAS
 
 🏟️ Estádio: {venue}
 📍 Cidade: {city}
@@ -188,23 +209,16 @@ def create_event_description(match: dict, competition: str, match_time: str) -> 
 🔄 Competição: {competition}
 📊 Rodada: {round_num}ªrodada"""
 
-    return description
-
 
 def get_event_color(match: dict, competition: str) -> str:
     """Determine event color based on match type."""
     opponent = get_opponent(match, TEAM_ID)
     
-    # Derby games - red
     derbies = ['Corinthians', 'Santos', 'São Paulo', 'Flamengo', 'Coritiba']
     if any(d in opponent for d in derbies):
         return '11'  # Red
-    
-    # Home game - green
     if is_home_game(match, TEAM_ID):
         return '10'  # Green
-    
-    # Away game - yellow
     return '5'  # Yellow
 
 
@@ -219,13 +233,67 @@ def fetch_upcoming_matches(limit: int = 10) -> list:
     data = response.json()
     matches = data.get('matches', [])
     
-    # Filter for upcoming matches (TIMED or SCHEDULED)
     upcoming = [
         m for m in matches 
         if m.get('status') in ('TIMED', 'SCHEDULED')
     ]
     
     return upcoming[:limit]
+
+
+def get_calendar_event_id(opponent: str, date: str) -> str:
+    """Search for existing event ID by title pattern using gog."""
+    # Try to find event by searching calendar
+    from_date = date[:10]
+    to_date = (datetime.fromisoformat(date[:10]) + timedelta(days=1)).strftime('%Y-%m-%d')
+    
+    cmd = [
+        'gog', 'calendar', 'events', CALENDAR_ID,
+        '--from', from_date,
+        '--to', to_date,
+        '--json'
+    ]
+    
+    result = subprocess.run(cmd, capture_output=True, text=True)
+    
+    if result.returncode != 0:
+        return None
+    
+    try:
+        events = json.loads(result.stdout)
+        # Look for matching event
+        for event in events:
+            summary = event.get('summary', '')
+            if 'Palmeiras' in summary and opponent in summary:
+                return event.get('id')
+    except:
+        pass
+    
+    return None
+
+
+def update_calendar_event(event_id: str, match: dict, dry_run: bool = False) -> bool:
+    """Update an existing calendar event."""
+    team_id = TEAM_ID
+    opponent = get_opponent(match, team_id)
+    competition = get_competition_name(match)
+    match_time = match.get('utcDate', '')
+    
+    start_iso, end_iso, time_formatted = format_datetime(match_time)
+    title = create_event_title(opponent, competition)
+    description = create_event_description(match, competition, time_formatted)
+    color = get_event_color(match, competition)
+    
+    print(f"  Updating event: {title}")
+    
+    if dry_run:
+        print("    [DRY RUN - Not updating]")
+        return True
+    
+    # Note: gog doesn't have direct update, we delete and recreate
+    # For now, we'll just log that update is needed
+    print(f"    ℹ️  Event exists - will be updated on next sync")
+    return True
 
 
 def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
@@ -250,7 +318,6 @@ def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
         print("  [DRY RUN - Not creating event]")
         return True
     
-    # Build gog command
     cmd = [
         'gog', 'calendar', 'create', CALENDAR_ID,
         '--summary', title,
@@ -258,7 +325,7 @@ def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
         '--to', end_iso,
         '--description', description,
         '--event-color', color,
-        '--reminder', 'popup:120m',  # 2 hours before
+        '--reminder', 'popup:120m',
     ]
     
     result = subprocess.run(cmd, capture_output=True, text=True)
@@ -271,42 +338,22 @@ def create_calendar_event(match: dict, dry_run: bool = False) -> bool:
         return False
 
 
-def list_existing_events(calendar_id: str, days: int = 30) -> list:
-    """List existing Palmeiras events in calendar."""
-    from_date = datetime.now().strftime('%Y-%m-%d')
-    to_date = (datetime.now() + timedelta(days=days)).strftime('%Y-%m-%d')
-    
-    cmd = [
-        'gog', 'calendar', 'events', calendar_id,
-        '--from', from_date,
-        '--to', to_date,
-        '--json'
-    ]
-    
-    result = subprocess.run(cmd, capture_output=True, text=True)
-    
-    if result.returncode != 0:
-        return []
-    
-    try:
-        events = json.loads(result.stdout)
-        # Filter for Palmeiras events
-        return [e for e in events if 'Palmeiras' in e.get('summary', '')]
-    except:
-        return []
-
-
 def main():
     parser = argparse.ArgumentParser(description='Sync Palmeiras matches to Google Calendar')
     parser.add_argument('--dry-run', action='store_true', help='Show what would be created without creating events')
     parser.add_argument('--limit', type=int, default=5, help='Number of matches to sync')
     parser.add_argument('--calendar-id', type=str, default=CALENDAR_ID, help='Calendar ID to use')
-    parser.add_argument('--check-existing', action='store_true', help='Check for existing events before creating')
+    parser.add_argument('--force', action='store_true', help='Force recreate all events (ignore cache)')
+    parser.add_argument('--check', action='store_true', help='Check existing events only (no create)')
     
     args = parser.parse_args()
     
-    print("⚽ Palmeiras Calendar Sync")
-    print("=" * 40)
+    print("⚽ Palmeiras Calendar Sync (Anti-Duplication)")
+    print("=" * 45)
+    
+    # Load cache
+    cache = load_cache()
+    print(f"\n📂 Cache loaded: {len(cache.get('events', {}))} events tracked")
     
     # Fetch upcoming matches
     print(f"\n📡 Fetching upcoming matches...")
@@ -318,35 +365,82 @@ def main():
     
     print(f"Found {len(matches)} upcoming matches\n")
     
-    # Check for existing events if requested
-    existing_events = []
-    if args.check_existing:
-        print("🔍 Checking for existing events...")
-        existing_events = list_existing_events(args.calendar_id)
-        print(f"Found {len(existing_events)} existing Palmeiras events\n")
+    # Check mode - just show what's in calendar
+    if args.check:
+        print("🔍 Checking existing events in calendar...")
+        for match in matches:
+            event_id = generate_event_id(match)
+            opponent = get_opponent(match, TEAM_ID)
+            date = match.get('utcDate', '')[:10]
+            
+            cached = cache['events'].get(event_id)
+            exists = '✅' if cached else '⏭️'
+            
+            print(f"  {exists} {date} - Palmeiras vs {opponent}")
+            if cached:
+                print(f"      Cached: {cached.get('title')}")
+        return
     
     # Create events
     created = 0
     skipped = 0
+    already_exists = 0
     
     for match in matches:
+        event_id = generate_event_id(match)
         opponent = get_opponent(match, TEAM_ID)
         competition = get_competition_name(match)
         title = create_event_title(opponent, competition)
+        date = match.get('utcDate', '')[:10]
         
-        # Check if event already exists
-        if args.check_existing and any(title in e.get('summary', '') for e in existing_events):
-            print(f"⏭️  Skipping (already exists): {title}")
+        # Check if already in cache
+        if not args.force and event_id in cache['events']:
+            print(f"⏭️  Skipping (cached): {title}")
             skipped += 1
+            already_exists += 1
             continue
         
+        # Also check calendar for existing events (fallback)
+        existing_event_id = get_calendar_event_id(opponent, match.get('utcDate', ''))
+        
+        if existing_event_id and not args.force:
+            print(f"⏭️  Skipping (exists in calendar): {title}")
+            # Add to cache
+            cache['events'][event_id] = {
+                'title': title,
+                'date': date,
+                'calendar_event_id': existing_event_id,
+                'created_at': datetime.now().isoformat()
+            }
+            skipped += 1
+            already_exists += 1
+            continue
+        
+        # Create new event
         if create_calendar_event(match, args.dry_run):
             created += 1
+            # Add to cache
+            cache['events'][event_id] = {
+                'title': title,
+                'date': date,
+                'competition': competition,
+                'created_at': datetime.now().isoformat()
+            }
+    
+    # Clean old events from cache (older than 30 days)
+    cutoff = (datetime.now() - timedelta(days=30)).strftime('%Y-%m-%d')
+    old_events = [eid for eid, ev in cache['events'].items() if ev.get('date', '') < cutoff]
+    for eid in old_events:
+        del cache['events'][eid]
+    
+    # Save cache
+    save_cache(cache)
     
     print(f"\n✅ Summary:")
     print(f"   Created: {created}")
-    print(f"   Skipped: {skipped}")
+    print(f"   Skipped (exists): {skipped}")
     print(f"   Total:   {len(matches)}")
+    print(f"\n📂 Cache saved: {len(cache['events'])} events tracked")
 
 
 if __name__ == '__main__':
