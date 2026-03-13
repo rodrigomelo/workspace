@@ -4,8 +4,19 @@ Fetches the next Palmeiras match and sends notification to Discord.
 """
 
 import os
+from pathlib import Path
+from dotenv import load_dotenv
 import requests
-from datetime import datetime
+from datetime import datetime, timezone, timedelta
+from zoneinfo import ZoneInfo
+
+# Brazil timezone (Brasilia)
+BRAZIL_TZ = ZoneInfo("America/Sao_Paulo")
+
+# Load environment variables from .env file
+env_path = Path(__file__).parent.parent / ".env"
+load_dotenv(env_path)
+
 from src.config import API_KEY, WEBHOOK_URL, TEAM_ID
 
 
@@ -35,14 +46,15 @@ def format_match_notification(match):
     away_team = match.get("awayTeam", {}).get("name", "Unknown")
     utc_date = match.get("utcDate", "")
     
-    # Parse and format date
-    dt = datetime.fromisoformat(utc_date.replace("Z", "+00:00"))
-    match_time = dt.strftime("%d/%m/%Y às %H:%M")
+    # Parse and format date (convert from UTC to Brazil timezone)
+    dt_utc = datetime.fromisoformat(utc_date.replace("Z", "+00:00"))
+    dt_br = dt_utc.astimezone(ZoneInfo("America/Sao_Paulo"))
+    match_time = dt_br.strftime("%d/%m/%Y às %H:%M")
     
-    # Determine opponent
-    opponent = away_team if home_team == "Palmeiras" else home_team
-    is_home = home_team == "Palmeiras"
-    venue = "em casa" if is_home else "fora"
+    # Determine opponent (handle both "Palmeiras" and "SE Palmeiras")
+    is_palmeiras_home = "palmeiras" in home_team.lower()
+    opponent = away_team if is_palmeiras_home else home_team
+    venue = "em casa" if is_palmeiras_home else "fora"
     
     embed = {
         "title": "⚽ Próximo Jogo do Palmeiras",
@@ -68,7 +80,7 @@ def format_match_notification(match):
         "footer": {
             "text": "VerdaoTracker • Dados via football-data.org"
         },
-        "timestamp": datetime.utcnow().isoformat()
+        "timestamp": datetime.now(BRAZIL_TZ).isoformat()
     }
     
     return embed

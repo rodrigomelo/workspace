@@ -6,7 +6,7 @@ Uses environment variables for sensitive data.
 import os
 
 # Palmeiras Team ID (from football-data.org)
-TEAM_ID = 102
+TEAM_ID = 1769  # SE Palmeiras
 
 # API Configuration
 # Get your free API key at: https://www.football-data.org/
