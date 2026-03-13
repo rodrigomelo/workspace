@@ -20,4 +20,4 @@ Cada projeto deve seguir esta estrutura:
 
 ## Projetos Ativos
 
-- [Liste os projetos aqui assim que criá-los]
+- **[cli-task-manager](/Users/rodrigomelo/.openclaw/workspace/projects/cli-task-manager)** — CLI para gerenciamento de tarefas com UX terminal (emoji, cores). Spec de Athena, implementação em andamento por Hefesto.
