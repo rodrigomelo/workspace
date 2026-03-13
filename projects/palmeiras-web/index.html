@@ -357,6 +357,129 @@
                 padding: 0.6rem 1rem;
                 font-size: 0.9rem;
             }
+
+            .hero-card {
+                padding: 1.5rem;
+            }
+
+            .hero-teams {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .hero-vs {
+                font-size: 1.5rem;
+            }
+
+            .info-bar {
+                flex-direction: column;
+            }
+        }
+
+        /* Hero Card */
+        .hero-card {
+            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-dark-green));
+            border-radius: 16px;
+            padding: 2rem;
+            margin-bottom: 1.5rem;
+            box-shadow: 0 8px 32px rgba(0, 120, 36, 0.4);
+            border: 2px solid var(--palmeiras-green);
+        }
+
+        .hero-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .hero-competition {
+            display: inline-block;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            color: white;
+        }
+
+        .hero-teams {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            gap: 2rem;
+        }
+
+        .hero-team {
+            text-align: center;
+            flex: 1;
+        }
+
+        .hero-team-name {
+            font-size: 1.3rem;
+            font-weight: bold;
+            color: white;
+            margin-top: 0.5rem;
+        }
+
+        .hero-team.palmeiras .hero-team-name {
+            color: var(--palmeiras-cream);
+        }
+
+        .hero-vs {
+            font-size: 2rem;
+            font-weight: bold;
+            color: var(--palmeiras-cream);
+        }
+
+        .hero-datetime {
+            text-align: center;
+            margin-top: 1.5rem;
+            padding-top: 1rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .hero-date {
+            font-size: 1.2rem;
+            color: white;
+            font-weight: bold;
+        }
+
+        .hero-time {
+            font-size: 1.5rem;
+            color: var(--palmeiras-cream);
+            margin-top: 0.3rem;
+        }
+
+        /* Info Bar */
+        .info-bar {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-card {
+            flex: 1;
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+            border-left: 4px solid var(--palmeiras-green);
+        }
+
+        .info-icon {
+            font-size: 1.5rem;
+        }
+
+        .info-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            text-transform: uppercase;
+        }
+
+        .info-value {
+            font-size: 1rem;
+            color: var(--text-light);
+            font-weight: 500;
         }
     </style>
 </head>
@@ -367,6 +490,29 @@
     </header>
 
     <main class="container">
+        <!-- Hero: Next Match -->
+        <div class="hero-card" id="hero-match">
+            <div class="loading">Carregando próximo jogo...</div>
+        </div>
+        
+        <!-- Info Bar: Where to Watch + Stadium -->
+        <div class="info-bar">
+            <div class="info-card">
+                <span class="info-icon">📺</span>
+                <div class="info-content">
+                    <div class="info-label">Onde Assistir</div>
+                    <div class="info-value" id="where-watch">Globo, Premiere, Amazon Prime</div>
+                </div>
+            </div>
+            <div class="info-card">
+                <span class="info-icon">📍</span>
+                <div class="info-content">
+                    <div class="info-label">Estádio</div>
+                    <div class="info-value" id="stadium-info">Allianz Parque</div>
+                </div>
+            </div>
+        </div>
+
         <!-- Navigation Tabs -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="proximos">Próximos Jogos</button>
@@ -677,17 +823,85 @@
                     </div>
                 `;
             } catch (error) {
-                container.innerHTML = '<div class="no-data">Erro ao carregar classificação</div>';
+                if (currentCompetition === 'CLI') {
+                    container.innerHTML = '<div class="no-data">📊 Libertadores: dados não disponíveis no plano gratuito. Atualize para acessar!</div>';
+                } else {
+                    container.innerHTML = '<div class="no-data">Erro ao carregar classificação</div>';
+                }
                 console.error(error);
             }
         }
 
         // Initialize
         document.addEventListener('DOMContentLoaded', () => {
+            loadHeroMatch();
             loadNextMatches();
             loadRecentResults();
             loadStandings(currentCompetition);
         });
+
+        // Load hero (next match)
+        async function loadHeroMatch() {
+            const container = document.getElementById('hero-match');
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`
+                );
+                
+                if (!response.ok) throw new Error('API error');
+                
+                const data = await response.json();
+                const match = data.matches?.[0];
+                
+                if (!match) {
+                    container.innerHTML = '<div class="no-data" style="color: white;">Nenhum jogo agendado</div>';
+                    return;
+                }
+
+                const homeTeam = match.homeTeam;
+                const awayTeam = match.awayTeam;
+                const isHome = homeTeam.id === TEAM_ID;
+                const compCode = getCompetitionCode(match.competition);
+
+                // Determine where to watch based on competition
+                let whereToWatch = 'Globo, Premiere';
+                if (compCode === 'LIB') {
+                    whereToWatch = 'Globo, Paramount+';
+                } else if (compCode === 'COPA') {
+                    whereToWatch = 'Globo, Band, CazéTV';
+                }
+
+                // Determine venue
+                const venue = isHome ? 'Allianz Parque' : (match.venue || 'Ausente');
+
+                // Update info bar
+                document.getElementById('where-watch').textContent = whereToWatch;
+                document.getElementById('stadium-info').textContent = venue;
+
+                container.innerHTML = `
+                    <div class="hero-header">
+                        <span class="hero-competition">${formatCompetition(compCode)}</span>
+                    </div>
+                    <div class="hero-teams">
+                        <div class="hero-team ${isHome ? 'palmeiras' : ''}">
+                            <div class="team-name">${homeTeam.name}</div>
+                        </div>
+                        <div class="hero-vs">X</div>
+                        <div class="hero-team ${!isHome ? 'palmeiras' : ''}">
+                            <div class="team-name">${awayTeam.name}</div>
+                        </div>
+                    </div>
+                    <div class="hero-datetime">
+                        <div class="hero-date">${formatDate(match.utcDate)}</div>
+                        <div class="hero-time">${formatTime(match.utcDate)}</div>
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = '<div class="no-data" style="color: white;">Erro ao carregar próximo jogo</div>';
+                console.error(error);
+            }
+        }
     </script>
 </body>
 </html>
