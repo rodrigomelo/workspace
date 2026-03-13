@@ -4,7 +4,7 @@ import { formatTask, header } from '../lib/ui.js';
 
 export function createListCommand(): Command {
   return new Command('list')
-    .option('-s, --status <status>', 'Filter by status: pending|completed')
+    .option('-s, --status <status>', 'Filter by status: pending|completed', 'pending')
     .option('-p, --priority <level>', 'Filter by priority: low|medium|high')
     .action(async (options) => {
       let tasks = await loadTasks();

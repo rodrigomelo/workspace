@@ -6,11 +6,27 @@ import { Task } from '../types.js';
 
 const CONFIG_DIR = join(homedir(), '.config', 'clawlab');
 const STORAGE_FILE = join(CONFIG_DIR, 'tasks.json');
+const COUNTER_FILE = join(CONFIG_DIR, 'counter.json');
 
 export async function ensureStorageDir(): Promise<void> {
   if (!existsSync(CONFIG_DIR)) {
     await mkdir(CONFIG_DIR, { recursive: true });
   }
+}
+
+export async function loadCounter(): Promise<number> {
+  try {
+    const data = await readFile(COUNTER_FILE, 'utf-8');
+    const parsed = JSON.parse(data);
+    return typeof parsed.nextId === 'number' ? parsed.nextId : 1;
+  } catch {
+    return 1; // default start
+  }
+}
+
+export async function saveCounter(nextId: number): Promise<void> {
+  await ensureStorageDir();
+  await writeFile(COUNTER_FILE, JSON.stringify({ nextId }), 'utf-8');
 }
 
 export async function loadTasks(): Promise<Task[]> {
@@ -33,8 +49,9 @@ export async function saveTasks(tasks: Task[]): Promise<void> {
 
 export async function addTask(text: string, priority: 'low' | 'medium' | 'high' = 'medium'): Promise<Task> {
   const tasks = await loadTasks();
+  const nextId = await loadCounter();
   const newTask: Task = {
-    id: tasks.length > 0 ? Math.max(...tasks.map(t => t.id)) + 1 : 1,
+    id: nextId,
     text,
     priority,
     status: 'pending',
@@ -42,6 +59,7 @@ export async function addTask(text: string, priority: 'low' | 'medium' | 'high' 
   };
   tasks.push(newTask);
   await saveTasks(tasks);
+  await saveCounter(nextId + 1);
   return newTask;
 }
 

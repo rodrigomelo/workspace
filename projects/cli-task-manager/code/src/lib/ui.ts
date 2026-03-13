@@ -2,9 +2,8 @@ import chalk from 'chalk';
 
 export function formatTask(task: { id: number; text: string; priority: 'low' | 'medium' | 'high'; status: 'pending' | 'completed' }): string {
   const emoji = priorityEmoji(task.priority);
-  const statusIcon = task.status === 'completed' ? '✅' : '⬜';
   const color = priorityChalk(task.priority);
-  return `${color}${emoji} ${chalk.bold(`[${task.id}]`)}${chalk.reset} ${task.text} ${statusIcon}`;
+  return `${color}${emoji} ${chalk.bold(`[${task.id}]`)}${chalk.reset} ${task.text}`;
 }
 
 export function priorityChalk(priority: 'low' | 'medium' | 'high') {
