@@ -74,6 +74,29 @@
             color: white;
         }
 
+        .comp-btn {
+            padding: 0.5rem 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .comp-btn:hover {
+            background: var(--palmeiras-light);
+            color: var(--palmeiras-green);
+        }
+
+        .comp-btn.active {
+            background: var(--palmeiras-green);
+            color: white;
+            border-color: var(--palmeiras-green);
+        }
+
         .tab-content { display: none; }
         .tab-content.active { display: block; }
 
@@ -329,6 +352,11 @@
         <div id="classificacao" class="tab-content">
             <div class="card">
                 <div class="card-title">Classificação</div>
+                <div class="tabs" style="margin-bottom: 1rem;">
+                    <button class="comp-btn active" data-comp="BSA">Brasileirão</button>
+                    <button class="comp-btn" data-comp="LIB">Libertadores</button>
+                    <button class="comp-btn" data-comp="CDB">Copa do Brasil</button>
+                </div>
                 <div id="standings"><div class="loading">Carregando...</div></div>
             </div>
         </div>
@@ -448,34 +476,73 @@
             } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
         }
 
+        let currentCompetition = 'BSA';
+
+        // Competition buttons
+        document.querySelectorAll('.comp-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentCompetition = btn.dataset.comp;
+                loadStandings(currentCompetition);
+            });
+        });
+
         // Load standings
-        async function loadStandings() {
+        async function loadStandings(comp) {
             const container = document.getElementById('standings');
+            const competition = comp || currentCompetition;
+            const compNames = { 'BSA': 'Brasileirão', 'LIB': 'Copa Libertadores', 'CDB': 'Copa do Brasil' };
+            
+            container.innerHTML = '<div class="loading">Carregando...</div>';
+            
             try {
-                const res = await fetch(`${API_BASE}/competitions/BSA/standings`);
-                if (!res.ok) throw new Error();
+                const res = await fetch(`${API_BASE}/competitions/${competition}/standings`);
+                if (!res.ok) {
+                    const err = await res.json();
+                    throw new Error(err.error || 'Competition not available');
+                }
                 const data = await res.json();
-                let pos = null, pts = 0, p = 0, w = 0;
+                let pos = null, pts = 0, p = 0, w = 0, g = 0, d = 0;
                 for (const s of data.standings || []) {
                     if (s.type === 'TOTAL') {
                         for (let i = 0; i < s.table.length; i++) {
-                            if (s.table[i].team.id === TEAM_ID) { pos = i + 1; pts = s.table[i].points; p = s.table[i].playedGames; w = s.table[i].won; break; }
+                            if (s.table[i].team.id === TEAM_ID) { 
+                                pos = i + 1; 
+                                pts = s.table[i].points; 
+                                p = s.table[i].playedGames; 
+                                w = s.table[i].won;
+                                g = s.table[i].goalsFor;
+                                d = s.table[i].goalsAgainst;
+                                break; 
+                            }
                         }
                         break;
                     }
                 }
-                if (!pos) { container.innerHTML = '<div class="loading">Dados não disponíveis</div>'; return; }
+                if (!pos) { 
+                    container.innerHTML = '<div class="loading">Palmeiras não está nesta competição</div>'; 
+                    return; 
+                }
                 container.innerHTML = `
                     <div class="standings-info">
+                        <div style="margin-bottom:0.5rem;color:var(--text-secondary);font-size:0.9rem">${compNames[competition] || competition}</div>
                         <div class="position-badge">${pos}º</div>
                         <div class="stats-grid">
                             <div class="stat-box"><div class="stat-value">${pts}</div><div class="stat-label">Pontos</div></div>
                             <div class="stat-box"><div class="stat-value">${p}</div><div class="stat-label">Jogos</div></div>
                             <div class="stat-box"><div class="stat-value">${w}</div><div class="stat-label">Vitórias</div></div>
                         </div>
+                        <div class="stats-grid" style="margin-top:0.5rem">
+                            <div class="stat-box"><div class="stat-value">${g}</div><div class="stat-label">Gols Pró</div></div>
+                            <div class="stat-box"><div class="stat-value">${d}</div><div class="stat-label">Gols Contra</div></div>
+                            <div class="stat-box"><div class="stat-value">${g - d}</div><div class="stat-label">Saldo</div></div>
+                        </div>
                     </div>
                 `;
-            } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+            } catch (e) { 
+                container.innerHTML = `<div class="loading" style="color:#c0392b">❌ ${e.message || 'Erro ao carregar classificação'}</div>`; 
+            }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
