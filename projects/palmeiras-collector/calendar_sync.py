@@ -185,7 +185,7 @@ def format_datetime(utc_str: str) -> tuple:
 
 def create_event_title(opponent: str, competition: str) -> str:
     """Create event title in the required format."""
-    return f"🏆 Palmeiras vs {opponent} - {competition}"
+    return f"Palmeiras vs {opponent} - {competition}"
 
 
 def create_event_description(match: dict, competition: str, match_time: str) -> str:
@@ -200,7 +200,7 @@ def create_event_description(match: dict, competition: str, match_time: str) -> 
 
 🏟️ Estádio: {venue}
 📍 Cidade: {city}
-🕐Horário: {match_time} (horário de Brasília)
+🕐 Horário: {match_time} (horário de Brasília)
 
 📺 Onde assistir:
 • TV: {broadcast['tv']}

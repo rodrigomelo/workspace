@@ -1,0 +1,35 @@
+{
+  "events": {
+    "01e4b6f25caa": {
+      "title": "Palmeiras vs Mirassol FC - Brasileir\u00e3o",
+      "date": "2026-03-15",
+      "competition": "Brasileir\u00e3o",
+      "created_at": "2026-03-13T19:29:51.200189"
+    },
+    "4bc1013a2c70": {
+      "title": "Palmeiras vs Botafogo FR - Brasileir\u00e3o",
+      "date": "2026-03-18",
+      "competition": "Brasileir\u00e3o",
+      "created_at": "2026-03-13T19:29:52.883953"
+    },
+    "bfbd92027977": {
+      "title": "Palmeiras vs S\u00e3o Paulo FC - Brasileir\u00e3o",
+      "date": "2026-03-22",
+      "competition": "Brasileir\u00e3o",
+      "created_at": "2026-03-13T19:29:54.518501"
+    },
+    "a57c6318aef7": {
+      "title": "Palmeiras vs Gr\u00eamio FBPA - Brasileir\u00e3o",
+      "date": "2026-04-01",
+      "competition": "Brasileir\u00e3o",
+      "created_at": "2026-03-13T19:29:56.085225"
+    },
+    "f743b8a9c138": {
+      "title": "Palmeiras vs EC Bahia - Brasileir\u00e3o",
+      "date": "2026-04-04",
+      "competition": "Brasileir\u00e3o",
+      "created_at": "2026-03-13T19:29:58.003647"
+    }
+  },
+  "last_sync": "2026-03-13T19:29:58.003776"
+}
