@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CLI Task Manager</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🗂️ CLI Task Manager</h1>
+      <button id="addBtn" class="btn-primary">+ Add Task</button>
+    </header>
+
+    <div class="filters">
+      <div class="status-filters">
+        <button class="filter-btn active" data-status="all">All</button>
+        <button class="filter-btn" data-status="pending">Pending</button>
+        <button class="filter-btn" data-status="completed">Completed</button>
+      </div>
+      <div class="priority-filter">
+        <select id="priorityFilter">
+          <option value="all">All Priorities</option>
+          <option value="high">High</option>
+          <option value="medium">Medium</option>
+          <option value="low">Low</option>
+        </select>
+      </div>
+    </div>
+
+    <div id="taskList" class="task-list">
+      <div class="loading">Loading...</div>
+    </div>
+
+    <!-- Add Task Modal -->
+    <div id="addModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Add New Task</h2>
+        <input type="text" id="taskText" placeholder="Task description..." autofocus>
+        <div class="priority-select">
+          <label>Priority:</label>
+          <select id="taskPriority">
+            <option value="low">Low 🟢</option>
+            <option value="medium" selected>Medium 🟡</option>
+            <option value="high">High 🔴</option>
+          </select>
+        </div>
+        <div class="modal-actions">
+          <button id="cancelBtn" class="btn-secondary">Cancel</button>
+          <button id="confirmAddBtn" class="btn-primary">Add</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="deleteModal" class="modal hidden">
+      <div class="modal-content">
+        <h2>Delete Task?</h2>
+        <p>Are you sure you want to delete task <span id="deleteTaskId"></span>?</p>
+        <div class="modal-actions">
+          <button id="cancelDeleteBtn" class="btn-secondary">Cancel</button>
+          <button id="confirmDeleteBtn" class="btn-danger">Delete</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast hidden"></div>
+  </div>
+
+  <script src="app.js"></script>
+</body>
+</html>

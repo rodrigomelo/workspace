@@ -1,6 +1,6 @@
 import chalk from 'chalk';
 
-export function formatTask(task: { id: number; text: string; priority: 'low' | 'medium' | 'high'; status: 'pending' | 'completed' }): string {
+export function formatTask(task: { id: number; text: string; priority: 'low' | 'medium' | 'high' }): string {
   const emoji = priorityEmoji(task.priority);
   const color = priorityChalk(task.priority);
   return `${color}${emoji} ${chalk.bold(`[${task.id}]`)}${chalk.reset} ${task.text}`;

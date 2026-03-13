@@ -1,57 +1,47 @@
-# Handoff: CLI Task Manager Web UI (Design → Code)
+# Handoff: Design → Development (Web UI)
 
-**From:** Athena (UX Designer)  
-**To:** Hefesto (Coder)  
-**Date:** 2026-03-12  
-**Project:** cli-task-manager/web
+**Data:** 2025-03-12
+**De:** Athena (Designer)
+**Para:** Hefesto (Coder)
+**Projeto:** cli-task-manager (Web UI)
 
----
+## Contexto do Projeto
 
-## Deliverables
+GUI web para o CLI Task Manager. Mantém mesma UX, cores, e compartilha storage JSON com a CLI.
 
-### ✅ Design Specification
-- **File:** `projects/cli-task-manager/web/SPEC.md`
-- Contains: UI layout, colors, components, functionality, tech stack
+## Entregas
 
----
+- [x] Especificação completa (`web/SPEC.md`)
+- [x] Layout, paleta de cores, tipografia
+- [x] Componentes: header, filtros, cards, modais
+- [x] Estados: empty, loading, error
+- [x] Fluxo de usuário detalhado
+- [x] Critérios de aceitação
 
-## Key Design Decisions
+## Decisões Tomadas
 
-1. **Web UI (not TUI)** — accessible via browser
-2. **Plain HTML/CSS/JS** — no framework, simpler to maintain
-3. **Same storage** — reads/writes to `~/.config/clawlab/tasks.json`
-4. **Color scheme** — matches CLI: 🔴 High (red), 🟡 Medium (yellow), 🟢 Low (green)
-5. **Dark theme** — modern, easy on eyes
+- **Stack:** Plain HTML/CSS/JS (sem framework) — simplicidade
+- **Server:** Express + static files
+- **Porta:** 3000
+- **API:** RESTful (GET/POST/PATCH/DELETE)
+- **Polling:** 5s auto-refresh
+- **Cores:** Mesmo scheme do CLI (vermelho/amarelo/verde, dark theme)
 
----
+## Alternativas Consideradas
 
-## Tech Stack
+- **React/Vue:** descartado por overhead desnecessário
+- **WebSocket:** polling é suficiente para uso local
+- **Electron/Tauri:** futuramente, mas web-first pra cross-platform
 
-- Plain HTML/CSS/JS
-- Simple static server (Node.js or Python)
-- Port 3000
-- Same JSON storage as CLI
+## Perguntas Abertas
 
----
+- Devo usar um build step (bundle) ou vanilla JS puro? (Decisão: vanilla)
+- Devo incluir service worker? (Não, fora de escopo)
 
-## Questions for You
+## Blockers
 
-1. **Server:** Express? http-server? Python SimpleHTTPServer?
-2. **File watching:** Poll for changes or just refresh button?
-3. **CORS:** Any concerns reading local JSON file?
-
----
-
-## Next Steps
-
-1. Review SPEC.md
-2. Confirm approach
-3. Start coding
-4. Test with CLI
+Nenhum — spec está completa.
 
 ---
 
-## Reference
-
-- Full spec: `projects/cli-task-manager/web/SPEC.md`
-- CLI spec: `../design/SPEC.md`
+**Próximo passo:** Hefesto implementa server + frontend, Apollo valida QA web, Artemis revisa boas práticas de UX web.

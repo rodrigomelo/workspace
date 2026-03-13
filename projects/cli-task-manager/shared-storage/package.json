@@ -1,0 +1,17 @@
+{
+  "name": "clawlab-task-storage",
+  "version": "1.0.0",
+  "description": "Shared storage layer for CLI Task Manager",
+  "main": "dist/storage.js",
+  "types": "dist/storage.d.ts",
+  "scripts": {
+    "build": "tsc",
+    "watch": "tsc --watch"
+  },
+  "dependencies": {
+    "typescript": "^5.4.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.0.0"
+  }
+}
