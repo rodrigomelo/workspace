@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Palmeiras - Dashboard</title>
+    <style>
+        :root {
+            --palmeiras-green: #007824;
+            --palmeiras-dark-green: #005c1a;
+            --palmeiras-white: #ffffff;
+            --palmeiras-cream: #f5f5dc;
+            --bg-dark: #1a1a1a;
+            --bg-card: #2d2d2d;
+            --text-light: #ffffff;
+            --text-muted: #a0a0a0;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: var(--bg-dark);
+            color: var(--text-light);
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-dark-green));
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 4px 20px rgba(0, 120, 36, 0.4);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            color: var(--palmeiras-white);
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header .subtitle {
+            color: var(--palmeiras-cream);
+            font-size: 1.1rem;
+            margin-top: 0.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .card {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .card-title {
+            color: var(--palmeiras-green);
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .card-title::before {
+            content: '';
+            width: 4px;
+            height: 24px;
+            background: var(--palmeiras-green);
+            border-radius: 2px;
+        }
+
+        /* Next Match */
+        .next-match {
+            text-align: center;
+        }
+
+        .match-date {
+            font-size: 1.1rem;
+            color: var(--text-muted);
+            margin-bottom: 1rem;
+        }
+
+        .match-teams {
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            margin: 1.5rem 0;
+        }
+
+        .team {
+            text-align: center;
+        }
+
+        .team-name {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-top: 0.5rem;
+        }
+
+        .team.palmeiras .team-name {
+            color: var(--palmeiras-green);
+        }
+
+        .vs {
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            font-weight: bold;
+        }
+
+        .competition {
+            display: inline-block;
+            background: var(--palmeiras-green);
+            color: white;
+            padding: 0.3rem 1rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            margin-top: 1rem;
+        }
+
+        .no-match {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        /* Recent Results */
+        .results-list {
+            display: flex;
+            flex-direction: column;
+            gap: 0.8rem;
+        }
+
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            border-left: 3px solid var(--palmeiras-green);
+        }
+
+        .result-date {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            width: 60px;
+        }
+
+        .result-teams {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .result-score {
+            font-size: 1.1rem;
+            font-weight: bold;
+            min-width: 60px;
+            text-align: right;
+        }
+
+        .win { color: #4ade80; }
+        .draw { color: #fbbf24; }
+        .loss { color: #f87171; }
+
+        /* Standings */
+        .standings-info {
+            text-align: center;
+        }
+
+        .position {
+            font-size: 3rem;
+            font-weight: bold;
+            color: var(--palmeiras-green);
+        }
+
+        .position-label {
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+
+        .stat {
+            text-align: center;
+            padding: 0.8rem;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+
+        .stat-value {
+            font-size: 1.5rem;
+            font-weight: bold;
+            color: var(--palmeiras-green);
+        }
+
+        .stat-label {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+        }
+
+        .no-standings {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        /* Loading */
+        .loading {
+            text-align: center;
+            color: var(--text-muted);
+            padding: 2rem;
+        }
+
+        .loading::after {
+            content: '';
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--palmeiras-green);
+            border-top-color: transparent;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-left: 10px;
+            vertical-align: middle;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 1.8rem;
+            }
+            
+            .container {
+                padding: 1rem;
+            }
+            
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🏆 Palmeiras</h1>
+        <p class="subtitle">Dashboard de Jogos e Classificação</p>
+    </header>
+
+    <main class="container">
+        <div class="grid">
+            <!-- Próximo Jogo -->
+            <div class="card">
+                <h2 class="card-title">Próximo Jogo</h2>
+                <div id="next-match">
+                    <div class="loading">Carregando...</div>
+                </div>
+            </div>
+
+            <!-- Últimos Resultados -->
+            <div class="card">
+                <h2 class="card-title">Últimos Resultados</h2>
+                <div id="recent-results">
+                    <div class="loading">Carregando...</div>
+                </div>
+            </div>
+
+            <!-- Classificação -->
+            <div class="card">
+                <h2 class="card-title">Classificação - Serie A</h2>
+                <div id="standings">
+                    <div class="loading">Carregando...</div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <footer class="footer">
+        <p>Dados fornecidos por Football-Data.org</p>
+    </footer>
+
+    <script>
+        const API_KEY = 'eca8b30bb5c34fcfa80ec28ceedf84a0';
+        const TEAM_ID = 1769;
+        const API_BASE = 'https://api.football-data.org/v4';
+
+        const headers = {
+            'X-Auth-Token': API_KEY
+        };
+
+        // Format date to Brazilian Portuguese
+        function formatDate(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleDateString('pt-BR', { 
+                day: '2-digit', 
+                month: '2-digit',
+                year: 'numeric'
+            });
+        }
+
+        // Format time to Brazilian Portuguese
+        function formatTime(dateStr) {
+            const date = new Date(dateStr);
+            return date.toLocaleTimeString('pt-BR', { 
+                hour: '2-digit', 
+                minute: '2-digit'
+            });
+        }
+
+        // Format competition name
+        function formatCompetition(comp) {
+            const names = {
+                'BSA': 'Brasileirão',
+                'COPA_DO_BRASIL': 'Copa do Brasil',
+                'LIBERTADORES': 'Libertadores',
+                'RECOPA': 'Recopa',
+                'PAULISTA': 'Campeonato Paulista'
+            };
+            return names[comp] || comp;
+        }
+
+        // Load next match
+        async function loadNextMatch() {
+            const container = document.getElementById('next-match');
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED`,
+                    { headers }
+                );
+                
+                if (!response.ok) throw new Error('API error');
+                
+                const data = await response.json();
+                const matches = data.matches || [];
+                
+                if (matches.length === 0) {
+                    container.innerHTML = '<div class="no-match">Nenhum jogo agendado no momento</div>';
+                    return;
+                }
+
+                const nextMatch = matches[0];
+                const homeTeam = nextMatch.homeTeam;
+                const awayTeam = nextMatch.awayTeam;
+                const isHome = homeTeam.id === TEAM_ID;
+
+                container.innerHTML = `
+                    <div class="next-match">
+                        <div class="match-date">
+                            ${formatDate(nextMatch.utcDate)} às ${formatTime(nextMatch.utcDate)}
+                        </div>
+                        <div class="match-teams">
+                            <div class="team ${isHome ? 'palmeiras' : ''}">
+                                <div class="team-name">${homeTeam.name}</div>
+                            </div>
+                            <div class="vs">X</div>
+                            <div class="team ${!isHome ? 'palmeiras' : ''}">
+                                <div class="team-name">${awayTeam.name}</div>
+                            </div>
+                        </div>
+                        <span class="competition">${formatCompetition(nextMatch.competition?.code)}</span>
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = '<div class="no-match">Erro ao carregar próximo jogo</div>';
+                console.error(error);
+            }
+        }
+
+        // Load recent results
+        async function loadRecentResults() {
+            const container = document.getElementById('recent-results');
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`,
+                    { headers }
+                );
+                
+                if (!response.ok) throw new Error('API error');
+                
+                const data = await response.json();
+                const matches = data.matches || [];
+                
+                if (matches.length === 0) {
+                    container.innerHTML = '<div class="no-match">Nenhum resultado encontrado</div>';
+                    return;
+                }
+
+                const resultsHTML = matches.map(match => {
+                    const homeTeam = match.homeTeam;
+                    const awayTeam = match.awayTeam;
+                    const scoreHome = match.score.fullTime.home ?? 0;
+                    const scoreAway = match.score.fullTime.away ?? 0;
+                    
+                    const isPalmeirasHome = homeTeam.id === TEAM_ID;
+                    const palmeirasScore = isPalmeirasHome ? scoreHome : scoreAway;
+                    const opponentScore = isPalmeirasHome ? scoreAway : scoreHome;
+                    const opponentName = isPalmeirasHome ? awayTeam.name : homeTeam.name;
+                    
+                    let resultClass = 'draw';
+                    if (palmeirasScore > opponentScore) resultClass = 'win';
+                    else if (palmeirasScore < opponentScore) resultClass = 'loss';
+
+                    return `
+                        <div class="result-item">
+                            <span class="result-date">${formatDate(match.utcDate)}</span>
+                            <span class="result-teams">${opponentName}</span>
+                            <span class="result-score ${resultClass}">${scoreHome} - ${scoreAway}</span>
+                        </div>
+                    `;
+                }).join('');
+
+                container.innerHTML = `<div class="results-list">${resultsHTML}</div>`;
+            } catch (error) {
+                container.innerHTML = '<div class="no-match">Erro ao carregar resultados</div>';
+                console.error(error);
+            }
+        }
+
+        // Load standings
+        async function loadStandings() {
+            const container = document.getElementById('standings');
+            
+            try {
+                const response = await fetch(
+                    `${API_BASE}/competitions/BSA/standings`,
+                    { headers }
+                );
+                
+                if (!response.ok) throw new Error('API error');
+                
+                const data = await response.json();
+                const standings = data.standings || [];
+                
+                if (standings.length === 0) {
+                    container.innerHTML = '<div class="no-standings">Nenhum dado de classificação disponível</div>';
+                    return;
+                }
+
+                // Find Palmeirense position in TOTAL table
+                let position = null;
+                let played = 0;
+                let points = 0;
+                let wins = 0;
+
+                for (const standing of standings) {
+                    if (standing.type === 'TOTAL') {
+                        for (let i = 0; i < standing.table.length; i++) {
+                            const team = standing.table[i];
+                            if (team.team.id === TEAM_ID) {
+                                position = i + 1;
+                                played = team.playedGames;
+                                points = team.points;
+                                wins = team.won;
+                                break;
+                            }
+                        }
+                        break;
+                    }
+                }
+
+                if (position === null) {
+                    container.innerHTML = '<div class="no-standings">Palmeiras não encontrado na tabela</div>';
+                    return;
+                }
+
+                container.innerHTML = `
+                    <div class="standings-info">
+                        <div class="position">${position}º</div>
+                        <div class="position-label">Lugar no Campeonato</div>
+                        <div class="stats">
+                            <div class="stat">
+                                <div class="stat-value">${played}</div>
+                                <div class="stat-label">Jogos</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${points}</div>
+                                <div class="stat-label">Pontos</div>
+                            </div>
+                            <div class="stat">
+                                <div class="stat-value">${wins}</div>
+                                <div class="stat-label">Vitórias</div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } catch (error) {
+                container.innerHTML = '<div class="no-standings">Erro ao carregar classificação</div>';
+                console.error(error);
+            }
+        }
+
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadNextMatch();
+            loadRecentResults();
+            loadStandings();
+        });
+    </script>
+</body>
+</html>
