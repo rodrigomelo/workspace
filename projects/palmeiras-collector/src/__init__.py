@@ -1,0 +1,1 @@
+# Palmeiras Collector package
