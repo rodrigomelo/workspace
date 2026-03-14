@@ -506,25 +506,63 @@
             } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
         }
 
-        // Standings
+        // Standings with detailed stats
         async function loadStandings() {
             const container = document.getElementById('standings');
             try {
                 const res = await fetch(`${API_BASE}/competitions/BSA/standings`);
-                if (!res.ok) throw new Error();
+                if (!res.ok) throw new Error('API error');
                 const data = await res.json();
-                let pos = null, pts = 0, p = 0, w = 0;
+                
+                let pos = null, pts = 0, p = 0, w = 0, d = 0, l = 0, gf = 0, ga = 0;
                 for (const s of data.standings || []) {
                     if (s.type === 'TOTAL') {
                         for (let i = 0; i < s.table.length; i++) {
-                            if (s.table[i].team.id === TEAM_ID) { pos = i + 1; pts = s.table[i].points; p = s.table[i].playedGames; w = s.table[i].won; break; }
+                            if (s.table[i].team.id === TEAM_ID) { 
+                                pos = i + 1; 
+                                pts = s.table[i].points; 
+                                p = s.table[i].playedGames; 
+                                w = s.table[i].won;
+                                d = s.table[i].draw;
+                                l = s.table[i].lost;
+                                gf = s.table[i].goalsFor;
+                                ga = s.table[i].goalsAgainst;
+                                break; 
+                            }
                         }
                         break;
                     }
                 }
                 if (!pos) { container.innerHTML = '<div class="loading">Dados indisponiveis</div>'; return; }
-                container.innerHTML = `<div style="text-align:center"><div class="position-badge">${pos}º</div><div class="stats-grid"><div class="stat-box"><div class="stat-value">${pts}</div><div class="stat-label">Pontos</div></div><div class="stat-box"><div class="stat-value">${p}</div><div class="stat-label">Jogos</div></div><div class="stat-box"><div class="stat-value">${w}</div><div class="stat-label">Vitorias</div></div></div></div>`;
-            } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+                
+                const gd = gf - ga;
+                const avgPts = p > 0 ? (pts / p).toFixed(2) : 0;
+                const winRate = p > 0 ? Math.round((w / p) * 100) : 0;
+                
+                container.innerHTML = `
+                    <div style="text-align:center">
+                        <div class="position-badge">${pos}º</div>
+                        <div class="stats-grid">
+                            <div class="stat-box"><div class="stat-value">${pts}</div><div class="stat-label">Pontos</div></div>
+                            <div class="stat-box"><div class="stat-value">${p}</div><div class="stat-label">Jogos</div></div>
+                            <div class="stat-box"><div class="stat-value">${avgPts}</div><div class="stat-label">Pts/Jogo</div></div>
+                        </div>
+                        <div class="stats-grid" style="margin-top:0.5rem">
+                            <div class="stat-box"><div class="stat-value" style="color:#27ae60">${w}</div><div class="stat-label">Vitorias</div></div>
+                            <div class="stat-box"><div class="stat-value" style="color:#f39c12">${d}</div><div class="stat-label">Empates</div></div>
+                            <div class="stat-box"><div class="stat-value" style="color:#e74c3c">${l}</div><div class="stat-label">Derrotas</div></div>
+                        </div>
+                        <div class="stats-grid" style="margin-top:0.5rem">
+                            <div class="stat-box"><div class="stat-value">${gf}</div><div class="stat-label">Gols Pro</div></div>
+                            <div class="stat-box"><div class="stat-value">${ga}</div><div class="stat-label">Gols Contra</div></div>
+                            <div class="stat-box"><div class="stat-value" style="color:${gd>=0?'#27ae60':'#e74c3c'}">${gd >= 0 ? '+' : ''}${gd}</div><div class="stat-label">Saldo</div></div>
+                        </div>
+                    </div>
+                `;
+            } catch (e) { 
+                container.innerHTML = '<div class="loading">Erro ao carregar classificacao</div>'; 
+                console.error('Standings error:', e);
+            }
         }
 
         // Team Stats
