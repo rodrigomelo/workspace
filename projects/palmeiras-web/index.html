@@ -234,12 +234,33 @@
     </style>
 </head>
 <body>
+    <!-- Palmeiras Shield SVG -->
+    <svg style="display:none">
+        <symbol id="palmeiras-shield" viewBox="0 0 100 100">
+            <defs>
+                <linearGradient id="shieldGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" style="stop-color:#01753B"/>
+                    <stop offset="100%" style="stop-color:#014726"/>
+                </linearGradient>
+            </defs>
+            <path d="M50 5 L95 20 L95 50 Q95 80 50 95 Q5 80 5 50 L5 20 Z" fill="url(#shieldGrad)" stroke="#FFD700" stroke-width="2"/>
+            <path d="M50 15 L80 25 L80 50 Q80 70 50 80 Q20 70 20 50 L20 25 Z" fill="#FFFFFF"/>
+            <path d="M35 35 L50 30 L65 35 L65 55 Q50 60 35 55 Z" fill="#01753B"/>
+            <circle cx="50" cy="45" r="8" fill="#FFD700"/>
+            <text x="50" y="48" text-anchor="middle" font-size="6" font-weight="bold" fill="#01753B">SEP</text>
+            <path d="M30 62 L50 58 L70 62 L70 72 Q50 76 30 72 Z" fill="#01753B"/>
+            <path d="M25 75 L50 70 L75 75 L75 85 Q50 90 25 85 Z" fill="#FFD700"/>
+        </symbol>
+    </svg>
+
     <header class="header">
         <div class="header-content">
-            <div class="logo"><span class="logo-text">V</span></div>
+            <div class="logo">
+                <svg width="50" height="50"><use href="#palmeiras-shield"/></svg>
+            </div>
             <div class="header-text">
                 <h1>Palmeiras</h1>
-                <div class="subtitle">Verdao Tracker</div>
+                <div class="subtitle">Dashboard Verdão</div>
             </div>
         </div>
     </header>
@@ -549,6 +570,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', () => {
+            loadQuickStats();
             loadHero();
             loadMatches();
             loadResults();
