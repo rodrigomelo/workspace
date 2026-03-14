@@ -4,130 +4,76 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Palmeiras - Dashboard</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg: #FFFFFF;
-            --bg-secondary: #F5F5F5;
+            --bg: #FAFAFA;
+            --bg-card: #FFFFFF;
             --text: #1A1A1A;
             --text-secondary: #666666;
-            --palmeiras-green: #0D7A3D;
-            --palmeiras-light: #E8F5E9;
-            --accent: #FFD700;
-            --shadow: 0 2px 8px rgba(0,0,0,0.08);
+            --text-muted: #999999;
+            --palmeiras-green: #01753B;
+            --palmeiras-green-dark: #014726;
+            --palmeiras-green-light: #E8F5E9;
+            --palmeiras-gold: #FFD700;
+            --shadow: 0 4px 20px rgba(1,117,59,0.1);
+            --border-radius: 16px;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-            background: var(--bg);
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
             color: var(--text);
             min-height: 100vh;
+            padding-bottom: 2rem;
         }
 
         .header {
-            background: var(--bg);
-            padding: 1.5rem;
+            background: linear-gradient(135deg, var(--palmeiras-green), var(--palmeiras-green-dark));
+            padding: 2rem 1.5rem;
             text-align: center;
-            border-bottom: 3px solid var(--palmeiras-green);
         }
 
-        .header h1 {
-            font-size: 2rem;
-            color: var(--palmeiras-green);
-            font-weight: 700;
-        }
-
-        .container {
-            max-width: 900px;
-            margin: 0 auto;
-            padding: 1.5rem;
-        }
-
-        /* Tabs */
-        .tabs {
-            display: flex;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-            flex-wrap: wrap;
-        }
-
-        .tab-btn {
-            padding: 0.75rem 1.25rem;
-            background: var(--bg-secondary);
-            border: none;
-            border-radius: 8px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 0.95rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .tab-btn:hover {
-            background: var(--palmeiras-light);
-            color: var(--palmeiras-green);
-        }
-
-        .tab-btn.active {
-            background: var(--palmeiras-green);
-            color: white;
-        }
-
-        .comp-btn {
-            padding: 0.5rem 1rem;
-            background: var(--bg-secondary);
-            border: 1px solid #ddd;
-            border-radius: 6px;
-            color: var(--text-secondary);
-            cursor: pointer;
-            font-size: 0.85rem;
-            font-weight: 500;
-            transition: all 0.2s;
-        }
-
-        .comp-btn:hover {
-            background: var(--palmeiras-light);
-            color: var(--palmeiras-green);
-        }
-
-        .comp-btn.active {
-            background: var(--palmeiras-green);
-            color: white;
-            border-color: var(--palmeiras-green);
-        }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; }
-
-        /* Cards */
-        .card {
-            background: var(--bg);
-            border-radius: 12px;
-            padding: 1.5rem;
-            box-shadow: var(--shadow);
-            margin-bottom: 1rem;
-            border: 1px solid #eee;
-        }
-
-        .card-title {
-            color: var(--palmeiras-green);
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-bottom: 1rem;
+        .header-content {
             display: flex;
             align-items: center;
-            gap: 0.5rem;
+            justify-content: center;
+            gap: 1rem;
         }
 
-        /* Hero */
+        .logo {
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .logo-text { font-size: 2.5rem; }
+
+        .header-text h1 {
+            font-size: 2rem;
+            color: white;
+            font-weight: 800;
+        }
+
+        .header-text .subtitle { color: rgba(255,255,255,0.9); font-size: 0.9rem; }
+
+        .container { max-width: 900px; margin: -1.5rem auto 0; padding: 0 1rem; }
+
+        /* Hero Card */
         .hero-card {
             background: linear-gradient(135deg, var(--palmeiras-green), #0a5a2d);
-            border-radius: 16px;
+            border-radius: var(--border-radius);
             padding: 2rem;
             color: white;
             text-align: center;
             margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
         }
 
         .hero-comp {
@@ -135,164 +81,152 @@
             background: rgba(255,255,255,0.2);
             padding: 0.3rem 1rem;
             border-radius: 20px;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
             margin-bottom: 1rem;
         }
 
-        .hero-teams {
-            display: flex;
-            justify-content: space-around;
-            align-items: center;
-            gap: 1rem;
-        }
+        .hero-teams { display: flex; justify-content: space-around; align-items: center; }
+        .hero-team { flex: 1; text-align: center; }
+        .hero-team-name { font-size: 1rem; font-weight: 600; margin-top: 0.5rem; }
+        .hero-vs { font-size: 1.5rem; font-weight: bold; opacity: 0.8; }
+        .hero-score { font-size: 2.5rem; font-weight: 800; }
+        .hero-date { margin-top: 1.5rem; padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.2); font-size: 1.2rem; font-weight: 600; }
 
-        .hero-team {
-            flex: 1;
-            text-align: center;
-        }
-
-        .hero-team-name {
-            font-size: 1.1rem;
-            font-weight: 600;
-            margin-top: 0.5rem;
-        }
-
-        .hero-vs {
-            font-size: 1.5rem;
-            font-weight: bold;
-            opacity: 0.8;
-        }
-
-        .hero-date {
-            margin-top: 1.5rem;
-            padding-top: 1rem;
-            border-top: 1px solid rgba(255,255,255,0.2);
-            font-size: 1.3rem;
-            font-weight: 600;
-        }
-
-        /* Info bar */
-        .info-bar {
-            display: flex;
-            gap: 1rem;
-            margin-bottom: 1.5rem;
-        }
-
+        /* Info Bar */
+        .info-bar { display: flex; gap: 1rem; margin-bottom: 1.5rem; }
         .info-card {
             flex: 1;
-            background: var(--bg-secondary);
-            border-radius: 10px;
+            background: var(--bg-card);
+            border-radius: 12px;
             padding: 1rem;
             display: flex;
             align-items: center;
             gap: 0.75rem;
+            box-shadow: var(--shadow);
+        }
+        .info-icon { font-size: 1.3rem; }
+        .info-label { font-size: 0.7rem; color: var(--text-muted); text-transform: uppercase; }
+        .info-value { font-size: 0.9rem; font-weight: 600; }
+
+        /* Cards */
+        .card {
+            background: var(--bg-card);
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--shadow);
         }
 
-        .info-icon { font-size: 1.3rem; }
-        .info-label { font-size: 0.75rem; color: var(--text-secondary); text-transform: uppercase; }
-        .info-value { font-size: 0.95rem; font-weight: 500; }
+        .card-title {
+            color: var(--palmeiras-green);
+            font-size: 1.1rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        /* Tabs */
+        .tabs { display: flex; gap: 0.5rem; margin-bottom: 1rem; flex-wrap: wrap; }
+        .tab-btn {
+            padding: 0.6rem 1rem;
+            background: var(--bg-card);
+            border: none;
+            border-radius: 8px;
+            color: var(--text-secondary);
+            cursor: pointer;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+        .tab-btn:hover { background: var(--palmeiras-green-light); }
+        .tab-btn.active { background: var(--palmeiras-green); color: white; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; }
 
         /* Matches */
         .match-item {
             padding: 1rem;
-            background: var(--bg-secondary);
+            background: var(--bg);
             border-radius: 8px;
             margin-bottom: 0.75rem;
             border-left: 3px solid var(--palmeiras-green);
         }
 
-        .match-header {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 0.5rem;
-            font-size: 0.85rem;
-            color: var(--text-secondary);
-        }
-
-        .match-teams {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-weight: 500;
-        }
+        .match-header { display: flex; justify-content: space-between; margin-bottom: 0.5rem; font-size: 0.8rem; color: var(--text-muted); }
+        .match-teams { display: flex; justify-content: space-between; align-items: center; font-weight: 500; }
 
         /* Standings */
-        .standings-info {
-            text-align: center;
-            padding: 1rem;
-        }
-
         .position-badge {
             display: inline-block;
             background: var(--palmeiras-green);
             color: white;
-            width: 60px;
-            height: 60px;
-            line-height: 60px;
+            width: 50px;
+            height: 50px;
+            line-height: 50px;
             border-radius: 50%;
-            font-size: 1.5rem;
+            font-size: 1.2rem;
             font-weight: bold;
         }
 
-        .stats-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 1rem;
-            margin-top: 1rem;
-        }
+        .stats-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; margin-top: 1rem; }
+        .stat-box { text-align: center; padding: 0.75rem; background: var(--bg); border-radius: 8px; }
+        .stat-value { font-size: 1.2rem; font-weight: 700; color: var(--palmeiras-green); }
+        .stat-label { font-size: 0.7rem; color: var(--text-muted); }
 
-        .stat-box {
-            text-align: center;
-            padding: 0.75rem;
-            background: var(--bg-secondary);
+        /* News */
+        .news-item {
+            padding: 1rem;
+            background: var(--bg);
             border-radius: 8px;
+            margin-bottom: 0.75rem;
+            cursor: pointer;
+            transition: all 0.2s;
         }
+        .news-item:hover { background: var(--palmeiras-green-light); }
+        .news-title { font-weight: 600; font-size: 0.95rem; margin-bottom: 0.25rem; }
+        .news-meta { font-size: 0.75rem; color: var(--text-muted); }
+        .news-source { color: var(--palmeiras-green); font-weight: 600; }
 
-        .stat-value {
-            font-size: 1.3rem;
-            font-weight: 700;
-            color: var(--palmeiras-green);
-        }
+        /* Stats Detailed */
+        .stat-row { display: flex; justify-content: space-between; padding: 0.75rem 0; border-bottom: 1px solid var(--bg); }
+        .stat-row:last-child { border-bottom: none; }
+        .stat-name { font-weight: 500; }
+        .stat-bar-container { flex: 1; margin: 0 1rem; background: var(--bg); border-radius: 4px; height: 8px; position: relative; }
+        .stat-bar { height: 100%; background: var(--palmeiras-green); border-radius: 4px; }
+        .stat-number { font-weight: 700; min-width: 40px; text-align: right; }
 
-        .stat-label {
-            font-size: 0.75rem;
-            color: var(--text-secondary);
+        /* Prediction */
+        .prediction-card { text-align: center; padding: 1.5rem; }
+        .prediction-probs { display: flex; justify-content: space-around; margin-top: 1rem; }
+        .prob-box { text-align: center; }
+        .prob-value { font-size: 2rem; font-weight: 800; color: var(--palmeiras-green); }
+        .prob-label { font-size: 0.8rem; color: var(--text-muted); }
+
+        /* Graph placeholder */
+        .graph-placeholder {
+            height: 150px;
+            background: var(--bg);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
         }
 
         /* Loading */
-        .loading {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-        }
-
-        .loading::after {
-            content: '';
-            display: inline-block;
-            width: 16px;
-            height: 16px;
-            border: 2px solid var(--palmeiras-green);
-            border-top-color: transparent;
-            border-radius: 50%;
-            animation: spin 1s linear infinite;
-            margin-left: 8px;
-            vertical-align: middle;
-        }
-
+        .loading { text-align: center; padding: 2rem; color: var(--text-muted); }
+        .loading::after { content: ''; display: inline-block; width: 16px; height: 16px; border: 2px solid var(--palmeiras-green); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
-        /* Footer */
-        .footer {
-            text-align: center;
-            padding: 2rem;
-            color: var(--text-secondary);
-            font-size: 0.8rem;
-        }
+        .footer { text-align: center; padding: 2rem; color: var(--text-muted); font-size: 0.8rem; }
 
-        /* Mobile */
         @media (max-width: 600px) {
             .header h1 { font-size: 1.5rem; }
-            .container { padding: 1rem; }
+            .container { padding: 0 0.75rem; }
             .hero-teams { flex-direction: column; gap: 0.5rem; }
             .info-bar { flex-direction: column; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
@@ -301,7 +235,13 @@
 </head>
 <body>
     <header class="header">
-        <h1>Palmeiras</h1>
+        <div class="header-content">
+            <div class="logo"><span class="logo-text">V</span></div>
+            <div class="header-text">
+                <h1>Palmeiras</h1>
+                <div class="subtitle">Verdao Tracker</div>
+            </div>
+        </div>
     </header>
 
     <main class="container">
@@ -313,57 +253,76 @@
         <!-- Info Bar -->
         <div class="info-bar">
             <div class="info-card">
-                <span class="info-icon">📺</span>
+                <span class="info-icon">TV</span>
                 <div>
-                    <div class="info-label">Onde Assistir</div>
-                    <div class="info-value" id="where-watch">Globo, Premiere</div>
+                    <div class="info-label">Transmissao</div>
+                    <div class="info-value" id="where-watch">-</div>
                 </div>
             </div>
             <div class="info-card">
-                <span class="info-icon">📍</span>
+                <span class="info-icon">EST</span>
                 <div>
-                    <div class="info-label">Estádio</div>
-                    <div class="info-value" id="stadium-info">Allianz Parque</div>
+                    <div class="info-label">Estadio</div>
+                    <div class="info-value" id="stadium-info">-</div>
                 </div>
             </div>
         </div>
 
         <!-- Tabs -->
         <div class="tabs">
-            <button class="tab-btn active" data-tab="proximos">Próximos</button>
+            <button class="tab-btn active" data-tab="proximos">Proximos</button>
             <button class="tab-btn" data-tab="resultados">Resultados</button>
-            <button class="tab-btn" data-tab="classificacao">Classificação</button>
+            <button class="tab-btn" data-tab="classificacao">Tabela</button>
+            <button class="tab-btn" data-tab="estatisticas">Estatisticas</button>
+            <button class="tab-btn" data-tab="news">Noticias</button>
+            <button class="tab-btn" data-tab="palpites">Palpites</button>
         </div>
 
         <div id="proximos" class="tab-content active">
             <div class="card">
-                <div class="card-title">Próximos 5 Jogos</div>
+                <div class="card-title">Proximos Jogos</div>
                 <div id="next-matches"><div class="loading">Carregando...</div></div>
             </div>
         </div>
 
         <div id="resultados" class="tab-content">
             <div class="card">
-                <div class="card-title">Resultados Recentes</div>
+                <div class="card-title">Resultados</div>
                 <div id="recent-results"><div class="loading">Carregando...</div></div>
             </div>
         </div>
 
         <div id="classificacao" class="tab-content">
             <div class="card">
-                <div class="card-title">Classificação</div>
-                <div class="tabs" style="margin-bottom: 1rem;">
-                    <button class="comp-btn active" data-comp="BSA">Brasileirão</button>
-                    <button class="comp-btn" data-comp="LIB">Libertadores</button>
-                    <button class="comp-btn" data-comp="CDB">Copa do Brasil</button>
-                </div>
+                <div class="card-title">Classificacao - Brasileirato</div>
                 <div id="standings"><div class="loading">Carregando...</div></div>
+            </div>
+        </div>
+
+        <div id="estatisticas" class="tab-content">
+            <div class="card">
+                <div class="card-title">Estatisticas da Temporada</div>
+                <div id="team-stats"><div class="loading">Carregando...</div></div>
+            </div>
+        </div>
+
+        <div id="news" class="tab-content">
+            <div class="card">
+                <div class="card-title">Noticias Recentes</div>
+                <div id="news-list"><div class="loading">Carregando...</div></div>
+            </div>
+        </div>
+
+        <div id="palpites" class="tab-content">
+            <div class="card">
+                <div class="card-title">Palpite do Proximo Jogo</div>
+                <div id="prediction"><div class="loading">Carregando...</div></div>
             </div>
         </div>
     </main>
 
     <footer class="footer">
-        <p>Dados: football-data.org • ge.globo</p>
+        <p>Dados: football-data.org | ge.globo</p>
     </footer>
 
     <script>
@@ -372,19 +331,15 @@
         const BR_TZ = 'America/Sao_Paulo';
 
         function formatDate(dateStr) {
-            return new Date(dateStr).toLocaleDateString('pt-BR', { 
-                day: '2-digit', month: '2-digit', timeZone: BR_TZ 
-            });
+            return new Date(dateStr).toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit', timeZone: BR_TZ });
         }
 
         function formatTime(dateStr) {
-            return new Date(dateStr).toLocaleTimeString('pt-BR', { 
-                hour: '2-digit', minute: '2-digit', timeZone: BR_TZ 
-            });
+            return new Date(dateStr).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit', timeZone: BR_TZ });
         }
 
-        function formatCompetition(comp) {
-            const names = { 'BSA': 'Brasileirão', 'COPA_DO_BRASIL': 'Copa do Brasil', 'LIBERTADORES': 'Libertadores' };
+        function formatComp(comp) {
+            const names = { 'BSA': 'Brasileirao', 'COPA_DO_BRASIL': 'Copa do Brasil', 'LIBERTADORES': 'Libertadores' };
             return names[comp?.code] || comp?.name || 'Campeonato';
         }
 
@@ -398,7 +353,37 @@
             });
         });
 
-        // Load hero
+        // Quick Stats
+        async function loadQuickStats() {
+            const positionEl = document.getElementById('stat-position');
+            const pointsEl = document.getElementById('stat-points');
+            const formEl = document.getElementById('stat-form');
+            try {
+                const res = await fetch(`${API_BASE}/competitions/BSA/standings`);
+                const data = await res.json();
+                const standings = data.standings?.[0]?.table;
+                if (standings) {
+                    const p = standings.find(t => t.team.id === parseInt(TEAM_ID));
+                    if (p) {
+                        positionEl.textContent = p.position;
+                        pointsEl.textContent = p.points;
+                    }
+                }
+                // Form
+                const formRes = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`);
+                const formData = await formRes.json();
+                const matches = formData.matches || [];
+                const form = matches.map(m => {
+                    const isHome = m.homeTeam.id === parseInt(TEAM_ID);
+                    const our = isHome ? m.score.fullTime.home : m.score.fullTime.away;
+                    const opp = isHome ? m.score.fullTime.away : m.score.fullTime.home;
+                    return our > opp ? 'V' : our < opp ? 'D' : 'E';
+                }).join('');
+                formEl.textContent = form || '-';
+            } catch(e) { console.log('Quick stats:', e); }
+        }
+
+        // Hero
         async function loadHero() {
             const container = document.getElementById('hero-match');
             try {
@@ -409,7 +394,7 @@
 
                 const home = match.homeTeam, away = match.awayTeam;
                 const isHome = home.id === TEAM_ID;
-                const comp = formatCompetition(match.competition);
+                const comp = formatComp(match.competition);
 
                 document.getElementById('where-watch').textContent = isHome ? 'Globo, Premiere' : 'Globo';
                 document.getElementById('stadium-info').textContent = isHome ? 'Allianz Parque' : 'Fora';
@@ -421,14 +406,12 @@
                         <div class="hero-vs">X</div>
                         <div class="hero-team"><div class="hero-team-name">${away.name}</div></div>
                     </div>
-                    <div class="hero-date">${formatDate(match.utcDate)} • ${formatTime(match.utcDate)}</div>
+                    <div class="hero-date">${formatDate(match.utcDate)} - ${formatTime(match.utcDate)}</div>
                 `;
-            } catch (e) {
-                container.innerHTML = '<div class="loading" style="color:white">Erro</div>';
-            }
+            } catch (e) { container.innerHTML = '<div class="loading" style="color:white">Erro</div>'; }
         }
 
-        // Load matches
+        // Matches
         async function loadMatches() {
             const container = document.getElementById('next-matches');
             try {
@@ -438,21 +421,14 @@
                 if (!matches.length) { container.innerHTML = '<div class="loading">Nenhum jogo</div>'; return; }
                 container.innerHTML = matches.map(m => `
                     <div class="match-item">
-                        <div class="match-header">
-                            <span>${formatDate(m.utcDate)} • ${formatTime(m.utcDate)}</span>
-                            <span>${formatCompetition(m.competition)}</span>
-                        </div>
-                        <div class="match-teams">
-                            <span>${m.homeTeam.name}</span>
-                            <span style="color:var(--text-secondary)">X</span>
-                            <span>${m.awayTeam.name}</span>
-                        </div>
+                        <div class="match-header"><span>${formatDate(m.utcDate)} - ${formatTime(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
+                        <div class="match-teams"><span>${m.homeTeam.name}</span><span style="color:var(--text-muted)">X</span><span>${m.awayTeam.name}</span></div>
                     </div>
                 `).join('');
             } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
         }
 
-        // Load results
+        // Results
         async function loadResults() {
             const container = document.getElementById('recent-results');
             try {
@@ -465,84 +441,111 @@
                     const ourScore = isHome ? m.score.fullTime.home : m.score.fullTime.away;
                     const oppScore = isHome ? m.score.fullTime.away : m.score.fullTime.home;
                     const oppName = isHome ? m.awayTeam.name : m.homeTeam.name;
-                    const result = ourScore > oppScore ? '✅' : ourScore < oppScore ? '❌' : '➖';
-                    return `
-                        <div class="match-item">
-                            <div class="match-header"><span>${formatDate(m.utcDate)}</span><span>${formatCompetition(m.competition)}</span></div>
-                            <div class="match-teams"><span>${oppName}</span><span>${ourScore} - ${oppScore} ${result}</span></div>
-                        </div>
-                    `;
+                    const result = ourScore > oppScore ? 'V' : ourScore < oppScore ? 'D' : 'E';
+                    return `<div class="match-item"><div class="match-header"><span>${formatDate(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div><div class="match-teams"><span>${oppName}</span><span>${ourScore}-${oppScore} ${result}</span></div></div>`;
                 }).join('');
             } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
         }
 
-        let currentCompetition = 'BSA';
-
-        // Competition buttons
-        document.querySelectorAll('.comp-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                document.querySelectorAll('.comp-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
-                currentCompetition = btn.dataset.comp;
-                loadStandings(currentCompetition);
-            });
-        });
-
-        // Load standings
-        async function loadStandings(comp) {
+        // Standings
+        async function loadStandings() {
             const container = document.getElementById('standings');
-            const competition = comp || currentCompetition;
-            const compNames = { 'BSA': 'Brasileirão', 'LIB': 'Copa Libertadores', 'CDB': 'Copa do Brasil' };
-            
-            container.innerHTML = '<div class="loading">Carregando...</div>';
-            
             try {
-                const res = await fetch(`${API_BASE}/competitions/${competition}/standings`);
-                if (!res.ok) {
-                    const err = await res.json();
-                    throw new Error(err.error || 'Competition not available');
-                }
+                const res = await fetch(`${API_BASE}/competitions/BSA/standings`);
+                if (!res.ok) throw new Error();
                 const data = await res.json();
-                let pos = null, pts = 0, p = 0, w = 0, g = 0, d = 0;
+                let pos = null, pts = 0, p = 0, w = 0;
                 for (const s of data.standings || []) {
                     if (s.type === 'TOTAL') {
                         for (let i = 0; i < s.table.length; i++) {
-                            if (s.table[i].team.id === TEAM_ID) { 
-                                pos = i + 1; 
-                                pts = s.table[i].points; 
-                                p = s.table[i].playedGames; 
-                                w = s.table[i].won;
-                                g = s.table[i].goalsFor;
-                                d = s.table[i].goalsAgainst;
-                                break; 
-                            }
+                            if (s.table[i].team.id === TEAM_ID) { pos = i + 1; pts = s.table[i].points; p = s.table[i].playedGames; w = s.table[i].won; break; }
                         }
                         break;
                     }
                 }
-                if (!pos) { 
-                    container.innerHTML = '<div class="loading">Palmeiras não está nesta competição</div>'; 
-                    return; 
-                }
+                if (!pos) { container.innerHTML = '<div class="loading">Dados indisponiveis</div>'; return; }
+                container.innerHTML = `<div style="text-align:center"><div class="position-badge">${pos}º</div><div class="stats-grid"><div class="stat-box"><div class="stat-value">${pts}</div><div class="stat-label">Pontos</div></div><div class="stat-box"><div class="stat-value">${p}</div><div class="stat-label">Jogos</div></div><div class="stat-box"><div class="stat-value">${w}</div><div class="stat-label">Vitorias</div></div></div></div>`;
+            } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+        }
+
+        // Team Stats
+        async function loadTeamStats() {
+            const container = document.getElementById('team-stats');
+            try {
+                const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=20`);
+                const data = await res.json();
+                const matches = data.matches || [];
+                if (!matches.length) { container.innerHTML = '<div class="loading">Sem dados</div>'; return; }
+
+                let wins = 0, draws = 0, losses = 0, goalsFor = 0, goalsAgainst = 0;
+                matches.forEach(m => {
+                    const isHome = m.homeTeam.id === TEAM_ID;
+                    const gf = isHome ? m.score.fullTime.home : m.score.fullTime.away;
+                    const ga = isHome ? m.score.fullTime.away : m.score.fullTime.home;
+                    goalsFor += gf; goalsAgainst += ga;
+                    if (gf > ga) wins++; else if (gf < ga) losses++; else draws++;
+                });
+
+                const total = wins + draws + losses;
+                const winPct = total ? Math.round(wins / total * 100) : 0;
+
                 container.innerHTML = `
-                    <div class="standings-info">
-                        <div style="margin-bottom:0.5rem;color:var(--text-secondary);font-size:0.9rem">${compNames[competition] || competition}</div>
-                        <div class="position-badge">${pos}º</div>
-                        <div class="stats-grid">
-                            <div class="stat-box"><div class="stat-value">${pts}</div><div class="stat-label">Pontos</div></div>
-                            <div class="stat-box"><div class="stat-value">${p}</div><div class="stat-label">Jogos</div></div>
-                            <div class="stat-box"><div class="stat-value">${w}</div><div class="stat-label">Vitórias</div></div>
+                    <div class="stat-row"><span class="stat-name">Jogos</span><span class="stat-number">${total}</span></div>
+                    <div class="stat-row"><span class="stat-name">Vitorias</span><span class="stat-number">${wins}</span></div>
+                    <div class="stat-row"><span class="stat-name">Empates</span><span class="stat-number">${draws}</span></div>
+                    <div class="stat-row"><span class="stat-name">Derrotas</span><span class="stat-number">${losses}</span></div>
+                    <div class="stat-row"><span class="stat-name">Gols Pro</span><span class="stat-number">${goalsFor}</span></div>
+                    <div class="stat-row"><span class="stat-name">Gols Contra</span><span class="stat-number">${goalsAgainst}</span></div>
+                    <div class="stat-row"><span class="stat-name">Saldo</span><span class="stat-number">${goalsFor - goalsAgainst}</span></div>
+                    <div class="stat-row"><span class="stat-name">Aproveitamento</span><span class="stat-number">${winPct}%</span></div>
+                `;
+            } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
+        }
+
+        // News (from ge.globo)
+        async function loadNews() {
+            const container = document.getElementById('news-list');
+            try {
+                const res = await fetch(`${API_BASE}/news`);
+                const data = await res.json();
+                const news = data.articles || [];
+                if (!news.length) { container.innerHTML = '<div class="loading">Nenhuma noticia</div>'; return; }
+                container.innerHTML = news.slice(0, 8).map(n => `
+                    <div class="news-item" onclick="window.open('${n.url}', '_blank')">
+                        <div class="news-title">${n.title}</div>
+                        <div class="news-meta"><span class="news-source">${n.source}</span> - ${n.time || ''}</div>
+                    </div>
+                `).join('');
+            } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+        }
+
+        // Prediction
+        async function loadPrediction() {
+            const container = document.getElementById('prediction');
+            try {
+                const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`);
+                const data = await res.json();
+                const match = data.matches?.[0];
+                if (!match) { container.innerHTML = '<div class="loading">Nenhum jogo para palpitar</div>'; return; }
+
+                // Simple prediction based on home/away
+                const isHome = match.homeTeam.id === TEAM_ID;
+                const homeWin = isHome ? 45 : 30;
+                const draw = 28;
+                const awayWin = 100 - homeWin - draw;
+
+                container.innerHTML = `
+                    <div class="prediction-card">
+                        <div style="font-size:1.1rem;font-weight:600;margin-bottom:0.5rem">${match.homeTeam.name} X ${match.awayTeam.name}</div>
+                        <div class="prediction-probs">
+                            <div class="prob-box"><div class="prob-value">${homeWin}%</div><div class="prob-label">${isHome ? 'V' : 'D'}</div></div>
+                            <div class="prob-box"><div class="prob-value">${draw}%</div><div class="prob-label">Empate</div></div>
+                            <div class="prob-box"><div class="prob-value">${awayWin}%</div><div class="prob-label">${isHome ? 'D' : 'V'}</div></div>
                         </div>
-                        <div class="stats-grid" style="margin-top:0.5rem">
-                            <div class="stat-box"><div class="stat-value">${g}</div><div class="stat-label">Gols Pró</div></div>
-                            <div class="stat-box"><div class="stat-value">${d}</div><div class="stat-label">Gols Contra</div></div>
-                            <div class="stat-box"><div class="stat-value">${g - d}</div><div class="stat-label">Saldo</div></div>
-                        </div>
+                        <div style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted)">* Palpite simples baseado em mando de campo</div>
                     </div>
                 `;
-            } catch (e) { 
-                container.innerHTML = `<div class="loading" style="color:#c0392b">❌ ${e.message || 'Erro ao carregar classificação'}</div>`; 
-            }
+            } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
         }
 
         document.addEventListener('DOMContentLoaded', () => {
@@ -550,6 +553,9 @@
             loadMatches();
             loadResults();
             loadStandings();
+            loadTeamStats();
+            loadNews();
+            loadPrediction();
         });
     </script>
 </body>

@@ -68,7 +68,7 @@ if __name__ == '__main__':
     app.run(host='0.0.0.0', port=5001, debug=True)
 
 
-@app.route('/api/palmeiras/news')
+@app.route('/api/news')
 def palmeiras_news():
     """Scrape news from ge.globo about Palmeiras"""
     try:
@@ -134,18 +134,18 @@ def palmeiras_news():
         return jsonify({
             'success': True,
             'source': 'ge.globo.com',
-            'news': news_items[:10]
+            'articles': news_items[:10]
         })
         
     except requests.RequestException as e:
         return jsonify({
             'success': False,
             'error': str(e),
-            'news': []
+            'articles': []
         }), 500
     except Exception as e:
         return jsonify({
             'success': False,
             'error': str(e),
-            'news': []
+            'articles': []
         }), 500

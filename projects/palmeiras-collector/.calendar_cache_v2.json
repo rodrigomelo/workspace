@@ -1,35 +1,46 @@
 {
   "events": {
-    "554807": {
-      "title": "Palmeiras vs Botafogo FR - Brasileir\u00e3o",
-      "date": "2026-03-18",
-      "competition": "Brasileir\u00e3o",
-      "google_event_id": "pending",
-      "created_at": "2026-03-13T19:40:36.499986"
-    },
     "554817": {
       "title": "Palmeiras vs S\u00e3o Paulo FC - Brasileir\u00e3o",
       "date": "2026-03-22",
       "competition": "Brasileir\u00e3o",
       "google_event_id": "pending",
-      "created_at": "2026-03-13T19:40:38.097805"
+      "created_at": "2026-03-14T10:30:01.784431"
     },
     "554828": {
       "title": "Palmeiras vs Gr\u00eamio FBPA - Brasileir\u00e3o",
       "date": "2026-04-01",
       "competition": "Brasileir\u00e3o",
       "google_event_id": "pending",
-      "created_at": "2026-03-13T19:40:39.739037"
+      "created_at": "2026-03-14T10:30:03.446071"
     },
     "554831": {
       "title": "Palmeiras vs EC Bahia - Brasileir\u00e3o",
       "date": "2026-04-04",
       "competition": "Brasileir\u00e3o",
       "google_event_id": "pending",
-      "created_at": "2026-03-13T19:40:41.433595"
+      "created_at": "2026-03-14T10:30:05.161066"
+    },
+    "554797": {
+      "title": "Palmeiras vs Mirassol FC - Brasileir\u00e3o",
+      "date": "2026-03-15",
+      "competition": "Brasileir\u00e3o",
+      "google_event_id": "3pjm5v2bfua2ob4a5dtspu43vg",
+      "created_at": "2026-03-14T10:28:40.886608"
+    },
+    "554807": {
+      "title": "Palmeiras vs Botafogo FR - Brasileir\u00e3o",
+      "date": "2026-03-18",
+      "competition": "Brasileir\u00e3o",
+      "google_event_id": "t5faris8upnjeef14183rq4cvo",
+      "created_at": "2026-03-14T10:28:42.621513"
     }
   },
-  "google_event_ids": {},
-  "last_sync": "2026-03-13T19:40:56.821177",
-  "last_full_reconcile": null
+  "google_event_ids": {
+    "3pjm5v2bfua2ob4a5dtspu43vg": "554797",
+    "t5faris8upnjeef14183rq4cvo": "554807",
+    "pending": "554817"
+  },
+  "last_sync": "2026-03-14T10:30:38.987270",
+  "last_full_reconcile": "2026-03-14T10:29:48.715080"
 }
