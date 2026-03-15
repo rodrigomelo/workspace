@@ -191,3 +191,62 @@ Address already in use
 Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
  * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
  * Restarting with stat
+Sun Mar 15 11:15:04 -03 2026: ✗ FAILED to restart dashboard
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+127.0.0.1 - - [15/Mar/2026 11:17:05] "GET /api/teams/1769/matches?limit=2 HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-m76q2w0l'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 11:20:04 -03 2026: ✗ FAILED to restart dashboard
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+127.0.0.1 - - [15/Mar/2026 11:20:53] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 11:20:58] "GET /api/news HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-xovrqs8d'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 11:25:04 -03 2026: ✗ FAILED to restart dashboard
+127.0.0.1 - - [15/Mar/2026 11:25:33] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 11:25:33] "[33mGET /favicon.ico HTTP/1.1[0m" 404 -
+127.0.0.1 - - [15/Mar/2026 11:25:34] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [15/Mar/2026 11:25:35] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [15/Mar/2026 11:25:35] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [15/Mar/2026 11:25:35] "[36mGET / HTTP/1.1[0m" 304 -
+127.0.0.1 - - [15/Mar/2026 11:25:35] "[36mGET / HTTP/1.1[0m" 304 -
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
