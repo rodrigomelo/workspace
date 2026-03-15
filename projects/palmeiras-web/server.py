@@ -2,6 +2,7 @@
 Palmeiras Web Dashboard - Flask Server
 """
 import os
+import time
 import requests
 from flask import Flask, jsonify, request, send_from_directory, Response
 from bs4 import BeautifulSoup
@@ -13,6 +14,35 @@ TEAM_ID = 1769
 API_BASE = 'https://api.football-data.org/v4'
 
 API_HEADERS = {'X-Auth-Token': API_KEY}
+
+# Simple cache: {url: (response_json, timestamp)}
+_cache = {}
+_CACHE_TTL = 300  # 5 minutes
+
+
+def get_cached(url, params=None):
+    """Get data from cache or fetch from API"""
+    cache_key = f"{url}?{params}" if params else url
+    now = time.time()
+    
+    if cache_key in _cache:
+        data, timestamp = _cache[cache_key]
+        if now - timestamp < _CACHE_TTL:
+            return data
+    
+    # Fetch from API
+    try:
+        response = requests.get(url, headers=API_HEADERS, params=params, timeout=10)
+        response.raise_for_status()
+        data = response.json()
+        _cache[cache_key] = (data, now)
+        return data
+    except Exception as e:
+        # Return cached data if available, even if expired
+        if cache_key in _cache:
+            data, _ = _cache[cache_key]
+            return data
+        raise e
 
 
 @app.route('/')
@@ -80,13 +110,11 @@ def palmeiras_news():
 def calendar_ics():
     """Generate iCal feed for Palmeiras matches"""
     try:
-        # Fetch both scheduled and finished matches
+        # Fetch matches with caching (5 min TTL)
         url = f"{API_BASE}/teams/{TEAM_ID}/matches"
         params = {'limit': 50}
         
-        response = requests.get(url, headers=API_HEADERS, params=params, timeout=10)
-        response.raise_for_status()
-        data = response.json()
+        data = get_cached(url, params)
         
         ical_lines = [
             "BEGIN:VCALENDAR",
