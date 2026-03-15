@@ -1710,3 +1710,80 @@ Sun Mar 15 14:30:04 -03 2026: ✗ FAILED to restart dashboard
 Address already in use
 Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
 Sun Mar 15 14:35:04 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-ijj139r6'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 14:40:04 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-nxn1hh57'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 14:45:04 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-gfh6vawn'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 14:50:05 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-92l_bu7d'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 14:55:04 -03 2026: ✗ FAILED to restart dashboard
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-bfu8xlal'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Sun Mar 15 15:00:04 -03 2026: ✗ FAILED to restart dashboard

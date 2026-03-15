@@ -17,7 +17,21 @@ API_HEADERS = {'X-Auth-Token': API_KEY}
 
 # Simple cache: {url: (response_json, timestamp)}
 _cache = {}
-_CACHE_TTL = 300  # 5 minutes
+_CACHE_TTL = 1800  # 30 minutes - reduce API calls
+
+# Static fallback data (deployed with site)
+import os
+FALLBACK_FILE = os.path.join(os.path.dirname(__file__), 'matches_backup.json')
+
+def load_fallback():
+    """Load fallback data from static file"""
+    try:
+        if os.path.exists(FALLBACK_FILE):
+            with open(FALLBACK_FILE, 'r') as f:
+                return json.load(f)
+    except:
+        pass
+    return None
 
 
 def get_cached(url, params=None):
@@ -38,10 +52,14 @@ def get_cached(url, params=None):
         _cache[cache_key] = (data, now)
         return data
     except Exception as e:
-        # Return cached data if available, even if expired
+        # Return cached data if available (even if expired)
         if cache_key in _cache:
             data, _ = _cache[cache_key]
             return data
+        # Try fallback file
+        fallback = load_fallback()
+        if fallback:
+            return fallback
         raise e
 
 
