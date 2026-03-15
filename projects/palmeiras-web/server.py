@@ -76,24 +76,37 @@ def team_matches(team_id):
     status = request.args.get('status', 'SCHEDULED')
     limit = request.args.get('limit', '10')
     
+    # Debug: list available files
+    debug_info = []
+    
     # Try multiple paths for local and Vercel
-    data_dir = 'data'
-    if not os.path.exists(os.path.join(data_dir, 'matches_scheduled.json')):
-        data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    for test_dir in ['data', os.path.join(os.path.dirname(__file__), 'data'), '.', '/tmp']:
+        if os.path.exists(test_dir):
+            debug_info.append(f"{test_dir}: {os.listdir(test_dir) if os.path.isdir(test_dir) else 'file'}")
+    
+    # Try different possible paths
+    data_dir = None
+    for test_dir in ['data', './data', os.path.join(os.path.dirname(__file__), 'data')]:
+        if os.path.exists(os.path.join(test_dir, 'matches_scheduled.json')):
+            data_dir = test_dir
+            break
+    
+    if not data_dir:
+        return jsonify({'error': 'Data not found', 'debug': debug_info}), 500
     
     # Read from local JSON files - NO external API calls!
     if status == 'SCHEDULED':
         try:
             with open(os.path.join(data_dir, 'matches_scheduled.json'), 'r') as f:
                 data = json.load(f)
-        except:
-            data = {'matches': []}
+        except Exception as e:
+            return jsonify({'error': str(e), 'debug': debug_info}), 500
     else:
         try:
             with open(os.path.join(data_dir, 'matches_finished.json'), 'r') as f:
                 data = json.load(f)
-        except:
-            data = {'matches': []}
+        except Exception as e:
+            return jsonify({'error': str(e), 'debug': debug_info}), 500
     
     # Apply limit
     if 'matches' in data and limit:
