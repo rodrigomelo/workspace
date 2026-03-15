@@ -124,29 +124,26 @@ def standings(competition):
 
 @app.route('/api/news')
 def palmeiras_news():
-    all_news = []
+    """GET /api/news - reads from local JSON cache (no live scraping!)"""
+    import os
+    
+    # Try multiple paths for local and Vercel
+    data_dir = 'data'
+    if not os.path.exists(os.path.join(data_dir, 'news.json')):
+        data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    
+    news_file = os.path.join(data_dir, 'news.json')
     
     try:
-        url = 'https://ge.globo.com/futebol/times/palmeiras/'
-        headers = {'User-Agent': 'Mozilla/5.0'}
-        
-        response = requests.get(url, headers=headers, timeout=10)
-        soup = BeautifulSoup(response.text, 'html.parser')
-        
-        for item in soup.select('.feed-post-item')[:8]:
-            link = item.select_one('.feed-post-link')
-            if link:
-                title = link.get_text(strip=True)
-                if title and len(title) > 10:
-                    all_news.append({
-                        'title': title[:150],
-                        'url': link.get('href', ''),
-                        'source': 'ge.globo'
-                    })
+        if os.path.exists(news_file):
+            with open(news_file, 'r', encoding='utf-8') as f:
+                data = json.load(f)
+                return jsonify({'articles': data.get('news', [])})
     except Exception as e:
         pass
     
-    return jsonify({'articles': all_news})
+    # Fallback: empty response if no local data
+    return jsonify({'articles': [], 'error': 'No cached news available'})
 
 
 @app.route('/api/calendar.ics')

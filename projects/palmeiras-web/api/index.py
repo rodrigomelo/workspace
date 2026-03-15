@@ -38,27 +38,8 @@ def competitions(request):
 
 
 def news(request):
-    """GET /api/news - still uses external API for news"""
-    import requests as req
-    articles = []
-    try:
-        r = req.get('https://ge.globo.com/futebol/times/palmeiras/', 
-                    headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
-        from bs4 import BeautifulSoup
-        soup = BeautifulSoup(r.text, 'html.parser')
-        for item in soup.select('.feed-post-item')[:8]:
-            link = item.select_one('.feed-post-link')
-            if link:
-                title = link.get_text(strip=True)
-                if title and len(title) > 10:
-                    articles.append({
-                        'title': title[:150],
-                        'url': link.get('href', ''),
-                        'source': 'ge.globo'
-                    })
-    except:
-        pass
-    return {'articles': articles}, 200
+    """GET /api/news - reads from local news.json (fetched by cron)"""
+    return read_json('news.json')
 
 
 def handler(request):
