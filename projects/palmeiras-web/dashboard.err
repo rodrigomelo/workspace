@@ -1507,3 +1507,7 @@ Sun Mar 15 13:20:05 -03 2026: ✗ FAILED to restart dashboard
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500

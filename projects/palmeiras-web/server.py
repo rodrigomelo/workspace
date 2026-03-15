@@ -116,6 +116,13 @@ def calendar_ics():
         
         data = get_cached(url, params)
         
+        # Stadium info
+        stadium = "Allianz Parque"
+        stadium_address = "Rua Palestra Itália, 200 - Água Branca, São Paulo, SP"
+        
+        # Where to watch
+        tv_channels = "TV: Globo, SporTV, Premiere | Streaming: Amazon Prime Video, Globoplay"
+        
         ical_lines = [
             "BEGIN:VCALENDAR",
             "VERSION:2.0",
@@ -142,6 +149,9 @@ def calendar_ics():
             competition = match.get('competition', {}).get('name', 'Football')
             status = match.get('status', 'SCHEDULED')
             
+            # Determine location (home games at Allianz Parque)
+            location = stadium_address if "Palmeiras" in home or "SE Palmeiras" in home else "Estádio a definir"
+            
             uid = f"{match.get('id')}@palmeiras.vercel.app"
             summary = f"🏆 {home} vs {away}"
             if status == 'FINISHED':
@@ -151,13 +161,14 @@ def calendar_ics():
                 away_goals = full_time.get('away') or 0
                 summary = f"🏆 {home} {home_goals} x {away_goals} {away}"
             
-            description = f"{competition}\\nStatus: {status}"
+            description = f"{competition}\\nStatus: {status}\\n\\n📍 {location}\\n\\n📺 {tv_channels}"
             
             ical_lines.extend([
                 "BEGIN:VEVENT",
                 f"UID:{uid}",
                 f"DTSTART:{dt}",
                 f"DTEND:{dt}",
+                f"LOCATION:{location}",
                 f"SUMMARY:{summary}",
                 f"DESCRIPTION:{description}",
                 "END:VEVENT"
