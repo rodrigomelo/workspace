@@ -174,7 +174,7 @@ def calendar_ics():
         stadium = "Allianz Parque"
         
         # Where to watch
-        tv_channels = "TV: Globo, SporTV, Premiere | Streaming: Amazon Prime Video, Globoplay"
+        tv_channels = "Transmissão: A confirmar"
         
         ical_lines = [
             "BEGIN:VCALENDAR",

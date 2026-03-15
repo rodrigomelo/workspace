@@ -469,8 +469,7 @@
                 const matchDate = new Date(match.utcDate);
                 const dayOfWeek = matchDate.toLocaleDateString('pt-BR', { weekday: 'long', timeZone: BR_TZ });
 
-                document.getElementById('where-watch').textContent = isHome ? 'Globo, SporTV, Premiere' : 'Globo, SporTV';
-                document.getElementById('where-watch').innerHTML = isHome ? 'Globo | SporTV | Premiere | <a href="https://ge.globo.com/futebol/central-de-jogos" target="_blank" style="color:var(--palmeiras-green)">Verificar</a>' : 'Globo | SporTV | <a href="https://ge.globo.com/futebol/central-de-jogos" target="_blank" style="color:var(--palmeiras-green)">Verificar</a>';
+                document.getElementById('where-watch').textContent = 'Transmissão: A confirmar';
                 document.getElementById('stadium-info').textContent = isHome ? 'Allianz Parque' : match.venue || 'Arena';
 
                 // Use shield for Palmeiras, placeholder for opponent
