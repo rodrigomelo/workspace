@@ -221,8 +221,8 @@
             color: var(--text-muted);
         }
 
-        /* Loading */
-        .loading { text-align: center; padding: 2rem; color: var(--text-muted); }
+        /* Loading / Empty */
+        .loading, .empty { text-align: center; padding: 2rem; color: var(--text-muted); }
         .loading::after { content: ''; display: inline-block; width: 16px; height: 16px; border: 2px solid var(--palmeiras-green); border-top-color: transparent; border-radius: 50%; animation: spin 1s linear infinite; margin-left: 8px; vertical-align: middle; }
         @keyframes spin { to { transform: rotate(360deg); } }
 
@@ -278,7 +278,7 @@
     <main class="container">
         <!-- Hero -->
         <div class="hero-card" id="hero-match">
-            <div class="loading" style="color:white">Carregando...</div>
+            <div class="empty" style="color:white">Carregando dados...</div>
         </div>
 
         <!-- Info Bar -->
@@ -312,42 +312,42 @@
         <div id="proximos" class="tab-content active">
             <div class="card">
                 <div class="card-title">Proximos Jogos</div>
-                <div id="next-matches"><div class="loading">Carregando...</div></div>
+                <div id="next-matches"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="resultados" class="tab-content">
             <div class="card">
                 <div class="card-title">Resultados</div>
-                <div id="recent-results"><div class="loading">Carregando...</div></div>
+                <div id="recent-results"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="classificacao" class="tab-content">
             <div class="card">
                 <div class="card-title">Classificacao - Brasileirato</div>
-                <div id="standings"><div class="loading">Carregando...</div></div>
+                <div id="standings"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="estatisticas" class="tab-content">
             <div class="card">
                 <div class="card-title">Estatisticas da Temporada</div>
-                <div id="team-stats"><div class="loading">Carregando...</div></div>
+                <div id="team-stats"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="news" class="tab-content">
             <div class="card">
                 <div class="card-title">Noticias Recentes</div>
-                <div id="news-list"><div class="loading">Carregando...</div></div>
+                <div id="news-list"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="palpites" class="tab-content">
             <div class="card">
                 <div class="card-title">Palpite do Proximo Jogo</div>
-                <div id="prediction"><div class="loading">Carregando...</div></div>
+                <div id="prediction"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
     </main>
@@ -421,7 +421,7 @@
                 const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`);
                 const data = await res.json();
                 const match = data.matches?.[0];
-                if (!match) { container.innerHTML = '<div class="loading" style="color:white">Nenhum jogo agendado</div>'; return; }
+                if (!match) { container.innerHTML = '<div class="empty" style="color:white">Nenhum jogo agendado</div>'; return; }
 
                 const home = match.homeTeam, away = match.awayTeam;
                 const isHome = home.id === TEAM_ID;
@@ -455,7 +455,7 @@
                     <div class="hero-date">${formatDate(match.utcDate)} - ${formatTime(match.utcDate)}<span style="display:block;font-size:0.85rem;opacity:0.8;margin-top:0.3rem;font-weight:400">${dayOfWeek}</span></div>
                 `;
             } catch (e) { 
-                container.innerHTML = '<div class="loading" style="color:white">Erro ao carregar</div>'; 
+                container.innerHTML = '<div class="empty" style="color:white">Erro ao carregar</div>'; 
                 console.error('Hero error:', e);
             }
         }
@@ -467,14 +467,14 @@
                 const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`);
                 const data = await res.json();
                 const matches = data.matches || [];
-                if (!matches.length) { container.innerHTML = '<div class="loading">Nenhum jogo</div>'; return; }
+                if (!matches.length) { container.innerHTML = '<div class="empty">Nenhum jogo</div>'; return; }
                 container.innerHTML = matches.map(m => `
                     <div class="match-item">
                         <div class="match-header"><span>${formatDate(m.utcDate)} - ${formatTime(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
                         <div class="match-teams"><span>${m.homeTeam.name}</span><span style="color:var(--text-muted)">X</span><span>${m.awayTeam.name}</span></div>
                     </div>
                 `).join('');
-            } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
+            } catch (e) { container.innerHTML = '<div class="empty">Erro</div>'; }
         }
 
         // Results
@@ -484,7 +484,7 @@
                 const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=5`);
                 const data = await res.json();
                 const matches = data.matches || [];
-                if (!matches.length) { container.innerHTML = '<div class="loading">Nenhum resultado</div>'; return; }
+                if (!matches.length) { container.innerHTML = '<div class="empty">Nenhum resultado</div>'; return; }
                 container.innerHTML = matches.map(m => {
                     const isHome = m.homeTeam.id === TEAM_ID;
                     const ourScore = isHome ? m.score.fullTime.home : m.score.fullTime.away;
@@ -497,13 +497,13 @@
                         <div class="match-teams">
                             <span>${isHome ? '🟢' : '⚪'} ${oppName}</span>
                             <span style="display:flex;align-items:center;gap:0.5rem">
-                                <span style="padding:0.2rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:600;background:${resultClass==='win'?'#d4edda':resultClass==='loss'?'#f8d7da':'#fff3cd'};color:${resultClass==='win'?'#155724':resultClass==='loss'?'#721c24'?'#856404'}">${resultText}</span>
+                                <span style="padding:0.2rem 0.5rem;border-radius:4px;font-size:0.75rem;font-weight:600;background:${(resultClass==='win')?'#d4edda':(resultClass==='loss')?'#f8d7da':'#fff3cd'};color:${(resultClass==='win')?'#155724':(resultClass==='loss')?'#721c24':'#856404'}">${resultText}</span>
                                 <span style="font-weight:700">${ourScore} - ${oppScore}</span>
                             </span>
                         </div>
                     </div>`;
                 }).join('');
-            } catch (e) { container.innerHTML = '<div class="loading">Erro ao carregar</div>'; }
+            } catch (e) { container.innerHTML = '<div class="empty">Erro ao carregar</div>'; }
         }
 
         // Standings with detailed stats
@@ -533,7 +533,7 @@
                         break;
                     }
                 }
-                if (!pos) { container.innerHTML = '<div class="loading">Dados indisponiveis</div>'; return; }
+                if (!pos) { container.innerHTML = '<div class="empty">Dados indisponiveis</div>'; return; }
                 
                 const gd = gf - ga;
                 const avgPts = p > 0 ? (pts / p).toFixed(2) : 0;
@@ -560,7 +560,7 @@
                     </div>
                 `;
             } catch (e) { 
-                container.innerHTML = '<div class="loading">Erro ao carregar classificacao</div>'; 
+                container.innerHTML = '<div class="empty">Erro ao carregar classificacao</div>'; 
                 console.error('Standings error:', e);
             }
         }
@@ -572,7 +572,7 @@
                 const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=FINISHED&limit=20`);
                 const data = await res.json();
                 const matches = data.matches || [];
-                if (!matches.length) { container.innerHTML = '<div class="loading">Sem dados</div>'; return; }
+                if (!matches.length) { container.innerHTML = '<div class="empty">Sem dados</div>'; return; }
 
                 let wins = 0, draws = 0, losses = 0, goalsFor = 0, goalsAgainst = 0;
                 matches.forEach(m => {
@@ -596,7 +596,7 @@
                     <div class="stat-row"><span class="stat-name">Saldo</span><span class="stat-number">${goalsFor - goalsAgainst}</span></div>
                     <div class="stat-row"><span class="stat-name">Aproveitamento</span><span class="stat-number">${winPct}%</span></div>
                 `;
-            } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
+            } catch (e) { container.innerHTML = '<div class="empty">Erro</div>'; }
         }
 
         // News (from ge.globo)
@@ -606,7 +606,7 @@
                 const res = await fetch(`${API_BASE}/news`);
                 const data = await res.json();
                 const news = data.articles || [];
-                if (!news.length) { container.innerHTML = '<div class="loading">Nenhuma noticia</div>'; return; }
+                if (!news.length) { container.innerHTML = '<div class="empty">Nenhuma noticia</div>'; return; }
                 container.innerHTML = news.slice(0, 8).map(n => `
                     <div class="news-item" onclick="window.open('${n.url}', '_blank')">
                         <div class="news-title">${n.title}</div>
@@ -614,7 +614,7 @@
                     </div>
                 `).join('');
             } catch (e) { 
-                container.innerHTML = '<div class="loading">Erro ao carregar noticias</div>'; 
+                container.innerHTML = '<div class="empty">Erro ao carregar noticias</div>'; 
                 console.error('News error:', e);
             }
         }
@@ -626,7 +626,7 @@
                 const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`);
                 const data = await res.json();
                 const match = data.matches?.[0];
-                if (!match) { container.innerHTML = '<div class="loading">Nenhum jogo para palpitar</div>'; return; }
+                if (!match) { container.innerHTML = '<div class="empty">Nenhum jogo para palpitar</div>'; return; }
 
                 // Simple prediction based on home/away
                 const isHome = match.homeTeam.id === TEAM_ID;
@@ -645,7 +645,7 @@
                         <div style="margin-top:1rem;font-size:0.8rem;color:var(--text-muted)">* Palpite simples baseado em mando de campo</div>
                     </div>
                 `;
-            } catch (e) { container.innerHTML = '<div class="loading">Erro</div>'; }
+            } catch (e) { container.innerHTML = '<div class="empty">Erro</div>'; }
         }
 
         document.addEventListener('DOMContentLoaded', () => {

@@ -1,15 +1,12 @@
 """
-Palmeiras Web Dashboard - Vercel Server
+Palmeiras Web Dashboard - Flask Server
 """
 import os
-import json
-import re
 import requests
 from flask import Flask, jsonify, request, send_from_directory
 from bs4 import BeautifulSoup
 
-# Create app without static configuration for Vercel
-app = Flask(__name__)
+app = Flask(__name__, static_folder='.')
 
 API_KEY = os.environ.get('FOOTBALL_API_KEY', 'eca8b30bb5c34fcfa80ec28ceedf84a0')
 TEAM_ID = 1769
@@ -79,6 +76,6 @@ def palmeiras_news():
     return jsonify({'articles': all_news})
 
 
-# Vercel handler
-def handler(environ, start_response):
-    return app(environ, start_response)
+if __name__ == '__main__':
+    print("🏆 Starting Palmeiras Dashboard...")
+    app.run(host='0.0.0.0', port=5001, debug=True)

@@ -250,3 +250,409 @@ Sun Mar 15 11:25:04 -03 2026: ✗ FAILED to restart dashboard
 127.0.0.1 - - [15/Mar/2026 11:25:35] "[36mGET / HTTP/1.1[0m" 304 -
  * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
  * Restarting with stat
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Sun Mar 15 11:30:04 -03 2026: ✗ FAILED to restart dashboard
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Traceback (most recent call last):
+  File "/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py", line 83, in <module>
+    handler = vercel.app(app, lambda *args: None)
+              ^^^^^^^^^^
+AttributeError: module 'vercel' has no attribute 'app'
+Sun Mar 15 11:35:04 -03 2026: ✗ FAILED to restart dashboard
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/api.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+127.0.0.1 - - [15/Mar/2026 11:37:09] "GET /api/teams/1769/matches?limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 11:37:14] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 11:37:31] "GET /api/teams/1769/matches?limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 11:37:49] "HEAD / HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-r37suul1'}
+  warnings.warn(
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+127.0.0.1 - - [15/Mar/2026 11:38:45] "GET /api/teams/1769/matches?limit=1 HTTP/1.1" 200 -
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/api.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-_0gogocy'}
+  warnings.warn(
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+Sun Mar 15 11:40:05 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+Sun Mar 15 11:45:05 -03 2026: ✗ FAILED to restart dashboard
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/Resources/Python.app/Contents/MacOS/Python: can't open file '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py': [Errno 2] No such file or directory
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+127.0.0.1 - - [15/Mar/2026 11:47:25] "GET / HTTP/1.1" 200 -
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-s9e2wk3v'}
+  warnings.warn(
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 118-490-448
+Sun Mar 15 11:50:05 -03 2026: ✗ FAILED to restart dashboard
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+127.0.0.1 - - [15/Mar/2026 11:51:01] "HEAD / HTTP/1.1" 200 -
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-yqxp3oe5'}
+  warnings.warn(
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 11:55:05 -03 2026: ✗ FAILED to restart dashboard
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 12:00:04 -03 2026: ✗ FAILED to restart dashboard
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 12:05:04 -03 2026: ✗ FAILED to restart dashboard
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
