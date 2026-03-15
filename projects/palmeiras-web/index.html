@@ -573,7 +573,7 @@
                 const matches = data.matches || [];
                 if (!matches.length) { container.innerHTML = '<div class="empty">Nenhum jogo</div>'; return; }
                 container.innerHTML = matches.map(m => `
-                    <div class="match-item" onclick="this.classList.toggle('expanded')"><div class="match-extra" style="display:none;padding:0.5rem;background:var(--palmeiras-green);border-radius:8px;margin-top:0.5rem;color:white"><p style="margin:0.2rem 0;font-size:0.8rem">🏟️ Estadio</p><p style="margin:0.2rem 0;font-size:0.8rem">📺 Transmissão: A confirmar</p><p style="margin:0.2rem 0;font-size:0.8rem">⚽ Rodada</p></div>
+                    <div class="match-item" onclick="var x=this.querySelector(".match-extra");x.style.display=(x.style.display==="none"?"block":"none")"><div class="match-extra" style="display:none;padding:0.5rem;background:var(--palmeiras-green);border-radius:8px;margin-top:0.5rem;color:white"><p style="margin:0.2rem 0;font-size:0.8rem">🏟️ Estadio</p><p style="margin:0.2rem 0;font-size:0.8rem">📺 Transmissão: A confirmar</p><p style="margin:0.2rem 0;font-size:0.8rem">⚽ Rodada</p></div>
                         <div class="match-header"><span>${formatDate(m.utcDate)} - ${formatTime(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
                         <div class="match-teams"><span><img src="${m.homeTeam.crest}" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">${m.homeTeam.name}</span><span style="color:var(--text-muted)">X</span><span>${m.awayTeam.name}<img src="${m.awayTeam.crest}" style="width:20px;height:20px;vertical-align:middle;margin-left:4px"></span></div>
                     </div>
@@ -596,7 +596,7 @@
                     const oppName = isHome ? m.awayTeam.name : m.homeTeam.name;
                     const resultClass = ourScore > oppScore ? 'win' : ourScore < oppScore ? 'loss' : 'draw';
                     const resultText = ourScore > oppScore ? 'V' : ourScore < oppScore ? 'D' : 'E';
-                    return `<div class="match-item" onclick="this.classList.toggle('expanded')"><div class="match-extra" style="display:none;padding:0.5rem;background:var(--palmeiras-green);border-radius:8px;margin-top:0.5rem;color:white"><p style="margin:0.2rem 0;font-size:0.8rem">🏟️ Estadio</p><p style="margin:0.2rem 0;font-size:0.8rem">📺 Transmissão: A confirmar</p><p style="margin:0.2rem 0;font-size:0.8rem">⚽ Rodada</p></div>
+                    return `<div class="match-item" onclick="var x=this.querySelector(".match-extra");x.style.display=(x.style.display==="none"?"block":"none")"><div class="match-extra" style="display:none;padding:0.5rem;background:var(--palmeiras-green);border-radius:8px;margin-top:0.5rem;color:white"><p style="margin:0.2rem 0;font-size:0.8rem">🏟️ Estadio</p><p style="margin:0.2rem 0;font-size:0.8rem">📺 Transmissão: A confirmar</p><p style="margin:0.2rem 0;font-size:0.8rem">⚽ Rodada</p></div>
                         <div class="match-header"><span>${formatDate(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
                         <div class="match-teams">
                             <span>${isHome ? '🟢' : '⚪'} ${oppName}</span>
