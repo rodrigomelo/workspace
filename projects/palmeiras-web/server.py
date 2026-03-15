@@ -71,11 +71,15 @@ def index():
 @app.route('/api/teams/<int:team_id>/matches')
 def team_matches(team_id):
     """GET /api/teams/1769/matches - reads from JSON cache only"""
+    import os
+    
     status = request.args.get('status', 'SCHEDULED')
     limit = request.args.get('limit', '10')
     
-    import os
-    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    # Try multiple paths for local and Vercel
+    data_dir = 'data'
+    if not os.path.exists(os.path.join(data_dir, 'matches_scheduled.json')):
+        data_dir = os.path.join(os.path.dirname(__file__), 'data')
     
     # Read from local JSON files - NO external API calls!
     if status == 'SCHEDULED':
@@ -102,7 +106,11 @@ def team_matches(team_id):
 def standings(competition):
     """GET /api/competitions/BSA/standings - reads from JSON cache only"""
     import os
-    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    
+    # Try multiple paths for local and Vercel
+    data_dir = 'data'
+    if not os.path.exists(os.path.join(data_dir, 'standings.json')):
+        data_dir = os.path.join(os.path.dirname(__file__), 'data')
     
     try:
         with open(os.path.join(data_dir, 'standings.json'), 'r') as f:
