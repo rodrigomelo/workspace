@@ -70,31 +70,47 @@ def index():
 
 @app.route('/api/teams/<int:team_id>/matches')
 def team_matches(team_id):
+    """GET /api/teams/1769/matches - reads from JSON cache only"""
     status = request.args.get('status', 'SCHEDULED')
     limit = request.args.get('limit', '10')
     
-    url = f"{API_BASE}/teams/{team_id}/matches"
-    params = {'status': status}
-    if limit:
-        params['limit'] = limit
+    import os
+    data_dir = os.path.join(os.path.dirname(__file__), 'data')
     
-    try:
-        response = requests.get(url, headers=API_HEADERS, params=params, timeout=10)
-        response.raise_for_status()
-        return jsonify(response.json())
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+    # Read from local JSON files - NO external API calls!
+    if status == 'SCHEDULED':
+        try:
+            with open(os.path.join(data_dir, 'matches_scheduled.json'), 'r') as f:
+                data = json.load(f)
+        except:
+            data = {'matches': []}
+    else:
+        try:
+            with open(os.path.join(data_dir, 'matches_finished.json'), 'r') as f:
+                data = json.load(f)
+        except:
+            data = {'matches': []}
+    
+    # Apply limit
+    if 'matches' in data and limit:
+        data['matches'] = data['matches'][:int(limit)]
+    
+    return jsonify(data)
 
 
 @app.route('/api/competitions/<competition>/standings')
 def standings(competition):
+    """GET /api/competitions/BSA/standings - reads from JSON cache only"""
+    import os
+    data_dir = os.path.join(os.path.dirname(__file__), 'data')
+    
     try:
-        url = f"{API_BASE}/competitions/{competition}/standings"
-        response = requests.get(url, headers=API_HEADERS, timeout=10)
-        response.raise_for_status()
-        return jsonify(response.json())
-    except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        with open(os.path.join(data_dir, 'standings.json'), 'r') as f:
+            data = json.load(f)
+    except:
+        data = {'error': 'Standings data not available'}
+    
+    return jsonify(data)
 
 
 @app.route('/api/news')
