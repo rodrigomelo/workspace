@@ -277,6 +277,13 @@
             .hero-teams { flex-direction: column; gap: 0.5rem; }
             .info-bar { flex-direction: column; }
             .stats-grid { grid-template-columns: repeat(3, 1fr); }
+
+            /* Flip card for matches */
+            .match-item { position: relative; min-height: 80px; perspective: 1000px; }
+            .match-front, .match-back { backface-visibility: hidden; transition: transform 0.4s; transform-style: preserve-3d; }
+            .match-back { position: absolute; top: 0; left: 0; right: 0; background: var(--palmeiras-green); border-radius: 8px; color: white; transform: rotateY(180deg); }
+            .match-item.flipped .match-front { transform: rotateY(180deg); }
+            .match-item.flipped .match-back { transform: rotateY(0); }
         }
     </style>
 </head>
@@ -566,7 +573,7 @@
                 const matches = data.matches || [];
                 if (!matches.length) { container.innerHTML = '<div class="empty">Nenhum jogo</div>'; return; }
                 container.innerHTML = matches.map(m => `
-                    <div class="match-item">
+                    <div class="match-item" onclick="this.classList.toggle('flipped')">
                         <div class="match-header"><span>${formatDate(m.utcDate)} - ${formatTime(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
                         <div class="match-teams"><span><img src="${m.homeTeam.crest}" style="width:20px;height:20px;vertical-align:middle;margin-right:4px">${m.homeTeam.name}</span><span style="color:var(--text-muted)">X</span><span>${m.awayTeam.name}<img src="${m.awayTeam.crest}" style="width:20px;height:20px;vertical-align:middle;margin-left:4px"></span></div>
                     </div>
@@ -589,7 +596,7 @@
                     const oppName = isHome ? m.awayTeam.name : m.homeTeam.name;
                     const resultClass = ourScore > oppScore ? 'win' : ourScore < oppScore ? 'loss' : 'draw';
                     const resultText = ourScore > oppScore ? 'V' : ourScore < oppScore ? 'D' : 'E';
-                    return `<div class="match-item">
+                    return `<div class="match-item" onclick="this.classList.toggle('flipped')">
                         <div class="match-header"><span>${formatDate(m.utcDate)}</span><span>${formatComp(m.competition)}</span></div>
                         <div class="match-teams">
                             <span>${isHome ? '🟢' : '⚪'} ${oppName}</span>
