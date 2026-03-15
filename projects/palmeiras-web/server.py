@@ -140,9 +140,18 @@ def calendar_ics():
                 
             # Parse ISO date and create iCal format
             # Format: 2026-03-15T20:00:00Z -> 20260315T200000Z
-            dt = utc_date.replace('-', '').replace(':', '').replace('Z', 'Z')
-            if dt.endswith('Z'):
-                dt = dt[:-1] + 'Z'
+            dt_start = utc_date.replace('-', '').replace(':', '').replace('Z', 'Z')
+            if dt_start.endswith('Z'):
+                dt_start = dt_start[:-1] + 'Z'
+            
+            # Calculate end time (2 hours later for match duration)
+            from datetime import datetime, timedelta
+            try:
+                start_dt = datetime.strptime(utc_date.replace('Z', ''), '%Y-%m-%dT%H:%M:%S')
+                end_dt = start_dt + timedelta(hours=2)
+                dt_end = end_dt.strftime('%Y%m%dT%H%M%S') + 'Z'
+            except:
+                dt_end = dt_start  # Fallback
             
             home = match.get('homeTeam', {}).get('name', 'Home')
             away = match.get('awayTeam', {}).get('name', 'Away')
@@ -150,7 +159,7 @@ def calendar_ics():
             status = match.get('status', 'SCHEDULED')
             
             # Determine location (home games at Allianz Parque)
-            location = stadium_address if "Palmeiras" in home or "SE Palmeiras" in home else "Estádio a definir"
+            location = stadium if "Palmeiras" in home or "SE Palmeiras" in home else "Estádio a definir"
             
             uid = f"{match.get('id')}@palmeiras.vercel.app"
             summary = f"🏆 {home} vs {away}"
@@ -161,13 +170,13 @@ def calendar_ics():
                 away_goals = full_time.get('away') or 0
                 summary = f"🏆 {home} {home_goals} x {away_goals} {away}"
             
-            description = f"{competition}\\nStatus: {status}\\n\\n📍 {location}\\n\\n📺 {tv_channels}"
+            description = f"{competition}\\nStatus: {status}\\n\\n📍 {location}\\n📺 {tv_channels}"
             
             ical_lines.extend([
                 "BEGIN:VEVENT",
                 f"UID:{uid}",
-                f"DTSTART:{dt}",
-                f"DTEND:{dt}",
+                f"DTSTART:{dt_start}",
+                f"DTEND:{dt_end}",
                 f"LOCATION:{location}",
                 f"SUMMARY:{summary}",
                 f"DESCRIPTION:{description}",
