@@ -314,21 +314,21 @@
 
         <div id="proximos" class="tab-content active">
             <div class="card">
-                <div class="card-title">Proximos Jogos</div>
+                <div class="card-title">Proximos Jogos <button onclick="localStorage.removeItem('palmeiras_matches');location.reload()" style="float:right;background:none;border:none;cursor:pointer;font-size:0.9rem" title="Atualizar">🔄</button></div>
                 <div id="next-matches"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="resultados" class="tab-content">
             <div class="card">
-                <div class="card-title">Resultados</div>
+                <div class="card-title">Resultados <button onclick="localStorage.removeItem('palmeiras_results');location.reload()" style="float:right;background:none;border:none;cursor:pointer;font-size:0.9rem" title="Atualizar">🔄</button></div>
                 <div id="recent-results"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
 
         <div id="classificacao" class="tab-content">
             <div class="card">
-                <div class="card-title">Classificacao - Brasileirato</div>
+                <div class="card-title">Classificacao - Brasileirato <button onclick="localStorage.removeItem('palmeiras_standings');location.reload()" style="float:right;background:none;border:none;cursor:pointer;font-size:0.9rem" title="Atualizar">🔄</button></div>
                 <div id="standings"><div class="empty">Carregando dados...</div></div>
             </div>
         </div>
