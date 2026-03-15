@@ -74,11 +74,51 @@
         .hero-card {
             background: linear-gradient(135deg, var(--palmeiras-green), #0a5a2d);
             border-radius: var(--border-radius);
-            padding: 2rem;
             color: white;
             text-align: center;
             margin-bottom: 1.5rem;
             box-shadow: var(--shadow);
+            perspective: 1000px;
+            min-height: 280px;
+        }
+        
+        .hero-card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.6s;
+            transform-style: preserve-3d;
+        }
+        
+        .hero-card.flipped .hero-card-inner {
+            transform: rotateY(180deg);
+        }
+        
+        .hero-card-front, .hero-card-back {
+            position: absolute;
+            width: 100%;
+            backface-visibility: hidden;
+            padding: 1.5rem;
+        }
+        
+        .hero-card-back {
+            transform: rotateY(180deg);
+            background: linear-gradient(135deg, #014726, #01753B);
+            border-radius: var(--border-radius);
+        }
+        
+        .hero-card-toggle {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            padding: 8px 12px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            z-index: 10;
         }
 
         .hero-comp {
@@ -281,7 +321,20 @@
     <main class="container">
         <!-- Hero -->
         <div class="hero-card" id="hero-match">
-            <div class="empty" style="color:white">Carregando dados...</div>
+            <div class="hero-card-inner">
+                <div class="hero-card-front" id="hero-front">
+                    <div class="empty" style="color:white">Carregando dados...</div>
+                </div>
+                <div class="hero-card-back" id="hero-back">
+                    <div style="padding-top:1rem">
+                        <h3 style="margin-bottom:1rem">Detalhes do Jogo</h3>
+                        <p>Transmissao: A confirmar</p>
+                        <p>Estadio: Allianz Parque</p>
+                        <p>Competicao: Brasileirato</p>
+                    </div>
+                </div>
+            </div>
+            <button class="hero-card-toggle" onclick="document.getElementById('hero-match').classList.toggle('flipped')">ℹ️ Detalhes</button>
         </div>
 
         <!-- Info Bar -->
@@ -459,7 +512,7 @@
             try {
                 const data = await fetchWithCache(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`, 'palmeiras_hero');
                 const match = data.matches?.[0];
-                if (!match) { container.innerHTML = '<div class="empty" style="color:white">Nenhum jogo agendado</div>'; return; }
+                if (!match) { document.getElementById('hero-front').innerHTML = '<div class="empty" style="color:white">Nenhum jogo agendado</div>'; return; }
 
                 const home = match.homeTeam, away = match.awayTeam;
                 const isHome = home.id === TEAM_ID;
@@ -473,7 +526,7 @@
                 document.getElementById('stadium-info').textContent = isHome ? 'Allianz Parque' : match.venue || 'Arena';
 
                 // Use shield for Palmeiras, placeholder for opponent
-                container.innerHTML = `
+                document.getElementById('hero-front').innerHTML = `
                     <div class="hero-comp">${comp}</div>
                     <div class="hero-teams">
                         <div class="hero-team">
@@ -487,6 +540,17 @@
                         </div>
                     </div>
                     <div class="hero-date">${formatDate(match.utcDate)} - ${formatTime(match.utcDate)}<span style="display:block;font-size:0.85rem;opacity:0.8;margin-top:0.3rem;font-weight:400">${dayOfWeek}</span></div>
+                `;
+                
+                // Populate back card
+                document.getElementById('hero-back').innerHTML = `
+                    <div style="padding-top:1rem">
+                        <h3 style="margin-bottom:1rem">Detalhes do Jogo</h3>
+                        <p style="margin:0.5rem 0"><strong>Transmissao:</strong> A confirmar</p>
+                        <p style="margin:0.5rem 0"><strong>Estadio:</strong> ${isHome ? 'Allianz Parque' : match.venue || 'Arena'}</p>
+                        <p style="margin:0.5rem 0"><strong>Competicao:</strong> ${comp}</p>
+                        <p style="margin:0.5rem 0"><strong>Rodada:</strong> ${match.matchday}</p>
+                    </div>
                 `;
             } catch (e) { 
                 container.innerHTML = '<div class="empty" style="color:white">Erro ao carregar</div>'; 
