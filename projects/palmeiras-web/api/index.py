@@ -1,51 +1,56 @@
 """
-Palmeiras Web Dashboard - Vercel API Handler
+Palmeiras API - Vercel Serverless
 """
 import os
 import json
 import requests
-from flask import Flask, request, jsonify
-from bs4 import BeautifulSoup
 
 API_KEY = os.environ.get('FOOTBALL_API_KEY', 'eca8b30bb5c34fcfa80ec28ceedf84a0')
-TEAM_ID = 1769
-API_BASE = 'https://api.football-data.org/v4'
 HEADERS = {'X-Auth-Token': API_KEY}
 
-app = Flask(__name__)
 
-
-@app.route('/api/teams/<int:team_id>/matches')
-def matches(team_id):
+def teams_matches(request):
+    """GET /api/teams/1769/matches?status=SCHEDULED&limit=5"""
+    team_id = 1769
     status = request.args.get('status', 'SCHEDULED')
     limit = request.args.get('limit', '10')
     
-    url = f"{API_BASE}/teams/{team_id}/matches"
+    url = f"https://api.football-data.org/v4/teams/{team_id}/matches"
     params = {'status': status, 'limit': limit}
     
     try:
         r = requests.get(url, headers=HEADERS, params=params, timeout=10)
-        return jsonify(r.json())
+        return r.json(), r.status_code
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return {'error': str(e)}, 500
 
 
-@app.route('/api/competitions/<comp>/standings')
-def standings(comp):
+def competitions(request):
+    """GET /api/competitions/BSA/standings"""
+    path = request.path
+    import re
+    m = re.search(r'/competitions/(\w+)', path)
+    comp = m.group(1) if m else 'BSA'
+    
+    url = f"https://api.football-data.org/v4/competitions/{comp}/standings"
+    
     try:
-        url = f"{API_BASE}/competitions/{comp}/standings"
         r = requests.get(url, headers=HEADERS, timeout=10)
-        return jsonify(r.json())
+        return r.json(), r.status_code
     except Exception as e:
-        return jsonify({'error': str(e)}), 500
+        return {'error': str(e)}, 500
 
 
-@app.route('/api/news')
-def news():
+def news(request):
+    """GET /api/news"""
     articles = []
     try:
-        r = requests.get('https://ge.globo.com/futebol/times/palmeiras/', 
-                       headers={'User-Agent': 'Mozilla/5.0'}, timeout=10)
+        r = requests.get(
+            'https://ge.globo.com/futebol/times/palmeiras/',
+            headers={'User-Agent': 'Mozilla/5.0'},
+            timeout=10
+        )
+        from bs4 import BeautifulSoup
         soup = BeautifulSoup(r.text, 'html.parser')
         for item in soup.select('.feed-post-item')[:8]:
             link = item.select_one('.feed-post-link')
@@ -59,8 +64,18 @@ def news():
                     })
     except:
         pass
-    return jsonify({'articles': articles})
+    return {'articles': articles}
 
 
-def handler(event, context):
-    return app(event, context)
+def handler(request):
+    """Main Vercel handler"""
+    path = request.path
+    
+    if '/teams/' in path and '/matches' in path:
+        return teams_matches(request)
+    elif '/competitions/' in path and '/standings' in path:
+        return competitions(request)
+    elif path == '/api/news':
+        return news(request)
+    
+    return {'error': 'Not found'}, 404

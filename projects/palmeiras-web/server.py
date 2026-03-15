@@ -1,129 +1,84 @@
 """
-Palmeiras Web Dashboard - Vercel Server (Pure Python)
+Palmeiras Web Dashboard - Vercel Server
 """
 import os
 import json
+import re
 import requests
-from urllib.parse import urlparse, parse_qs
+from flask import Flask, jsonify, request, send_from_directory
+from bs4 import BeautifulSoup
 
-# Football Data API configuration
+# Create app without static configuration for Vercel
+app = Flask(__name__)
+
 API_KEY = os.environ.get('FOOTBALL_API_KEY', 'eca8b30bb5c34fcfa80ec28ceedf84a0')
 TEAM_ID = 1769
 API_BASE = 'https://api.football-data.org/v4'
 
-API_HEADERS = {
-    'X-Auth-Token': API_KEY
-}
+API_HEADERS = {'X-Auth-Token': API_KEY}
 
 
-def handler(request):
-    """Vercel Python handler - receives a request object"""
-    path = request.url.path
-    query = request.url.query
-    
-    # Parse query params
-    params = {}
-    if query:
-        for key, value in parse_qs(query).items():
-            params[key] = value[0] if len(value) == 1 else value
-    
-    # Root - serve index.html
-    if path == '/' or path == '':
-        return {
-            'statusCode': 200,
-            'headers': {'Content-Type': 'text/html'},
-            'body': open('index.html').read()
-        }
-    
-    # API: /api/teams/{id}/matches
-    if path.startswith('/api/teams/') and '/matches' in path:
-        import re
-        match = re.match(r'/api/teams/(\d+)/matches', path)
-        if match:
-            team_id = match.group(1)
-            status = params.get('status', 'SCHEDULED')
-            limit = params.get('limit', '10')
-            
-            url = f"{API_BASE}/teams/{team_id}/matches"
-            req_params = {'status': status}
-            if limit:
-                req_params['limit'] = limit
-            
-            try:
-                response = requests.get(url, headers=API_HEADERS, params=req_params, timeout=10)
-                response.raise_for_status()
-                data = response.json()
-            except Exception as e:
-                data = {'error': str(e)}
-            
-            return {
-                'statusCode': 200,
-                'headers': {'Content-Type': 'application/json'},
-                'body': json.dumps(data)
-            }
-    
-    # API: /api/competitions/{comp}/standings
-    if path.startswith('/api/competitions/') and '/standings' in path:
-        import re
-        match = re.match(r'/api/competitions/(\w+)/standings', path)
-        if match:
-            comp = match.group(1)
-            url = f"{API_BASE}/competitions/{comp}/standings"
-            
-            try:
-                response = requests.get(url, headers=API_HEADERS, timeout=10)
-                response.raise_for_status()
-                data = response.json()
-            except Exception as e:
-                data = {'error': str(e)}
-            
-            return {
-                'statusCode': 200,
-                'headers': {'Content-Type': 'application/json'},
-                'body': json.dumps(data)
-            }
-    
-    # API: /api/news
-    if path == '/api/news':
-        return handle_news()
-    
-    return {
-        'statusCode': 404,
-        'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps({'error': 'Not found'})
-    }
+@app.route('/')
+def index():
+    return send_from_directory('.', 'index.html')
 
 
-def handle_news():
-    """Scrape news from ge.globo"""
+@app.route('/api/teams/<int:team_id>/matches')
+def team_matches(team_id):
+    status = request.args.get('status', 'SCHEDULED')
+    limit = request.args.get('limit', '10')
+    
+    url = f"{API_BASE}/teams/{team_id}/matches"
+    params = {'status': status}
+    if limit:
+        params['limit'] = limit
+    
+    try:
+        response = requests.get(url, headers=API_HEADERS, params=params, timeout=10)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/competitions/<competition>/standings')
+def standings(competition):
+    try:
+        url = f"{API_BASE}/competitions/{competition}/standings"
+        response = requests.get(url, headers=API_HEADERS, timeout=10)
+        response.raise_for_status()
+        return jsonify(response.json())
+    except Exception as e:
+        return jsonify({'error': str(e)}), 500
+
+
+@app.route('/api/news')
+def palmeiras_news():
+    all_news = []
+    
     try:
         url = 'https://ge.globo.com/futebol/times/palmeiras/'
-        headers = {
-            'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36'
-        }
+        headers = {'User-Agent': 'Mozilla/5.0'}
         
-        response = requests.get(url, headers=headers, timeout=15)
-        response.raise_for_status()
-        
-        from bs4 import BeautifulSoup
+        response = requests.get(url, headers=headers, timeout=10)
         soup = BeautifulSoup(response.text, 'html.parser')
         
-        news_items = []
-        for item in soup.select('.feed-post-item')[:10]:
+        for item in soup.select('.feed-post-item')[:8]:
             link = item.select_one('.feed-post-link')
             if link:
-                news_items.append({
-                    'title': link.get_text(strip=True)[:200],
-                    'url': link.get('href', ''),
-                    'source': 'ge.globo'
-                })
-        
-        data = {'articles': news_items}
+                title = link.get_text(strip=True)
+                if title and len(title) > 10:
+                    all_news.append({
+                        'title': title[:150],
+                        'url': link.get('href', ''),
+                        'source': 'ge.globo'
+                    })
     except Exception as e:
-        data = {'articles': [], 'error': str(e)}
+        pass
     
-    return {
-        'statusCode': 200,
-        'headers': {'Content-Type': 'application/json'},
-        'body': json.dumps(data)
-    }
+    return jsonify({'articles': all_news})
+
+
+# Vercel handler
+def handler(environ, start_response):
+    return app(environ, start_response)
