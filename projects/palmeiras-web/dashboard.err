@@ -1923,3 +1923,114 @@ Sun Mar 15 15:35:04 -03 2026: ✗ FAILED to restart dashboard
 Address already in use
 Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
 Sun Mar 15 15:40:04 -03 2026: ✗ FAILED to restart dashboard
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/teams/1769/matches?status=SCHEDULED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "[33mGET /favicon.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [15/Mar/2026 15:43:48] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:49] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:50] "[33mGET /favicon.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:51] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:52] "[33mGET /favicon.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:53] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:43:54] "[33mGET /favicon.png HTTP/1.1[0m" 404 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET / HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET /api/competitions/BSA/standings HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET /api/teams/1769/matches?status=FINISHED&limit=5 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET /api/teams/1769/matches?status=FINISHED&limit=20 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET /api/teams/1769/matches?status=SCHEDULED&limit=1 HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:22] "GET /api/news HTTP/1.1" 200 -
+127.0.0.1 - - [15/Mar/2026 15:44:23] "[33mGET /favicon.png HTTP/1.1[0m" 404 -
+/opt/homebrew/Cellar/python@3.14/3.14.3_1/Frameworks/Python.framework/Versions/3.14/lib/python3.14/multiprocessing/resource_tracker.py:396: UserWarning: resource_tracker: There appear to be 1 leaked semaphore objects to clean up at shutdown: {'/mp-jthwc86x'}
+  warnings.warn(
+[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on all addresses (0.0.0.0)
+ * Running on http://127.0.0.1:5001
+ * Running on http://192.168.15.159:5001
+[33mPress CTRL+C to quit[0m
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500
+Address already in use
+Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
+Sun Mar 15 15:45:04 -03 2026: ✗ FAILED to restart dashboard
