@@ -1830,3 +1830,7 @@ Sun Mar 15 15:10:04 -03 2026: ✗ FAILED to restart dashboard
 Address already in use
 Port 5001 is in use by another program. Either identify and stop that program, or start the server with a different port.
 Sun Mar 15 15:15:05 -03 2026: ✗ FAILED to restart dashboard
+ * Detected change in '/Users/rodrigomelo/.openclaw/workspace/projects/palmeiras-web/server.py', reloading
+ * Restarting with stat
+ * Debugger is active!
+ * Debugger PIN: 102-951-500

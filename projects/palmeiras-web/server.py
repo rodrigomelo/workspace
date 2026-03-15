@@ -126,17 +126,27 @@ def palmeiras_news():
 
 @app.route('/api/calendar.ics')
 def calendar_ics():
-    """Generate iCal feed for Palmeiras matches"""
+    """Generate iCal feed for Palmeiras matches - reads from JSON cache only"""
     try:
-        # Fetch matches with caching (5 min TTL)
-        url = f"{API_BASE}/teams/{TEAM_ID}/matches"
-        params = {'limit': 50}
+        # Read from local JSON cache - NO external API calls!
+        import json
+        data_dir = os.path.join(os.path.dirname(__file__), 'data')
         
-        data = get_cached(url, params)
+        # Try scheduled matches first
+        try:
+            with open(os.path.join(data_dir, 'matches_scheduled.json'), 'r') as f:
+                data = json.load(f)
+        except:
+            # Fallback to all matches
+            try:
+                with open(os.path.join(data_dir, 'matches_all.json'), 'r') as f:
+                    data = json.load(f)
+            except:
+                # Ultimate fallback
+                data = {'matches': []}
         
         # Stadium info
         stadium = "Allianz Parque"
-        stadium_address = "Rua Palestra Itália, 200 - Água Branca, São Paulo, SP"
         
         # Where to watch
         tv_channels = "TV: Globo, SporTV, Premiere | Streaming: Amazon Prime Video, Globoplay"
