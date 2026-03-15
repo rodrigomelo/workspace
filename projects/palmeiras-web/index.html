@@ -448,31 +448,12 @@
         }
 
         // Cache utility
-        const CACHE_TTL = 60 * 60 * 1000; // 60 minutes - cached data loads first
-        
-        async function fetchWithCache(url, cacheKey, ttl = CACHE_TTL) {
-            const cached = localStorage.getItem(cacheKey);
-            if (cached) {
-                const { data, timestamp } = JSON.parse(cached);
-                if (Date.now() - timestamp < ttl) {
-                    return data;
-                }
-            }
-            try {
-                const res = await fetch(url);
-                if (!res.ok) throw new Error('API error');
-                const data = await res.json();
-                localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
-                return data;
-            } catch (e) {
-                if (cached) {
-                    const { data } = JSON.parse(cached);
-                    return data;
-                }
-                throw e;
-            }
+        // Always fetch from server (serves local JSON files - no external API calls)
+        async function fetchWithCache(url, cacheKey, ttl = 0) {
+            const response = await fetch(url);
+            const data = await response.json();
+            return data;
         }
-
         // Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
