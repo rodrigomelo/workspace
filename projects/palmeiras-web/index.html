@@ -603,9 +603,9 @@
         async function loadNews() {
             const container = document.getElementById('news-list');
             try {
-                const res = await fetch(`${API_BASE}/palmeiras/news`);
+                const res = await fetch(`${API_BASE}/news`);
                 const data = await res.json();
-                const news = data.news || [];
+                const news = data.articles || [];
                 if (!news.length) { container.innerHTML = '<div class="loading">Nenhuma noticia</div>'; return; }
                 container.innerHTML = news.slice(0, 8).map(n => `
                     <div class="news-item" onclick="window.open('${n.url}', '_blank')">

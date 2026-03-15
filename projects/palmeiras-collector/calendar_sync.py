@@ -161,8 +161,11 @@ def fetch_upcoming_matches(limit=10):
         return []
 
 
+GOG_CMD = '/opt/homebrew/bin/gog'
+GOG_ACCOUNT = os.getenv('GOG_ACCOUNT', 'melorodrigo@gmail.com')
+
 def query_google_calendar():
-    cmd = ['gog', 'calendar', 'events', CALENDAR_ID, '--json']
+    cmd = [GOG_CMD, 'calendar', 'events', CALENDAR_ID, '--json', '--account', GOG_ACCOUNT]
     
     try:
         result = subprocess.run(cmd, capture_output=True, text=True, timeout=30)
@@ -213,7 +216,8 @@ def create_calendar_event(match):
     logger.info(f"Creating: {title}")
     
     cmd = [
-        'gog', 'calendar', 'create', CALENDAR_ID,
+        GOG_CMD, 'calendar', 'create', CALENDAR_ID,
+        '--account', GOG_ACCOUNT,
         '--summary', title,
         '--from', start_iso,
         '--to', end_iso,

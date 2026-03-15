@@ -10,7 +10,7 @@ from bs4 import BeautifulSoup
 app = Flask(__name__, static_folder='.')
 
 # Football Data API configuration
-API_KEY = 'eca8b30bb5c34fcfa80ec28ceedf84a0'
+API_KEY = os.environ.get('FOOTBALL_API_KEY', 'eca8b30bb5c34fcfa80ec28ceedf84a0')
 TEAM_ID = 1769
 API_BASE = 'https://api.football-data.org/v4'
 
@@ -18,6 +18,11 @@ API_BASE = 'https://api.football-data.org/v4'
 API_HEADERS = {
     'X-Auth-Token': API_KEY
 }
+
+
+# Vercel handler
+def handler(request):
+    return app(request)
 
 
 @app.route('/')
