@@ -20,6 +20,14 @@
 - Add prominent "📅 Assinar Calendário" button
 - Link to: `https://palmeiras-web.vercel.app/api/calendar.ics`
 
+### 5. Duplicate Calendar Button - FIX NOW
+- Remove the duplicate "Adicionar ao Google Calendar" button from the hero section
+- Keep only ONE button (in footer)
+
+### 6. Team Logos - FIX NOW  
+- Use m.homeTeam.crest and m.awayTeam.crest from API
+- Add fallback to Palmeiras shield if no crest available
+
 ---
 
 ## Color Scheme (keep)

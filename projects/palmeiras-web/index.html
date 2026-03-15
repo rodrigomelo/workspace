@@ -391,6 +391,32 @@
             return names[comp?.code] || comp?.name || 'Campeonato';
         }
 
+        // Cache utility
+        const CACHE_TTL = 10 * 60 * 1000; // 10 minutes
+        
+        async function fetchWithCache(url, cacheKey, ttl = CACHE_TTL) {
+            const cached = localStorage.getItem(cacheKey);
+            if (cached) {
+                const { data, timestamp } = JSON.parse(cached);
+                if (Date.now() - timestamp < ttl) {
+                    return data;
+                }
+            }
+            try {
+                const res = await fetch(url);
+                if (!res.ok) throw new Error('API error');
+                const data = await res.json();
+                localStorage.setItem(cacheKey, JSON.stringify({ data, timestamp: Date.now() }));
+                return data;
+            } catch (e) {
+                if (cached) {
+                    const { data } = JSON.parse(cached);
+                    return data;
+                }
+                throw e;
+            }
+        }
+
         // Tabs
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -435,8 +461,7 @@
         async function loadHero() {
             const container = document.getElementById('hero-match');
             try {
-                const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`);
-                const data = await res.json();
+                const data = await fetchWithCache(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=1`, 'palmeiras_hero');
                 const match = data.matches?.[0];
                 if (!match) { container.innerHTML = '<div class="empty" style="color:white">Nenhum jogo agendado</div>'; return; }
 
@@ -481,8 +506,7 @@
         async function loadMatches() {
             const container = document.getElementById('next-matches');
             try {
-                const res = await fetch(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`);
-                const data = await res.json();
+                const data = await fetchWithCache(`${API_BASE}/teams/${TEAM_ID}/matches?status=SCHEDULED&limit=5`, 'palmeiras_matches');
                 const matches = data.matches || [];
                 if (!matches.length) { container.innerHTML = '<div class="empty">Nenhum jogo</div>'; return; }
                 container.innerHTML = matches.map(m => `
@@ -527,9 +551,7 @@
         async function loadStandings() {
             const container = document.getElementById('standings');
             try {
-                const res = await fetch(`${API_BASE}/competitions/BSA/standings`);
-                if (!res.ok) throw new Error('API error');
-                const data = await res.json();
+                const data = await fetchWithCache(`${API_BASE}/competitions/BSA/standings`, 'palmeiras_standings');
                 
                 let pos = null, pts = 0, p = 0, w = 0, d = 0, l = 0, gf = 0, ga = 0;
                 for (const s of data.standings || []) {
